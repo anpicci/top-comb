@@ -22,13 +22,27 @@ function custom_msg() {
 	echo -e " >> ${COLOR} ${MSG} ${ENDCOLOR}"
 }
 
+function quit_setup() {
+	custom_msg WARN "Quitting setup script..."
+	exit 1
+}
+
 function check_module() {
 	# Check the module has been installed
 	isInit=$(git submodule status | grep $1)
 	case $isInit in
 		\-*)
-	 		custom_msg ERROR "$1 is not initialize. Please run"
-			custom_msg ERROR "git submodule update --init  $1"
+	 		custom_msg ERROR "$1 is not initialized. Would you like to initialize it?"
+			select ans in yes no; do
+				case $ans in
+					yes)
+						git submodule update --init $1
+						;;
+					no)
+						quit_setup	
+						;;
+				esac
+			done
 			;;
 		U.*)
 			custom_msg WARN "$1 is initialized, but please be aware" 
@@ -81,7 +95,7 @@ select mode in  Gridpack Reinterpretation Quit; do
 			break
 			;;
 		Quit)
-			custom_msg WARN "Quitting setup script..."
+			quit_setup	
 			break
 			;;
 	esac
