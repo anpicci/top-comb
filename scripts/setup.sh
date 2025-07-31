@@ -22,19 +22,60 @@ function custom_msg() {
 	echo -e " >> ${COLOR} ${MSG} ${ENDCOLOR}"
 }
 
+function check_module() {
+	# Check the module has been installed
+	isInit=$(git submodule status | grep $1)
+	case $isInit in
+		\-*)
+	 		custom_msg ERROR "$1 is not initialize. Please run"
+			custom_msg ERROR "git submodule update --init  $1"
+			;;
+		U.*)
+			custom_msg WARN "$1 is initialized, but please be aware" 
+			custom_msg WARN "are merging conflicts with the revision used in the main repository"
+			;;
+		*)
+			custom_msg GOOD "$1 module is properly initialized and up to date"
+			;;
+	esac
+}
+
+function setup_genproductions() {
+	custom_msg INFO "Setting up environment for gridpack production"
+	custom_msg NC "This is based in the Genproductions framework."
+
+	check_module "genproductions_scripts"	
+	check_module "topcomb_smeft_cards"
+	
+}
+
 function setup_cmgrdf() {
 	custom_msg INFO "Setting up environment for reinterpretation"
 	custom_msg NC "This is based in the CMGRDF framework."
 
-	# Check the module has been installed
+	
+	check_module "cmgrdf-prototype"	
+
+	# Now do the basic setup
+	source /cvmfs/sft.cern.ch/lcg/views/dev3/latest/x86_64-el9-gcc13-opt/setup.sh
+	pushd cmgrdf-prototype
+	git submodule update --init externals/RoccoR 
+	make -j 4
+	popd
+	
 }
 
 # Print a welcome message
 custom_msg GOOD "Running the setup for the EFT combination"
 custom_msg NC "Please select which step of the setup you would like to run: "
 
-select mode in  Reinterpretation Quit; do
+select mode in  Gridpack Reinterpretation Quit; do
 	case $mode in
+		Gridpack)
+			setup_genproductions
+			break
+			;;
+
 		Reinterpretation)
 			setup_cmgrdf
 			break
