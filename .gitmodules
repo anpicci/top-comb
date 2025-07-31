@@ -5,6 +5,8 @@
 [submodule "genproductions_scripts"]
 	path = genproductions_scripts
 	url = https://gitlab.cern.ch/cms-gen/genproductions_scripts.git
+	branch = master
 [submodule "topcomb_smeft_cards"]
 	path = topcomb_smeft_cards
 	url = ssh://git@gitlab.cern.ch:7999/cvicovil/topcomb_smeft_cards.git
+	branch = master
