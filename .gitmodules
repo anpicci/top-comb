@@ -1,0 +1,3 @@
+[submodule "cmgrdf-prototype"]
+	path = cmgrdf-prototype
+	url = https://gitlab.cern.ch/cms-new-cmgtools/cmgrdf-prototype.git
