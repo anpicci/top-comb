@@ -24,7 +24,7 @@ function custom_msg() {
 
 function quit_setup() {
 	custom_msg WARN "Quitting setup script..."
-	exit 1
+	exit 0
 }
 
 function check_module() {
@@ -37,9 +37,10 @@ function check_module() {
 				case $ans in
 					yes)
 						git submodule update --init $1
+						break
 						;;
 					no)
-						quit_setup	
+						quit_setup
 						;;
 				esac
 			done
