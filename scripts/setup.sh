@@ -58,9 +58,19 @@ function check_module() {
 function setup_genproductions() {
 	custom_msg INFO "Setting up environment for gridpack production"
 	custom_msg NC "This is based in the Genproductions framework."
-
 	check_module "genproductions_scripts"	
-	check_module "topcomb_smeft_cards"
+
+	# Remove stuff that is not needed
+	rm -rf $TOPCOMB_GENPRODUCTIONS/bin/Powheg
+	rm -rf $TOPCOMB_GENPRODUCTIONS/bin/Horace
+	rm -rf $TOPCOMB_GENPRODUCTIONS/bin/JHUGen
+	rm -rf $TOPCOMB_GENPRODUCTIONS/bin/MCFM
+	rm -rf $TOPCOMB_GENPRODUCTIONS/bin/Phantom
+	rm -rf $TOPCOMB_GENPRODUCTIONS/bin/Sherpa
+	rm -rf $TOPCOMB_GENPRODUCTIONS/bin/Starlight
+	rm -rf $TOPCOMB_GENPRODUCTIONS/bin/Superchic
+	rm -rf $TOPCOMB_GENPRODUCTIONS/bin/UPCgen
+	rm -rf $TOPCOMB_GENPRODUCTIONS/bin/utils
 	
 }
 

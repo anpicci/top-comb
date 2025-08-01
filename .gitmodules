@@ -10,3 +10,6 @@
 	path = topcomb_smeft_cards
 	url = ssh://git@gitlab.cern.ch:7999/cvicovil/topcomb_smeft_cards.git
 	branch = master
+[submodule "topcomb_analyses"]
+	path = topcomb_analyses
+	url = ssh://git@gitlab.cern.ch:7999/cvicovil/topcomb_analyses.git
