@@ -67,13 +67,12 @@ function setup_genproductions() {
 function setup_cmgrdf() {
 	custom_msg INFO "Setting up environment for reinterpretation"
 	custom_msg NC "This is based in the CMGRDF framework."
-
 	
 	check_module "cmgrdf-prototype"	
 
 	# Now do the basic setup
 	source /cvmfs/sft.cern.ch/lcg/views/dev3/latest/x86_64-el9-gcc13-opt/setup.sh
-	pushd cmgrdf-prototype
+	pushd $TOPCOMB_CMGRDF
 	git submodule update --init externals/RoccoR 
 	make -j 4
 	popd
@@ -84,7 +83,7 @@ function setup_cmgrdf() {
 custom_msg GOOD "Running the setup for the EFT combination"
 custom_msg NC "Please select which step of the setup you would like to run: "
 
-select mode in  Gridpack Reinterpretation Quit; do
+select mode in  Gridpack Reinterpretation all Quit; do
 	case $mode in
 		Gridpack)
 			setup_genproductions
@@ -92,6 +91,11 @@ select mode in  Gridpack Reinterpretation Quit; do
 			;;
 
 		Reinterpretation)
+			setup_cmgrdf
+			break
+			;;
+		all)
+			setup_genproductions
 			setup_cmgrdf
 			break
 			;;
