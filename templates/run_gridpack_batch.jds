@@ -1,0 +1,11 @@
+executable = run_gridpack_batch.sh 
+getenv = True
+when_to_transfer_output = on_exit
++JobFlavour = "tomorrow"
++JobBatchName = "__PROCNAME__"
+transfer_input_files = genproductions.tar.xz 
+output = __PROCNAME__.$(ProcId).stdout
+error = __PROCNAME__.$(ProcId).stderr
+log = __PROCNAME__.$(ProcId).stdlog
+request_memory = 32000
+queue

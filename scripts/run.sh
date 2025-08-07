@@ -45,54 +45,67 @@ function check_cards_before_gridpack() {
 }
 
 function run_gridpack() {
+	custom_msg INFO "Running gridpack. Please select a process from the available list"
+	
 
-	custom_msg INFO "Running gridpack. Please select an analysis from the available list"
-	listAnalyses=$(find ${TOPCOMB_ANALYSES} -type d -name "mgcards" | awk -F '/' '{print $(NF-1)}'  )
-
-	select analysis in ${listAnalyses/$TOPCOMB_ANALYSES/}; do
-		break
-	done
-
-
-	listProcesses=$(find ${TOPCOMB_ANALYSES}/${analysis}/mgcards -mindepth 1 -type d | awk -F '/' '{print $NF}'  )
-	custom_msg WARN "Analysis $analysis has the following processes: " 
+	listProcesses=$(find ${TOPCOMB_ANALYSES}/${analysis} -mindepth 2 -maxdepth 2 -type d | awk -F '/' '{print $NF}'  )
 	select process in ${listProcesses/$TOPCOMB_ANALYSES}; do
 		break
 	done
 
+
+	analysisDir=$(find ${TOPCOMB_ANALYSES}/ -name $process -type d)
+	
+
 	custom_msg INFO "Generating gridpack for process ${process}"
+	# Prepare the submission folder
+	SUBMISSION_DIR=submit_gridpack_${process}_try
+	rm -rf $SUBMISSION_DIR
+	mkdir -p $SUBMISSION_DIR
 
+	# Prepare the cards and scripts from genproductions
 	tempdir=temp_cards_${process}
-
-	# Now actually run the gridpack_generation.sh script	
 	pushd $TOPCOMB_GENPRODUCTIONS/bin/MadGraph5_aMCatNLO
-
-	# Clean from previous run
-	rm -rf $tempdir
-	cp -r $TOPCOMB_ANALYSES/$analysis/mgcards/$process/ $tempdir
-
-	# Do a few checks
+	rm -rf temp*
+	cp -r $analysisDir/mgcards $tempdir
 	check_cards_before_gridpack $tempdir
+	cd ../
+	tar -zcvf genproductions.tar.xz MadGraph5_aMCatNLO
+	mv genproductions.tar.xz $TOPCOMB_MAINPATH/$SUBMISSION_DIR 
 
-	# Run the script
-	./submit_condor_gridpack_generation.sh $process $tempdir ${process}_workdir 
+	# Return to the main path and prepare the submission scripts
 	popd
-		
+
+	pushd $SUBMISSION_DIR
+
+	cp $TOPCOMB_MAINPATH/templates/run_gridpack_batch.sh .
+ 	sed -i "s|__PROCNAME__|$process|g" run_gridpack_batch.sh
+ 	sed -i "s|__CARDSDIR__|$tempdir|g" run_gridpack_batch.sh
+ 	sed -i "s|__OUTPATH__|$TOPCOMB_OUTPATH|g" run_gridpack_batch.sh
+	chmod +x run_gridpack_batch.sh
+
+	# Now copy the jds
+	cp $TOPCOMB_MAINPATH/templates/run_gridpack_batch.jds .
+ 	sed -i "s|__PROCNAME__|$process|g" run_gridpack_batch.jds
+	condor_submit run_gridpack_batch.jds
+
+	popd
 }
-
-
 
 # Print a welcome message
 custom_msg GOOD "Running the workflow for the EFT combination"
 custom_msg NC "Please select which step of the setup you would like to run: "
 
-select mode in  Gridpack  Quit; do
+select mode in  Gridpack Generate Quit; do
 	case $mode in
 		Gridpack)
 			run_gridpack
 			break
 			;;
-
+		Generate)
+			run_generation
+			break
+			;;
 		Quit)
 			quit_setup	
 			break
