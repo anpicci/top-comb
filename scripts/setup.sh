@@ -1,7 +1,6 @@
 # Scripts for setting up the environment
 
 # Set of colors for prompts
-
 function custom_msg() {
 	ERROR="\e[31m" # red
 	GOOD="\e[32m" # green 

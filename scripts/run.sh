@@ -47,36 +47,25 @@ function check_cards_before_gridpack() {
 function run_gridpack() {
 	custom_msg INFO "Running gridpack. Please select a process from the available list"
 	
-
 	listProcesses=$(find ${TOPCOMB_ANALYSES}/${analysis} -mindepth 2 -maxdepth 2 -type d | awk -F '/' '{print $NF}'  )
 	select process in ${listProcesses/$TOPCOMB_ANALYSES}; do
 		break
 	done
 
-
 	analysisDir=$(find ${TOPCOMB_ANALYSES}/ -name $process -type d)
 	
-
 	custom_msg INFO "Generating gridpack for process ${process}"
 	# Prepare the submission folder
-	SUBMISSION_DIR=submit_gridpack_${process}_try
-	rm -rf $SUBMISSION_DIR
-	mkdir -p $SUBMISSION_DIR
+	SUBMISSION_DIR=submit_gridpack_${process}
+	rm -rf $SUBMISSION_DIR; mkdir -p $SUBMISSION_DIR
 
 	# Prepare the cards and scripts from genproductions
 	tempdir=temp_cards_${process}
-	pushd $TOPCOMB_GENPRODUCTIONS/bin/MadGraph5_aMCatNLO
-	rm -rf temp*
-	cp -r $analysisDir/mgcards $tempdir
-	check_cards_before_gridpack $tempdir
-	cd ../
-	tar -zcvf genproductions.tar.xz MadGraph5_aMCatNLO
-	mv genproductions.tar.xz $TOPCOMB_MAINPATH/$SUBMISSION_DIR 
-
-	# Return to the main path and prepare the submission scripts
-	popd
 
 	pushd $SUBMISSION_DIR
+	cp -r $analysisDir/mgcards $tempdir
+	check_cards_before_gridpack $tempdir
+
 
 	cp $TOPCOMB_MAINPATH/templates/run_gridpack_batch.sh .
  	sed -i "s|__PROCNAME__|$process|g" run_gridpack_batch.sh
