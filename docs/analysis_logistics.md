@@ -1,3 +1,4 @@
+**Note**: click [here](https://gitlab.cern.ch/cvicovil/top-comb/-/blob/master/README.md) to return to the main README.
 # Analysis Logistics
 
 This document summarizes the inputs required for the combination process.
