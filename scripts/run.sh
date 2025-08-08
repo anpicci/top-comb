@@ -1,30 +1,6 @@
 # Scripts for setting up the environment
 
-# Set of colors for prompts
-function custom_msg() {
-	ERROR="\e[31m" # red
-	GOOD="\e[32m" # green 
-	INFO="\e[34m" # blue
-	WARN="\e[93m" # yellow
-	ENDCOLOR="\e[0m"
-
-	MSG_TYPE=$1
-	case $MSG_TYPE in
-		ERROR) COLOR=$ERROR;;
-		GOOD) COLOR=$GOOD;;
-		INFO) COLOR=$INFO;;
-		WARN) COLOR=$WARN;;
-		*) COLOR=$ENDCOLOR;;
-	esac
-	MSG=$2
-
-	echo -e "${COLOR} ${MSG} ${ENDCOLOR}"
-}
-
-function quit_setup() {
-	custom_msg WARN "Quitting setup script..."
-	exit 0
-}
+source scripts/utils.sh
 
 function check_cards_before_gridpack() {
 
@@ -47,10 +23,8 @@ function check_cards_before_gridpack() {
 function run_gridpack() {
 	custom_msg INFO "Running gridpack. Please select a process from the available list"
 	
-	listProcesses=$(find ${TOPCOMB_ANALYSES}/${analysis} -mindepth 2 -maxdepth 2 -type d | awk -F '/' '{print $NF}'  )
-	select process in ${listProcesses/$TOPCOMB_ANALYSES}; do
-		break
-	done
+	# Get the list of analyses
+	list_processes
 
 	analysisDir=$(find ${TOPCOMB_ANALYSES}/ -name $process -type d)
 	
@@ -81,6 +55,7 @@ function run_gridpack() {
 	popd
 }
 
+
 # Print a welcome message
 custom_msg GOOD "Running the workflow for the EFT combination"
 custom_msg NC "Please select which step of the setup you would like to run: "
@@ -89,10 +64,6 @@ select mode in  Gridpack Generate Quit; do
 	case $mode in
 		Gridpack)
 			run_gridpack
-			break
-			;;
-		Generate)
-			run_generation
 			break
 			;;
 		Quit)
