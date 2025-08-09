@@ -2,31 +2,28 @@
 
 # Setup TOP EFT Combination
 
-This repository uses several `git submodules` and `Makefiles` to make running combination commands as smooth as possible for newcomers.
-
-To set up the repository, follow these steps:
-
-1. Clone everything
-  ```bash
-  git clone https://gitlab.cern.ch/cvicovil/topcomb_analyses.git
-  make setup
-  ```
-  
-  When running `make setup`, you will be prompted to choose which set of tools to download.  This ensures that only the modules required for your specific purpose are fetched. When prompted, enter a number to select the package you want to download.
-  
-  The complete list of available submodules can be found in [`.gitmodules`](../.gitmodules). If you need **all submodules**, you can clone them in one step:
-  
-  ```bash
-  git clone https://gitlab.cern.ch/cvicovil/topcomb_analyses.git --recursive
-  ```
-2. Source the main environment
-
-This is needed everytime you want to work with the tools used in the combination. To do this, just run:
+This repository uses several `git submodules` and `Makefiles` to make running combination commands as smooth as possible for newcomers. **Once cloned**, and each time wants to run **anything** (either gridpack creation, generating events, or running the combination), one needs to setup the environment by doing:
 
 ```bash
 source setenv.sh
 ```
 
-This will essentially load different environment variables that are used in the combination scripts.
+As for how to set up the repository, follow **one of these options**:
 
- 
+## Clone everything at once
+The complete list of available submodules can be found in [`.gitmodules`](../.gitmodules). If you need **all submodules**, you can clone them in one step:
+
+```bash
+git clone https://gitlab.cern.ch/cvicovil/topcomb_analyses.git --recursive
+```
+
+## Clone everything and install specific packages
+
+This is normally only needed if for whichever reason one does not need to install `topcomb_analyses` (e.g. for just generating events or producing differential level studies). Normally, it is best to install everything (since the whole project is anyway not heavy). 
+
+```bash
+git clone https://gitlab.cern.ch/cvicovil/topcomb_analyses.git
+make setup
+```
+
+When running `make setup`, you will be prompted to choose which set of tools to download.  This ensures that only the modules required for your specific purpose are fetched. When prompted, enter a number to select the package you want to download. 
