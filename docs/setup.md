@@ -8,6 +8,8 @@ This repository uses several `git submodules` and `Makefiles` to make running co
 source setenv.sh
 ```
 
+**Important**: the default path where outputs from batch jobs (such as generation of events) is fixed to `/eos/cms/store/group/phys_top/cvicovil/`, so if you plan to generate events, change this path in the `setenv.sh` script in the main repository. 
+
 As for how to set up the repository, follow **one of these options**:
 
 ## Clone everything at once

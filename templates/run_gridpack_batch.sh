@@ -3,11 +3,13 @@
 # Template script for batch submission of gridpacks
 BASE=`pwd`
 
+tar -xvf cards.tgz
+
 # Download genproductions
 git clone https://gitlab.cern.ch/cms-gen/genproductions_scripts.git -b master 
 
 # Basic setup
-cd genproductions/bin/MadGraph5_aMCatNLO
+cd genproductions_scripts/bin/MadGraph5_aMCatNLO
 cp -r $BASE/__CARDSDIR__ . 
 
 

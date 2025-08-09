@@ -38,6 +38,7 @@ function run_gridpack() {
 
 	pushd $SUBMISSION_DIR
 	cp -r $analysisDir/mgcards $tempdir
+	tar -zcvf cards.tgz $tempdir
 	check_cards_before_gridpack $tempdir
 
 
