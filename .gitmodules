@@ -6,3 +6,7 @@
 	path = topcomb_analyses
 	url = ssh://git@gitlab.cern.ch:7999/cvicovil/topcomb_analyses.git
 	branch = master
+
+[submodule "tmg-tools"]
+	path = tmg-tools
+	url = ssh://git@gitlab.cern.ch:7999/cms-top-tmg/tmg-tools.git
