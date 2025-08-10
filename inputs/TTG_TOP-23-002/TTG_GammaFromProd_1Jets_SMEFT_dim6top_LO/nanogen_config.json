@@ -1,0 +1,26 @@
+{
+    "mode": "nanogen",
+    "processes": {
+        "TTG_GammaFromProd_1Jets_SMEFT_dim6top_LO": "file:/afs/cern.ch/work/c/cvicovil/private/top-comb/topcomb_analyses/TTG_TOP-23-002/TTG_GammaFromProd_1Jets_SMEFT_dim6top_LO/fragment.py"
+    },
+    "nevents": {
+        "TTG_GammaFromProd_1Jets_SMEFT_dim6top_LO": 1000000.0
+    },
+    "memory": {
+        "TTG_GammaFromProd_1Jets_SMEFT_dim6top_LO": 32000
+    },
+    "njobs": {
+        "TTG_GammaFromProd_1Jets_SMEFT_dim6top_LO": 1000
+    },
+    "xsec": {
+        "TTG_GammaFromProd_1Jets_SMEFT_dim6top_LO": 1
+    },
+    "isGS": {
+        "TTG_GammaFromProd_1Jets_SMEFT_dim6top_LO": 0
+    },
+    "campaign": "RunIISummer20UL18",
+    "outpath": "/eos/cms/store/group/phys_top/cvicovil/top-comb/nanogen/",
+    "submit_dir": "submit_nanogen_TTG_GammaFromProd_1Jets_SMEFT_dim6top_LO",
+    "tag": "TTG_GammaFromProd_1Jets_SMEFT_dim6top_LO",
+    "routines": []
+}
