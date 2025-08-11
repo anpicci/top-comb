@@ -10,19 +10,28 @@ source setenv.sh
 
 **Important**: the default path where outputs from batch jobs (such as generation of events) is fixed to `/eos/cms/store/group/phys_top/cvicovil/`, so if you plan to generate events, change this path in the `setenv.sh` script in the main repository. 
 
-As for how to set up the repository, follow **one of these options**:
 
-## Clone everything at once
-The complete list of available submodules can be found in [`.gitmodules`](../.gitmodules). If you need **all submodules**, you can clone them in one step:
+
+## Basic setup: cloning 
+
+The repository makes use of a set of repositories that are included as submodules.  The complete list of available submodules can be found in [`.gitmodules`](../.gitmodules). 
+If you need **all submodules**, you can clone them in one step:
 
 ```bash
 git clone https://gitlab.cern.ch/cvicovil/topcomb_analyses.git --recursive
 ```
 
-## Clone everything and install specific packages
+**Alternatively**, one can install specific modules by just cloning without the `--recursive` option, and instead do:
 
-This is normally only needed if for whichever reason one does not need to install `topcomb_analyses` (e.g. for just generating events or producing differential level studies). Normally, it is best to install everything (since the whole project is anyway not heavy). 
+```bash
+git submodule update --init $SUBMODULE
+```
 
+Where `$SUBMODULE` is the name of the module that one wants to use.
+
+## Basic setup: installation recipes
+
+Some of the functionalities used in the repository, particularly those related to reinterpretation and `combine` have to be properly setup following a recipe that essentially sets up `CMSSW` or other dependencies.
 ```bash
 git clone https://gitlab.cern.ch/cvicovil/topcomb_analyses.git
 make setup

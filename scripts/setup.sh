@@ -29,25 +29,6 @@ function check_module() {
 	esac
 }
 
-function setup_genproductions() {
-	custom_msg INFO "Setting up environment for gridpack production"
-	custom_msg NC "This is based in the Genproductions framework."
-	check_module "genproductions_scripts"	
-
-	# Remove stuff that is not needed
-	rm -rf $TOPCOMB_GENPRODUCTIONS/bin/Powheg
-	rm -rf $TOPCOMB_GENPRODUCTIONS/bin/Horace
-	rm -rf $TOPCOMB_GENPRODUCTIONS/bin/JHUGen
-	rm -rf $TOPCOMB_GENPRODUCTIONS/bin/MCFM
-	rm -rf $TOPCOMB_GENPRODUCTIONS/bin/Phantom
-	rm -rf $TOPCOMB_GENPRODUCTIONS/bin/Sherpa
-	rm -rf $TOPCOMB_GENPRODUCTIONS/bin/Starlight
-	rm -rf $TOPCOMB_GENPRODUCTIONS/bin/Superchic
-	rm -rf $TOPCOMB_GENPRODUCTIONS/bin/UPCgen
-	rm -rf $TOPCOMB_GENPRODUCTIONS/bin/utils
-	
-}
-
 function setup_cmgrdf() {
 	custom_msg INFO "Setting up environment for reinterpretation"
 	custom_msg NC "This is based in the CMGRDF framework."
@@ -67,20 +48,14 @@ function setup_cmgrdf() {
 custom_msg GOOD "Running the setup for the EFT combination"
 custom_msg NC "Please select which step of the setup you would like to run: "
 
-select mode in  Gridpack Reinterpretation all Quit; do
+select mode in  cmgrdf all Quit; do
 	case $mode in
-		Gridpack)
-			setup_genproductions
-			break
-			;;
-
-		Reinterpretation)
+		cmgrdf)
 			setup_cmgrdf
 			break
 			;;
 		all)
-			setup_genproductions
-			setup_cmgrdf
+			setup_cmgrdf # To add more (once there are more ;) )
 			break
 			;;
 		Quit)

@@ -3,14 +3,12 @@
 
 This document summarizes the inputs required for the combination process.
 
-## TOPCOMB Analysis
+## Database for Inputs 
 
-The inputs for the combination are maintained in a separate repository: [topcomb_analyses](https://gitlab.cern.ch/cvicovil/topcomb_analyses).  
-This repository serves as the bookkeeping hub for all aspects related to the analyses included in the combination.
+The inputs for the combination are maintained in the `inputs` folder. 
 
 ## Adding a New Analysis
-The `topcomb_analyses` repository is designed to store all relevant details for a given analysis in a single configuration file, written in `yml` format.  
-This avoids scattering the information in different parts.
+All relevant details for a given analysis in a single configuration file, written in `yml` format.  This avoids scattering the information in different parts.
 
 A typical `yml` configuration file looks like this:
 
@@ -26,7 +24,7 @@ operators:
   - ... # other operators
 ```
 
-An example of how one full `yaml` file looks like can be found in the [TTG configuration file](https://gitlab.cern.ch/cvicovil/topcomb_analyses/-/blob/master/configs/TTG_TOP-23-002.yml?ref_type=heads).
+An example of how one full `yaml` file looks like can be found in the [TTG configuration file](https://gitlab.cern.ch/cvicovil/top-comb/-/blob/master/inputs/configs/TTG_TOP-23-002.yml?ref_type=heads).
 
 **TODO**: provide a script to generate skeletons for `yaml` files, to make it easier for people that want to contribute.
 
@@ -41,7 +39,7 @@ Once the `yaml` file is properly configured, you can automatically generate the 
 Run the following command:
 
 ```bash
-python3 topcomb_analysis/setup_analysis.py --config topcomb_analysis/configs/MY_ANALYSIS.yaml
+python3 inputs/setup_analysis.py --config inputs/configs/MY_ANALYSIS.yaml
 ```
 
 Here, `MY_ANALYSIS.yaml` refers to the configuration file described in the previous section.

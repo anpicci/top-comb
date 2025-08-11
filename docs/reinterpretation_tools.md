@@ -24,7 +24,7 @@ make run
 ```
 
 - You will be presented with a menu of available actions. Select the **`Gridpack`** option to create a gridpack.
-- Next, you will be shown a list of available processes for which gridpacks can be generated.  This list is taken from the official sample definitions in `topcomb_analyses`.
+- Next, you will be shown a list of available processes for which gridpacks can be generated.  This list is taken from the official sample definitions in `inputs`.
 - New gridpacks can be added by modifying (not recommended) or setting up a new analysis, following the instructions from [Analysis Logistics](docs/analysis_logistics.md) document.
 
 ### Creating NanoGEN events
