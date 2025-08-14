@@ -26,7 +26,7 @@ function run_gridpack() {
 	# Get the list of analyses
 	list_processes
 
-	analysisDir=$(find ${TOPCOMB_ANALYSES}/ -name $process -type d)
+	analysisDir=$(find ${TOPCOMB_INPUTS}/ -name $process -type d)
 	
 	custom_msg INFO "Generating gridpack for process ${process}"
 	# Prepare the submission folder
@@ -46,6 +46,9 @@ function run_gridpack() {
  	sed -i "s|__PROCNAME__|$process|g" run_gridpack_batch.sh
  	sed -i "s|__CARDSDIR__|$tempdir|g" run_gridpack_batch.sh
  	sed -i "s|__OUTPATH__|$TOPCOMB_OUTPATH|g" run_gridpack_batch.sh
+ 	sed -i "s|__SINGULARITY_IMAGE__|$SINGULARITY_IMAGE_GRIDPACK|g" run_gridpack_batch.sh
+ 	sed -i "s|__GENPRODUCTIONS_GRIDPACK__|$GENPRODUCTIONS_GRIDPACK|g" run_gridpack_batch.sh
+ 	sed -i "s|__BRANCH_GRIDPACK__|$BRANCH_GRIDPACK|g" run_gridpack_batch.sh
 	chmod +x run_gridpack_batch.sh
 
 	# Now copy the jds

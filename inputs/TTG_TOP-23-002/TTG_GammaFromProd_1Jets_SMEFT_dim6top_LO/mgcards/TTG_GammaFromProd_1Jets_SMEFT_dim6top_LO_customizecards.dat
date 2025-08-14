@@ -19,11 +19,12 @@ set param_card yukawa 6 172.5
 
 
 
-# EFT operatorsset param_card ctG 1.0
+# EFT operators
+set param_card ctG 1.0
 set param_card ctW 1.0
 
 
 # User settings
 set run_card ptj 20
 set run_card xqcut 20
-set run_card maxjetflavour 5
+set run_card maxjetflavor 5

@@ -1,7 +1,7 @@
 {
     "mode": "nanogen",
     "processes": {
-        "TTG_GammaFromProd_1Jets_SMEFT_dim6top_LO": "file:/afs/cern.ch/work/c/cvicovil/private/top-comb/topcomb_analyses/TTG_TOP-23-002/TTG_GammaFromProd_1Jets_SMEFT_dim6top_LO/fragment.py"
+        "TTG_GammaFromProd_1Jets_SMEFT_dim6top_LO": "file:/afs/cern.ch/work/c/cvicovil/private/top-comb/inputs/TTG_TOP-23-002/TTG_GammaFromProd_1Jets_SMEFT_dim6top_LO/fragment.py"
     },
     "nevents": {
         "TTG_GammaFromProd_1Jets_SMEFT_dim6top_LO": 1000000.0

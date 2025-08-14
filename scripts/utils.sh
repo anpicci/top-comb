@@ -29,8 +29,8 @@ function quit_setup() {
 function list_processes() {
 	# Simple function to provide the list of available analyses
 
-	listProcesses=$(find ${TOPCOMB_ANALYSES}/${analysis} -mindepth 2 -maxdepth 2 -type d | awk -F '/' '{print $NF}'  )
-	select process in ${listProcesses/$TOPCOMB_ANALYSES}; do
+	listProcesses=$(find ${TOPCOMB_INPUTS}/${analysis} -mindepth 2 -maxdepth 2 -type d | awk -F '/' '{print $NF}'  )
+	select process in ${listProcesses/$TOPCOMB_INPUTS}; do
 		break
 	done
 

@@ -15,6 +15,7 @@ function check_module() {
 						;;
 					no)
 						quit_setup
+						break
 						;;
 				esac
 			done
@@ -36,7 +37,6 @@ function setup_cmgrdf() {
 	check_module "cmgrdf-prototype"	
 
 	# Now do the basic setup
-	source /cvmfs/sft.cern.ch/lcg/views/dev3/latest/x86_64-el9-gcc13-opt/setup.sh
 	pushd $TOPCOMB_CMGRDF
 	git submodule update --init externals/RoccoR 
 	make -j 4

@@ -17,7 +17,7 @@ def load_config( config_path ) -> dict:
         return yaml.safe_load(f)
 
 def open_template( template ):
-    with open( os.environ["TOPCOMB_ANALYSES"] + f"/{template}" ) as openfile:
+    with open( os.environ["TOPCOMB_MAINPATH"] + f"/{template}" ) as openfile:
         return openfile.read()
 
 def create_main_parser():
@@ -85,7 +85,7 @@ def write_customizecards( outdir, meta, all_operators ):
     # have to be used.
     
     arr = np.array( all_operators )[:, 0:2]
-    text += "\n\n# EFT operators"
+    text += "\n\n# EFT operators\n"
     for op, ref in arr:
         text += f"set param_card {op} {ref}\n"
 
@@ -199,7 +199,7 @@ def write_fragment( outdir, meta ):
 
     # The name of the gridpack is fixed by the process settings
     topcomb_gridpacks = os.environ['TOPCOMB_OUTPATH'] + f"top-comb/{meta['procname']}"
-    GRIDPACK = f"{topcomb_gridpacks}/gridpack_{meta['procname']}.tar.xz"
+    GRIDPACK = f"{topcomb_gridpacks}/gridpack/{meta['procname']}.tar.xz"
 
     # Now read the process settings
     PROCESS_PARAMETERS = ['# Process specific settings'] + meta['fragment']['process_parameters']
@@ -256,7 +256,7 @@ if __name__ == "__main__":
     analysis_name = metadata['analysis_name']
 
     print(f">> Creating directories for analysis: {analysis_name} ({parser.config})")
-    outdir = os.path.join(os.environ["TOPCOMB_ANALYSES"], analysis_name)
+    outdir = os.path.join(os.environ["TOPCOMB_INPUTS"], analysis_name)
     os.makedirs(outdir, exist_ok=True)
 
     # Write MadGraph cards if samples exist

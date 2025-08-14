@@ -24,7 +24,7 @@ samples:
       extraopts: [
         "set run_card ptj 20",
         "set run_card xqcut 20",
-        "set run_card maxjetflavour 5"
+        "set run_card maxjetflavor 5"
       ] 
     template_reweight_card: 
       algo: one_by_one
@@ -39,6 +39,20 @@ samples:
         "'JetMatching:nJetMax = 1'",
         "'TimeShower:mMaxGamma = 4.0'"
       ]
+
+analysis:
+  samples: 
+    TTG_from_prod: 
+      path: /eos/cms/store/group/phys_top/cvicovil/top-comb/nanogen/TTG_GammaFromProd_1Jets_SMEFT_dim6top_LO
+      files: [
+        batch_12_08_2025_1743/genfiles/*root
+      ]
+      xsec: 1.0 # change
+  plugins: [
+    plugins/TTG_TOP-23-002.cc
+  ]
+  definitions: definitions.TTG_TOP-23-002
+  plots: definitions.TTG_TOP-23-002
 
 
 # The syntax is:

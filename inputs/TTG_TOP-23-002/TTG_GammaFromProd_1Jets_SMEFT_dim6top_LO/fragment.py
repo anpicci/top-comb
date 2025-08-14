@@ -1,7 +1,7 @@
 import FWCore.ParameterSet.Config as cms
 
 externalLHEProducer = cms.EDProducer('ExternalLHEProducer',
-    args = cms.vstring('/eos/cms/store/group/phys_top/cvicovil/top-comb/TTG_GammaFromProd_1Jets_SMEFT_dim6top_LO/gridpack_TTG_GammaFromProd_1Jets_SMEFT_dim6top_LO.tar.xz'),
+    args = cms.vstring('/eos/cms/store/group/phys_top/cvicovil/top-comb/TTG_GammaFromProd_1Jets_SMEFT_dim6top_LO/gridpack/TTG_GammaFromProd_1Jets_SMEFT_dim6top_LO.tar.xz'),
     nEvents = cms.untracked.uint32(5000),
     numberOfParameters = cms.uint32(1),
     outputFile = cms.string('cmsgrid_final.lhe'),
@@ -13,10 +13,10 @@ from Configuration.Generator.Pythia8CommonSettings_cfi import *
 from Configuration.Generator.MCTunes2017.PythiaCP5Settings_cfi import *
 from Configuration.Generator.PSweightsPythia.PythiaPSweightsSettings_cfi import *
 
-generator = cms.EDFilter("Pythia8ConcurrentPSHadronizerFilter",
+generator = cms.EDFilter("Pythia8ConcurrentHadronizerFilter",
     PythiaParameters = cms.PSet(
         pythia8CommonSettingsBlock,
-        pythia8CP5NameSettingsBlock,
+        pythia8CP5SettingsBlock,
         pythia8PSweightsSettingsBlock,
         processParameters = cms.vstring(
             'JetMatching:setMad = off',
