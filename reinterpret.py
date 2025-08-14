@@ -27,7 +27,7 @@ def add_parsing_options():
     parser.add_argument(
         '--config', 
         dest = "config", 
-        default = "inputs/configs/TTG_TOP-23-002.yml", 
+        default = "configs/TTG_TOP-23-002.yml", 
         help = "Analysis configuration file."
     )
     parser.add_argument(
