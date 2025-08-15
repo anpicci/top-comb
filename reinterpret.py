@@ -16,6 +16,11 @@ from CMGRDF.plots import Plot, PlotSetPrinter
 # Utilities to be interface with CMGRDF
 from utils import cmgrdf_datasets as cmgdataset
 
+# Create the logger instance
+from utils.logger import get_logger
+logger = get_logger( __name__ )
+
+
 def load_config( config_path ) -> dict:
     """ Loads a configuration file written in yml format """
     with open(config_path, "r") as f:
@@ -49,7 +54,7 @@ if __name__ == "__main__":
     metadata = load_config( opts.config )
 
     # Load all samples
-    samples = cmgdataset.get_cmgrdf_processes( metadata['analysis']['samples'] )
+    samples = cmgdataset.get_cmgrdf_processes( metadata )
 
     # Load functions 
     for funcfile in metadata['analysis']['plugins']:
@@ -68,8 +73,8 @@ if __name__ == "__main__":
             defs.sequence
     )
 
+    # Book the plotter to generate histograms
     maker = Processor()
-
     maker.book(
         samples,
         { "all" : 138.0 },
@@ -78,7 +83,6 @@ if __name__ == "__main__":
         eras = [ "all" ],
         withUncertainties = False
     )
-
     results=maker.runPlots()
 
     PlotSetPrinter(
@@ -89,33 +93,3 @@ if __name__ == "__main__":
         showRatio=True
     )
 
-    """
-    flow_srwz = Flow("srwz", sequence)
-
-    maker = Processor()
-
-    maker.book(
-        processes,
-        lumi, 
-        flow_srwz,
-        plots_wz,
-        eras = eras,
-        withUncertainties = run_unc
-    )
-
-    # This creates the plots
-    results=maker.runPlots( mergeEras = True )
-
-
-    # This saves the plots in the `output folder`
-    # One can find more about this in `cmgrdf-prototype/python/CMGRDF/plots.py`.
-    PlotSetPrinter(
-        topRightText="%(lumi).1f fb^{-1} (13.6 TeV)",
-        showErrors=run_unc
-    ).printSet(results, outfolder + f"/{year}/",
-        maxRatioRange=(0.5, 1.5),
-        showRatio=True
-    )
-
-
-    """

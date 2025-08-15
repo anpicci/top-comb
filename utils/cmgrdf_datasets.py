@@ -1,75 +1,53 @@
 """
-Functions to fetch datasets
-"""
-
-"""
-Datasets (based on WZ analysis)
---------------------------------------------------------------
-This code builds a series of functions that are useful to read input
-ROOT files for both Data and MC. 
-
-The code can be easily debugged by just doing:
-python3 datasets.py
-
-from within the folder in which it is contained (and of course, one
-needs to load the CMGRDF environment beforehand.)
-
-
-The order in which you should be reading this code is:
-
-  1. L236 (or approx, might change if we write and don't update this line :D ) 
-  2. function `get_cmgrdf_processes`
-  3. Continue following that thread until the code finishes doing stuff.
+Functions to fetch datasets from the information available in the yml files
 """
 
 import os
 import ROOT
 
-from CMGRDF import MCSample, DataSample, Data, Process
 
-def color_msg(msg, color = "none", indentlevel=0):
-    """ Prints a message with ANSI coding so it can be printout with colors """
-    codes = {
-        "none" : "0m",
-        "green" : "1;32m",
-        "red" : "1;31m",
-        "blue" : "1;34m",
-        "yellow" : "1;33m"
-    }
-
-    if indentlevel == 0: indentSymbol=">> "
-    if indentlevel == 1: indentSymbol="+ "
-    if indentlevel >= 2: indentSymbol="* "
-
-    indent = indentlevel*" " + indentSymbol
-    print("\033[%s%s%s \033[0m"%(codes[color], indent, msg))
-    return
+# CMGRDF libraries
+from CMGRDF import MCSample, DataSample, Data, Process, AddWeight
+from CMGRDF.modifiers import Append
 
 
-def get_cmgrdf_processes( files ):
+import utils.auxiliars as aux
+# Create the logger instance
+from utils.logger import get_logger
+logger = get_logger( __name__ )
+
+def get_cmgrdf_processes( meta ):
     """
-    `get_cmgrdf_process`: this function is used to:
-        - Read a list of input metadata that contains information
-          about the samples.
-        - Create CMGRDF MCSample objects and processes for MC samples.
+    This function is used to read a list of input metadata that contains information
     """
-    
+
+    # First get the reweighting points
+    files = meta['analysis']['samples'] 
+    operators = meta['operators']['scans']
+    algorithm = meta['operators']['algo']
+    algos = algorithm.split("-")
+
+
+    # This is the list of processes that will be included in the histograms
     mc_processes = []
-    
+
+    # First, fetch all the nanogen files and prepare the MCSamples
+    mc_samples = {}
+
+
     for sample_name, sample_metadata in files.items():
         
         files = sample_metadata["files"]
         norm  = sample_metadata["xsec"]
         mcpath = sample_metadata["path"]
         
-        color_msg( f"Preparing process {sample_name}", color = "green", indentlevel = 0)
+        logger.info( f"Preparing process {sample_name}" )
         
         samples = []
         for ifile, _file in enumerate( files ):
-            
             fileName = f"{sample_name}_batch{ifile}" 
             sourcepath = f"{mcpath}/{_file}"
-            color_msg( f"Including MC sample: {fileName} (xsec : {norm}, fileIn = {sourcepath})", color = "none", indentlevel = 1)
+            logger.info( f"Including MC sample: {fileName} (xsec : {norm}, fileIn = {sourcepath})" )
         
             sample = MCSample(
                 name = fileName,
@@ -81,16 +59,29 @@ def get_cmgrdf_processes( files ):
             )
         
             samples.append( sample )
+
+        mc_samples[ sample_name ] = samples
         
-        proc = Process(
-            name = sample_name,
-            samples = samples,
-            fillColor = 0,
-            LineColor = 1,
-            lineStyle = 1
-        )
-        
-        mc_processes.append( proc )
+
+    for algo in algos:
+        rwgt_points = aux.get_rwgt_points(algo, operators)
+
+        # Now for each combination of operators, create a MCProcess
+        for irwgt, rwgt_point in enumerate( rwgt_points ):
+
+            procname = aux.get_rwgt_name( rwgt_point ) 
+            proc = Process(
+                name = procname,
+                samples = samples,
+                fillColor = 0,
+                LineColor = irwgt,
+                lineStyle = 1,
+                hooks = [ 
+                    Append( AddWeight("point", f"LHEReweightingWeight[{irwgt}]") ) 
+                ]
+            )
+
+            mc_processes.append( proc )
         
     
     return mc_processes 
