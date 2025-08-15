@@ -26,8 +26,6 @@ samples:
         "set run_card xqcut 20",
         "set run_card maxjetflavor 5"
       ] 
-    template_reweight_card: 
-      algo: one_by_one
 
     # ------ Configurations regarding the Parton shower
     fragment:
@@ -58,7 +56,9 @@ analysis:
 # The syntax is:
 # [operator_name, reference_point, minBound, maxBound ]
 operators:
-  - [ctG, 1.0, -1.0, 1.0]
-  - [ctW, 1.0, -1.0, 1.0]
+  scans:
+      - [ctG, 1.0, -1.0, 1.0]
+      - [ctW, 1.0, -1.0, 1.0]
+  algo: one_by_one
 
 

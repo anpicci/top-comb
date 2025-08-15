@@ -1,282 +1,192 @@
 """
 This macro takes a config yml file and writes a reweight card based on the information.
 """
-import re
-import itertools
-import textwrap 
-import numpy as np
-import yaml
-import argparse
 import os
+import re
 import json
+import argparse
+import textwrap
+import numpy as np
 from datetime import datetime
+import utils.auxiliars as aux
 
-def load_config( config_path ) -> dict:
-    """ Loads a configuration file written in yml format """
-    with open(config_path, "r") as f:
-        return yaml.safe_load(f)
+# Create the logger instance
+from utils.logger import get_logger
+logger = get_logger( __name__ )
 
-def open_template( template ):
-    with open( os.environ["TOPCOMB_MAINPATH"] + f"/{template}" ) as openfile:
-        return openfile.read()
+def open_template(template_path):
+    """Read and return the content of a template file """
+    main_path = os.environ["TOPCOMB_MAINPATH"]
+    with open(os.path.join(main_path, template_path)) as f:
+        return f.read()
+
 
 def create_main_parser():
-    # Define the main parser
+    """Create and return the main argument parser."""
     parser = argparse.ArgumentParser(
-            description=(
-                "Functionalities to setup a new analysis for the combination."
-            ),
+        description="Functionalities to setup a new analysis for the combination."
     )
 
     parser.add_argument(
-            "--config", 
-            dest = "config",
-            default = "configs/TTG_TOP-23-002.yml",
-            type = str, 
-            help = "Path to config file"
+        "--config",
+        dest="config",
+        default="configs/TTG_TOP-23-002.yml",
+        type=str,
+        help="Path to config file"
     )
 
     return parser.parse_args()
 
 
-def write_text( outfile, text ):
+def write_text(outfile, text):
+    """Write text to a file."""
     with open(outfile, "w") as out:
-        out.write( text )
-    return
+        out.write(text)
 
-def write_proc_card( outdir, meta ):
-    """ Writes the process card from the metadata """
 
-    # Model content
-    full_card = [ 
-            f"import model {meta['model']}", 
-            " " # space
+def write_proc_card(outdir, meta):
+    """Write the process card from the metadata."""
+    procname = meta['procname']
+
+    full_card = [
+        f"import model {meta['model']}",
+        "",
+        *meta['process'],
+        "",
+        f"output {procname} -nojpeg"
     ]
 
-    # Process content
-    full_card += meta['process']
+    write_text(os.path.join(outdir, f"{procname}_proc_card.dat"), "\n".join(full_card))
 
-    # Output content
-    full_card += [
-            " ", # space 
-            f"output {meta['procname']} -nojpeg" 
-    ]
 
-    text = "\n".join( full_card )
+def write_run_card(outdir, meta):
+    """Write the run card from the metadata (pass-through from template)."""
+    procname = meta['procname']
+    template_name = meta['template_run_card']['name']
 
-    write_text( f"{outdir}/{meta['procname']}_proc_card.dat", text )
-    return
+    text = open_template(template_name)
+    write_text(os.path.join(outdir, f"{procname}_run_card.dat"), text)
 
-def write_run_card( outdir, meta ):
-    """ Writes the process card from the metadata """
-    text = open_template( meta['template_run_card']['name'] )
 
-    # At the moment this is just a pass-through of the template run_card. 
-    # We leave it like this in case developments are needed in the future.
-    write_text( f"{outdir}/{meta['procname']}_run_card.dat", text )
-    return
+def write_customizecards(outdir, meta, operators):
+    """Write the customizecards file from the metadata."""
+    procname = meta['procname']
+    template_name = meta['template_customizecards']['name']
+    extra_opts = meta['template_customizecards']['extraopts']
 
-def write_customizecards( outdir, meta, all_operators ):
-    """ Writes the process card from the metadata """
+    text = open_template(template_name)
 
-    text = open_template( meta['template_customizecards']['name'] )
-
-    # Set the operators to a nonzero value so that MG knows they
-    # have to be used.
-    
-    arr = np.array( all_operators )[:, 0:2]
+    # EFT operators
     text += "\n\n# EFT operators\n"
-    for op, ref in arr:
+    for op, ref in np.array(operators)[:, 0:2]:
         text += f"set param_card {op} {ref}\n"
 
-
+    # Extra user settings
     text += "\n\n# User settings"
-    for opt in meta['template_customizecards']['extraopts']:
+    for opt in extra_opts:
         text += f"\n{opt}"
 
-
-    # At the moment this is just a pass-through of the template run_card. 
-    # We leave it like this in case developments are needed in the future.
-    write_text( f"{outdir}/{meta['procname']}_customizecards.dat", text )
-    return
-
-def get_rwgt_blocks(algo, all_operators):
-    """ Function to get reweighting points """
-    print( f" >> Making groups of {algo}" )
-    rwgt_block = ""
-
-    r_pars = {
-        "one_by_one" : 1,
-        "two_by_two" : 2,
-        "three_by_three" : 3
-    }
-
-    # --------------------
-    # First of all, unroll the relevant information
-    # This converts:
-    # - (
-    #     ['ctG', 1.0, -1.0, 1.0], 
-    #     ['ctW', 1.0, -1.0, 1.0] 
-    # )
-    # into:
-    # - [
-    #    ('ctG', -1.0), 
-    #    ('ctG', 1.0), 
-    #    ('ctW', -1.0), 
-    #    ('ctW', 1.0)
-    # ]
-    # Note: purposefully ignoring the reference 
-    # point value and using only bound 
-
-    unroll_operators = [ 
-        (op[0], opbound) for op in all_operators  for opbound in op[2:] 
-    ]
-
-    # Now make all combinations, replacing N operators by 0
-    operator_combinations = itertools.combinations( unroll_operators, r_pars[ algo ] )
-    for comb in operator_combinations:
-
-        # easier to work with arrays
-        op_arr = np.array(comb)
-
-        # Prune cases in which the same operator gets modified twice
-        unique_names = list( set(op_arr[:, 0]) )
-        if len(unique_names) != len(op_arr[:, 0]):
-            continue
-
-        # Generate a matrix with a size equal to the number of operators
-        # that will be modified.
-
-        # This is the information for the operators that are turned ON
-        full_matrix = np.full( (len(all_operators), 2), '0', dtype = 'object' )
-        full_matrix[:len(unique_names), :] = op_arr 
-
-        # Fill with those that are turned OFF
-        unused_operators = np.array(
-                [ (op[0], '0.0') for op in all_operators if op[0] not in unique_names ]
-        )
-        full_matrix[len(unique_names):, :] = unused_operators
+    write_text(os.path.join(outdir, f"{procname}_customizecards.dat"), text)
 
 
-        # A bit of OCD but let's sort the full matrix by operator name
-        full_matrix = full_matrix[full_matrix[:, 0].argsort()]
-
-        # Set up a name
-        rwgt_name = "_".join( 
-                "{0}{1}".format( opname, opval.replace(".", "p").replace("-","minus") ) for opname, opval in full_matrix 
-        )
-        
-        rwgt_block += f"launch --rwgt_name={rwgt_name}\n"
-        for row in full_matrix:
-            rwgt_block += f"set {row[0]} {float(row[1]):3.4f}\n"
-        rwgt_block += "\n"
-            
-
-    return rwgt_block 
-
-
-def write_reweightcards( outdir, meta, operators ):
-    """ Writes the process card from the metadata """
-
-    text = "# Reweight card created on " + datetime.now().strftime("%A %d. %B %Y") + "\n"
+def write_reweightcards(outdir, procname, operators, algorithm):
+    """Write the reweight card based on operators and algorithm for combining operators."""
+    text = f"# Reweight card created on {datetime.now().strftime('%A %d. %B %Y')}\n"
     text += "change rwgt_dir rwgt\n"
     text += "launch --rwgt_name=dummy # Name of first argument seems to be rwgt_1. Add dummy to fix it.\n\n"
 
-    algorithm = meta['template_reweight_card']['algo']
-    algos = algorithm.split("-")
+    for algo in algorithm.split("-"):
+        rwgt_points = aux.get_rwgt_points(algo, operators)
+        for rwgt_point in rwgt_points:
+            rwgt_name = aux.get_rwgt_name(rwgt_point)
+            text += f"launch --rwgt_name={rwgt_name}\n"
+            for param, value in rwgt_point:
+                text += f"set {param} {float(value):3.4f}\n"
+            text += "\n"
 
-    # Prepare reweighting points
-    for algo in algos:
-        text += get_rwgt_blocks(algo, operators)
-
-    write_text( f"{outdir}/{meta['procname']}_reweight_card.dat", text )
-    return
-
-def write_fragment( outdir, meta ):
-    """ Modify a PS template and add it to the analysis folder """
-
-    text = open_template( meta['fragment']['name'] )
-
-    # The name of the gridpack is fixed by the process settings
-    topcomb_gridpacks = os.environ['TOPCOMB_OUTPATH'] + f"top-comb/{meta['procname']}"
-    GRIDPACK = f"{topcomb_gridpacks}/gridpack/{meta['procname']}.tar.xz"
-
-    # Now read the process settings
-    PROCESS_PARAMETERS = ['# Process specific settings'] + meta['fragment']['process_parameters']
+    write_text(os.path.join(outdir, f"{procname}_reweight_card.dat"), text)
 
 
-    # Find indentation of the {PROCESS_PARAMETERS} placeholder in the template
+def write_fragment(outdir, meta):
+    """Modify a PS template and save it to the analysis folder."""
+    procname = meta['procname']
+    fragment_meta = meta['fragment']
+
+    text = open_template(fragment_meta['name'])
+
+    topcomb_gridpacks = os.path.join(os.environ['TOPCOMB_OUTPATH'], f"top-comb/{procname}")
+    gridpack_path = f"{topcomb_gridpacks}/gridpack/{procname}.tar.xz"
+
+    process_params = ['# Process specific settings'] + fragment_meta['process_parameters']
+
+    # Find indentation for {PROCESS_PARAMETERS}
     placeholder_match = re.search(r'^(?P<indent>\s*)\{PROCESS_PARAMETERS\}', text, flags=re.MULTILINE)
     indent = placeholder_match.group('indent') if placeholder_match else ''
 
-    # Format the parameters with proper indentation
-    formatted_params = (",\n" + indent).join(PROCESS_PARAMETERS)  
+    formatted_params = (",\n" + indent).join(process_params)
 
-    # Now substitute everything
-    text = text.format( 
-        GRIDPACK = GRIDPACK, 
-        PROCESS_PARAMETERS = formatted_params
+    text = text.format(
+        GRIDPACK=gridpack_path,
+        PROCESS_PARAMETERS=formatted_params
     )
 
-    # And save the fragment
-    write_text( f"{outdir}/fragment.py", text )
+    write_text(os.path.join(outdir, "fragment.py"), text)
 
 
-def write_submission_nanogen_file( outdir, meta ):
-    """ Write a configuration file to be used with tmg-tools/top-gendqm """
+def write_submission_nanogen_file(outdir, meta):
+    """Write a configuration file to be used with tmg-tools/top-gendqm."""
+    procname = meta['procname']
 
-    # Many fields are just filled with template numbers, just change
-    # whenever you need either more or less events, etc...
     data = {
-        "mode"       : "nanogen",
-        "processes"  : { sample_meta['procname'] : f"file:{outdir}/fragment.py" },
-        "nevents"    : { sample_meta['procname'] : 1e6 },        
-        "memory"     : { sample_meta['procname'] : 32000 },        
-        "njobs"      : { sample_meta['procname'] : 1000 },        
-        "xsec"       : { sample_meta['procname'] : 1 },        
-        "isGS"       : { sample_meta['procname'] : 0 },
-        "campaign"   : "RunIISummer20UL18",
-        "outpath"    : os.environ['TOPCOMB_OUTPATH'] + f"top-comb/nanogen/",
-        "submit_dir" : f"submit_nanogen_{meta['procname']}",        
-        "tag"        : meta['procname'],
-        "routines"   : []
-    }   
+        "mode": "nanogen",
+        "processes": {procname: f"file:{outdir}/fragment.py"},
+        "nevents": {procname: 1e6},
+        "memory": {procname: 32000},
+        "njobs": {procname: 1000},
+        "xsec": {procname: 1},
+        "isGS": {procname: 0},
+        "campaign": "RunIISummer20UL18",
+        "outpath": os.path.join(os.environ['TOPCOMB_OUTPATH'], "top-comb/nanogen/"),
+        "submit_dir": f"submit_nanogen_{procname}",
+        "tag": procname,
+        "routines": []
+    }
 
-    with open( f"{outdir}/nanogen_config.json", "w" ) as outfile:
-        json.dump( data, outfile, indent = 4 )
+    with open(os.path.join(outdir, "nanogen_config.json"), "w") as outfile:
+        json.dump(data, outfile, indent=4)
 
 
 if __name__ == "__main__":
-    parser = create_main_parser()
-
+    # ---- Implement here the main logic
+    args = create_main_parser()
+    
     # Load configurations
-    metadata = load_config(parser.config)
-
-    # Setup analysis directories
+    metadata = aux.load_config(args.config)
     analysis_name = metadata['analysis_name']
-
-    print(f">> Creating directories for analysis: {analysis_name} ({parser.config})")
+    
+    logger.info(f"Creating directories for analysis: {analysis_name} ({args.config})")
     outdir = os.path.join(os.environ["TOPCOMB_INPUTS"], analysis_name)
     os.makedirs(outdir, exist_ok=True)
-
-    # Write MadGraph cards if samples exist
+    
+    operators = metadata['operators']['scans']
+    algorithm = metadata['operators']['algo']
+    
     if metadata['samples']:
-
-
         for sample_meta in metadata['samples']:
-
             procname = sample_meta['procname']
-            mgcards_dir = os.path.join(outdir, procname, "mgcards")
+            proc_dir = os.path.join(outdir, procname)
+            mgcards_dir = os.path.join(proc_dir, "mgcards")
             os.makedirs(mgcards_dir, exist_ok=True)
-
+    
             # Matrix element configuration
             write_proc_card(mgcards_dir, sample_meta)
             write_run_card(mgcards_dir, sample_meta)
-            write_customizecards(mgcards_dir, sample_meta, metadata['operators'])
-            write_reweightcards(mgcards_dir, sample_meta, metadata['operators'])
-
+            write_customizecards(mgcards_dir, sample_meta, operators)
+            write_reweightcards(mgcards_dir, procname, operators, algorithm)
+    
             # Parton shower configuration
-            write_fragment(os.path.join(outdir, procname), sample_meta)
-
-            # Prepare configuration file for generating nanogen  
-            write_submission_nanogen_file(os.path.join(outdir, procname), sample_meta)  
+            write_fragment(proc_dir, sample_meta)
+    
+            # Nanogen submission configuration
+            write_submission_nanogen_file(proc_dir, sample_meta)
+    
