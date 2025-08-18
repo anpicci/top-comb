@@ -9,6 +9,7 @@ import textwrap
 import numpy as np
 from datetime import datetime
 import utils.auxiliars as aux
+from copy import deepcopy
 
 # Create the logger instance
 from utils.logger import get_logger
@@ -95,14 +96,20 @@ def write_reweightcards(outdir, procname, operators, algorithm):
     text += "change rwgt_dir rwgt\n"
     text += "launch --rwgt_name=dummy # Name of first argument seems to be rwgt_1. Add dummy to fix it.\n\n"
 
+    rwgt_points = []
     for algo in algorithm.split("-"):
-        rwgt_points = aux.get_rwgt_points(algo, operators)
-        for rwgt_point in rwgt_points:
-            rwgt_name = aux.get_rwgt_name(rwgt_point)
-            text += f"launch --rwgt_name={rwgt_name}\n"
-            for param, value in rwgt_point:
-                text += f"set {param} {float(value):3.4f}\n"
-            text += "\n"
+        rwgt_points += aux.get_rwgt_points(algo, operators)
+
+    # Add the SM point
+    sm = deepcopy( rwgt_points[-1] )
+    sm[:, 1] = "0.0"
+    rwgt_points.append( sm )
+    for rwgt_point in rwgt_points:
+        rwgt_name = aux.get_rwgt_name(rwgt_point)
+        text += f"launch --rwgt_name={rwgt_name}\n"
+        for param, value in rwgt_point:
+            text += f"set {param} {float(value):3.4f}\n"
+        text += "\n"
 
     write_text(os.path.join(outdir, f"{procname}_reweight_card.dat"), text)
 

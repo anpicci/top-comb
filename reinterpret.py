@@ -15,16 +15,12 @@ from CMGRDF.plots import Plot, PlotSetPrinter
 
 # Utilities to be interface with CMGRDF
 from utils import cmgrdf_datasets as cmgdataset
+import utils.auxiliars as aux
 
 # Create the logger instance
 from utils.logger import get_logger
 logger = get_logger( __name__ )
 
-
-def load_config( config_path ) -> dict:
-    """ Loads a configuration file written in yml format """
-    with open(config_path, "r") as f:
-        return yaml.safe_load(f)
 
 def add_parsing_options():
     """ This is a custom parser that allows for passing options to the code """
@@ -51,7 +47,7 @@ if __name__ == "__main__":
     ROOT.EnableImplicitMT( opts.ncores )
 
     # Load the configurations
-    metadata = load_config( opts.config )
+    metadata = aux.load_config( opts.config )
 
     # Load all samples
     samples = cmgdataset.get_cmgrdf_processes( metadata )
@@ -88,7 +84,7 @@ if __name__ == "__main__":
     PlotSetPrinter(
         topRightText="%(lumi).1f fb^{-1} (13.0 TeV)",
         showErrors = False
-    ).printSet(results, f"outplots/{metadata['analysis_name']}/",
+    ).printSet(results, metadata['analysis']['outpath'],
         maxRatioRange=(0.5, 1.5),
         showRatio=True
     )

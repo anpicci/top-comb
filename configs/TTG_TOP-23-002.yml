@@ -13,7 +13,7 @@ samples:
         'define vl = ve vm vt',
         'define vl~ = ve~ vm~ vt~',
         'generate p p > t t~ a FCNC=0 DIM6=1, (t > l+ vl b FCNC=0 DIM6=0), (t~ > l- vl~ b~ FCNC=0 DIM6=0) @0 ', 
-        #'add process p p > t t~ a j FCNC=0 DIM6=1, (t > l+ vl b FCNC=0 DIM6=0), (t~ > l- vl~ b~ FCNC=0 DIM6=0) @0 ', 
+        'add process p p > t t~ a j FCNC=0 DIM6=1, (t > l+ vl b FCNC=0 DIM6=0), (t~ > l- vl~ b~ FCNC=0 DIM6=0) @0 ', 
       ]
 
     template_run_card: 
@@ -42,23 +42,27 @@ analysis:
   samples: 
     TTG_from_prod: 
       path: /eos/cms/store/group/phys_top/cvicovil/top-comb/nanogen/TTG_GammaFromProd_1Jets_SMEFT_dim6top_LO
-      files: [
-        batch_12_08_2025_1743/genfiles/*root
-      ]
+      files: batch_12_08_2025_1743/genfiles/*root
       xsec: 1.0 # change
   plugins: [
     plugins/TTG_TOP-23-002.cc
   ]
   definitions: definitions.TTG_TOP-23-002
   plots: definitions.TTG_TOP-23-002
-
+  outpath: outplots/TTG_TOP-23-002
 
 # The syntax is:
 # [operator_name, reference_point, minBound, maxBound ]
 operators:
   scans:
       - [ctG, 1.0, -1.0, 1.0]
+      - [ctGI, 1.0, -1.0, 1.0]
+      - [ctp,  1.0, -1.0, 1.0]
+      - [ctpI, 1.0, -1.0, 1.0]
       - [ctW, 1.0, -1.0, 1.0]
-  algo: one_by_one
+      - [ctWI, 1.0, -1.0, 1.0]
+      - [ctZ, 1.0, -1.0, 1.0]
+      - [ctZI, 1.0, -1.0, 1.0]
+  algo: one_by_one-two_by_two
 
 

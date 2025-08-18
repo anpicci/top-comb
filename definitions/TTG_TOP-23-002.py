@@ -39,8 +39,9 @@ plots = [
         "genlep1_pt",
         f"FiducialLepton_pt[ 0 ]",
         (20, 25, 200),
-        xTitle = "#it{p}_{T} (lep1) (GeV)",
+        xTitle = "#it{p}_{T} (lep1)",
         legend = "TR",
+        unit = "GeV"
     )
 
 ]

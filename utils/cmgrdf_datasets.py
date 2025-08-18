@@ -1,15 +1,12 @@
 """
 Functions to fetch datasets from the information available in the yml files
 """
-
 import os
 import ROOT
-
 
 # CMGRDF libraries
 from CMGRDF import MCSample, DataSample, Data, Process, AddWeight
 from CMGRDF.modifiers import Append
-
 
 import utils.auxiliars as aux
 # Create the logger instance
@@ -31,56 +28,49 @@ def get_cmgrdf_processes( meta ):
     # This is the list of processes that will be included in the histograms
     mc_processes = []
 
-    # First, fetch all the nanogen files and prepare the MCSamples
-    mc_samples = {}
-
+    # Now consider the processes (lines in the histogram)
+    all_rwgt_points = [] 
+    for algo in algos:
+        all_rwgt_points.extend( aux.get_rwgt_points(algo, operators) )
 
     for sample_name, sample_metadata in files.items():
+
+        # Now for each combination of operators, create a MCProcess
+        for irwgt, rwgt_point in enumerate( all_rwgt_points ):
+    
+            procname = aux.get_rwgt_name( rwgt_point ) 
         
-        files = sample_metadata["files"]
-        norm  = sample_metadata["xsec"]
-        mcpath = sample_metadata["path"]
+            files = sample_metadata["files"]
+            norm  = sample_metadata["xsec"]
+            mcpath = sample_metadata["path"]
         
-        logger.info( f"Preparing process {sample_name}" )
-        
-        samples = []
-        for ifile, _file in enumerate( files ):
-            fileName = f"{sample_name}_batch{ifile}" 
-            sourcepath = f"{mcpath}/{_file}"
-            logger.info( f"Including MC sample: {fileName} (xsec : {norm}, fileIn = {sourcepath})" )
-        
-            sample = MCSample(
-                name = fileName,
+            logger.info( f"Preparing process {sample_name}" )
+
+            # First load all the files that make up this sample
+            sourcepath = f"{mcpath}/{files}"
+            logger.info( f"Including MC sample: xsec = {norm}, fileIn = {sourcepath})" )
+            logger.info( f"Including reweighting weight: {procname} ( index = {irwgt} )" )
+            
+            mcsample = MCSample(
+                name = sample_name,
                 source = sourcepath,
                 xsec = norm,
                 eras = [ "all" ],
-                genSumWeightName = "genEventSumw",
-                signal = False 
+                hooks = [ 
+                    Append( AddWeight("point", f"LHEReweightingWeight[{irwgt}]") ) 
+                ],
+                genSumWeightName = "genEventSumw * LHEReweightingSumw[ 0 ]", # this has to be changed to the SM
             )
-        
-            samples.append( sample )
-
-        mc_samples[ sample_name ] = samples
-        
-
-    for algo in algos:
-        rwgt_points = aux.get_rwgt_points(algo, operators)
-
-        # Now for each combination of operators, create a MCProcess
-        for irwgt, rwgt_point in enumerate( rwgt_points ):
-
-            procname = aux.get_rwgt_name( rwgt_point ) 
+            
             proc = Process(
                 name = procname,
-                samples = samples,
+                samples = [ mcsample ], 
                 fillColor = 0,
                 LineColor = irwgt,
                 lineStyle = 1,
-                hooks = [ 
-                    Append( AddWeight("point", f"LHEReweightingWeight[{irwgt}]") ) 
-                ]
+                signal = True
             )
-
+    
             mc_processes.append( proc )
         
     

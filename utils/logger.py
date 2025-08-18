@@ -15,7 +15,7 @@ colors = SimpleNamespace(
 class CustomFormatter(logging.Formatter):
     """ Custom class for formatting """
 
-    format = "%(levelname)s: %(message)s [%(name)s - %(asctime)s] "
+    format = "%(levelname)s: %(message)s [%(asctime)s] "
     FORMATS = {
         logging.DEBUG: colors.grey + format + colors.reset,
         logging.INFO: colors.green + format + colors.reset,

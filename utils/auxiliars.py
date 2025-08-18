@@ -2,6 +2,7 @@
 import yaml
 import itertools
 import numpy as np
+from copy import deepcopy
 
 # Create the logger instance
 from utils.logger import get_logger
@@ -73,8 +74,10 @@ def get_rwgt_points(algo, all_operators):
 
         # A bit of OCD but let's sort the full matrix by operator name
         full_set = full_set[full_set[:, 0].argsort()]
-        rwgt_points.append( full_set )
 
+        # Make sure we do not count twice the same point
+        rwgt_points.append( full_set )
+       
     return rwgt_points 
 
 def get_rwgt_name( rwgt_point ):
