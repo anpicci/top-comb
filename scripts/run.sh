@@ -39,7 +39,6 @@ function run_gridpack() {
 	pushd $SUBMISSION_DIR
 	cp -r $analysisDir/mgcards $tempdir
 	tar -zcvf cards.tgz $tempdir
-	check_cards_before_gridpack $tempdir
 
 
 	cp $TOPCOMB_MAINPATH/templates/run_gridpack_batch.sh .
@@ -54,20 +53,45 @@ function run_gridpack() {
 	# Now copy the jds
 	cp $TOPCOMB_MAINPATH/templates/run_gridpack_batch.jds .
  	sed -i "s|__PROCNAME__|$process|g" run_gridpack_batch.jds
-	condor_submit run_gridpack_batch.jds
 
 	popd
+	# Prompt the command to submit the job
+	custom_msg WARN ">> Use the following command to submit the job"
+	custom_msg NC "cd $SUBMISSION_DIR/ ; condor_submit run_gridpack_batch.jds; cd -"
+	custom_msg WARN "-------------------------------------------- "
+
 }
 
+function run_nanogen() {
+	custom_msg INFO "Running nanogen. Please select a process from the available list"
+	
+	# Get the list of analyses
+	list_processes
+
+	analysisDir=$(find ${TOPCOMB_INPUTS}/ -name $process -type d)
+	
+	custom_msg INFO "Generating nanogen for process ${process}"
+
+	# Prompt the command to submit the job
+	custom_msg WARN ">> Use the following command to submit the job"
+	custom_msg WARN "NOTE: modify the contents of the json if you want to change anything on the generation side."
+	custom_msg NC "python3 tmg-tools/top-gendqm/run_validation.py --parse_from_json ${analysisDir/$PWD/\.}/nanogen_config.json "
+	custom_msg WARN "-------------------------------------------- "
+
+}
 
 # Print a welcome message
 custom_msg GOOD "Running the workflow for the EFT combination"
 custom_msg NC "Please select which step of the setup you would like to run: "
 
-select mode in  Gridpack Generate Quit; do
+select mode in  Gridpack Nanogen Quit; do
 	case $mode in
 		Gridpack)
 			run_gridpack
+			break
+			;;
+		Nanogen)
+			run_nanogen
 			break
 			;;
 		Quit)
