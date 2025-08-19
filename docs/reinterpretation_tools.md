@@ -45,3 +45,63 @@ The generation of `NanoGEN` events is managed through the `tmg-tools` submodule.
 **Note**: The `tmg-tools` package requires a JSON input file to manage submissions (its scope is broader than the top-combination). We adapt to that convention here, but one is free to submit jobs in whichever way you prefer.
 
 **TODO**: one could improve the way the gridpack is parsed in the fragment, instead of fixing it from the beginning.
+
+### Analyzing NanoGEN Events
+
+The analysis of NanoGEN events is handled using the `cmgrdf-prototype` submodule.  
+The main idea is to:
+
+- Use `cmgrdf-prototype` to produce histograms and cards that include both the SM and EFT points.  
+- Validate these histograms by comparing them with the samples used in the corresponding differential measurements.
+
+---
+
+#### Step 1: Configure the Analysis
+
+To implement a new analysis, start by setting up the `analysis` tag in the input `yaml` configuration file.  
+You can follow the example provided in the [`TTG_TOP-23-002.yml`](https://gitlab.cern.ch/cvicovil/top-comb/-/blob/master/configs/TTG_TOP-23-002.yml?ref_type=heads) file.
+
+A typical configuration looks like this:
+
+```yaml
+analysis:
+  samples:
+    PROC_A:
+      path: # Directory where NanoGEN events are stored
+      files: # Subfolder(s) in path containing the events. Regex can be used to match multiple paths.
+      xsec: # Cross section used to normalize the shapes
+    PROC_B:
+      path: # Directory where NanoGEN events are stored
+      files: # Subfolder(s) in path containing the events. Regex can be used to match multiple paths.
+      xsec: # Cross section used to normalize the shapes
+  plugins: [
+    # C++ plugins that define fiducial selections or other analysis functions
+  ]
+  definitions: # Sequence of steps to reproduce fiducial selections
+  plots: # List of observables and histograms to be produced
+  outpath: # Directory where output histograms and plots will be stored
+```
+
+Where:
+- **Processes (`PROC_A`, `PROC_B`, ...)**  
+  Define the processes to include in the analysis.  
+  For example, you may want to compare the SM point of `ttGamma` where the photon originates either from the production or from the decay.  
+  All `files` listed under a process are combined and normalized using the same cross section.  
+
+  *Note*: This interface is still evolving, and some caveats may arise when performing more detailed validations.
+- **Plugins**  
+  The `plugins` section specifies C++ functions that reproduce fiducial selections or provide additional functionality (e.g., defining observables or new RDataFrame columns).  
+
+  - Typically, plugins for a given analysis are stored in the `plugins` directory.  
+  - It is also recommended to leverage existing configurations provided in `cmgrdf-prototype/src`.
+- **Definitions**  
+  The `definitions` section describes the sequence of analysis steps.  
+  It is essentially Python code that builds a list of variable and collection definitions, making use of functions defined in the C++ plugins.
+
+- **Plots**  
+  The `plots` section specifies which observables and histograms should be produced as output.
+
+- **Outpath**  
+  The `outpath` field sets the directory where the resulting histograms and plots will be saved.
+
+
