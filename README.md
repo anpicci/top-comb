@@ -6,3 +6,8 @@ Below, an index to the different sources of documentation can be found.
 ## Index
 - 0. [Setup](docs/setup.md)
 - 1. [Structure of the repository](docs/structure.md)
+
+
+## Talks in CMS meetings
+- [Carlos' talk in the TOP EFT meeting](https://indico.cern.ch/event/1570261/#2-kickoff-discussion-for-top-e) (26/07/2025)
+- [Sergio's talk in the TOP PAG Workshop in Ghent](https://indico.cern.ch/event/1473617/timetable/?view=standard#11-towards-a-top-eft-combinati) (29/01/2025)
