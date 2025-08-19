@@ -19,17 +19,19 @@ analysis_name:
 samples:
     # Relevant information for the modeling aspects
 
+analysis:
+    # Relevant information for producing histograms
+
 operators:
   - [operator_name, reference_point, minBound, maxBound]
   - ... # other operators
 ```
 
-An example of how one full `yaml` file looks like can be found in the [TTG configuration file](https://gitlab.cern.ch/cvicovil/top-comb/-/blob/master/inputs/configs/TTG_TOP-23-002.yml?ref_type=heads).
-
-**TODO**: provide a script to generate skeletons for `yaml` files, to make it easier for people that want to contribute.
+An example of how one full `yaml` file looks like can be found in the [TTG configuration file](https://gitlab.cern.ch/cvicovil/top-comb/-/blob/master/configs/TTG_TOP-23-002.yml?ref_type=heads).
 
 Note that:
  - The `samples` part is mostly relevant for analysis that do not look into EFTs directly, and are reinterpreted in terms of generated NanoGEN MC samples that include the EFT effects. 
+ - The `analysis` part is mostly relevant to produce shapes for a given analysis. This is also normally used in differential measurements that are reinterpreted based on EFTs. 
  - The `operators` side is generally interesting, as there we decide which couplings get constrained by which analysis. 
 
 ## Generating the Analysis Folder
@@ -39,7 +41,7 @@ Once the `yaml` file is properly configured, you can automatically generate the 
 Run the following command:
 
 ```bash
-python3 inputs/setup_analysis.py --config inputs/configs/MY_ANALYSIS.yaml
+python3 setup_analysis.py --config inputs/configs/MY_ANALYSIS.yaml
 ```
 
 Here, `MY_ANALYSIS.yaml` refers to the configuration file described in the previous section.
