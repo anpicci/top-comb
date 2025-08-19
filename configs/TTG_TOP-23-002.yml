@@ -13,7 +13,7 @@ samples:
         'define vl = ve vm vt',
         'define vl~ = ve~ vm~ vt~',
         'generate p p > t t~ a FCNC=0 DIM6=1, (t > l+ vl b FCNC=0 DIM6=0), (t~ > l- vl~ b~ FCNC=0 DIM6=0) @0 ', 
-        'add process p p > t t~ a j FCNC=0 DIM6=1, (t > l+ vl b FCNC=0 DIM6=0), (t~ > l- vl~ b~ FCNC=0 DIM6=0) @0 ', 
+        #'add process p p > t t~ a j FCNC=0 DIM6=1, (t > l+ vl b FCNC=0 DIM6=0), (t~ > l- vl~ b~ FCNC=0 DIM6=0) @0 ', 
       ]
 
     template_run_card: 
@@ -45,6 +45,8 @@ analysis:
       files: batch_12_08_2025_1743/genfiles/*root
       xsec: 1.0 # change
   plugins: [
+    cmgrdf-prototype/src/functions.cc,
+    plugins/common_functions.cc,
     plugins/TTG_TOP-23-002.cc
   ]
   definitions: definitions.TTG_TOP-23-002

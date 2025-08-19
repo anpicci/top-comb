@@ -86,12 +86,12 @@ def get_lower_axis( plot, refhistos ):
     haxis.GetYaxis().SetTitleSize(22)
 
     haxis.GetYaxis().SetTitleOffset(1.8)
-    haxis.GetXaxis().SetTitleOffset(4.3)
+    haxis.GetXaxis().SetTitleOffset(1.1)
     haxis.GetXaxis().SetLabelOffset(0.01)
-    haxis.SetTitle("")
     haxis.GetYaxis().SetTitle("EFT/SM.")
-    haxis.GetXaxis().SetTitle(plot.xTitle)
-    
+    print( plot.xTitle )
+    haxis.GetXaxis().SetTitle( plot.xTitle )
+     
     haxis.GetYaxis().SetNdivisions(503)
     haxis.GetXaxis().SetNdivisions(410)
     haxis.GetYaxis().CenterTitle(True)

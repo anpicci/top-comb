@@ -1,4 +1,4 @@
-# Reweight card created on Sunday 17. August 2025
+# Reweight card created on Tuesday 19. August 2025
 change rwgt_dir rwgt
 launch --rwgt_name=dummy # Name of first argument seems to be rwgt_1. Add dummy to fix it.
 

@@ -54,10 +54,8 @@ if __name__ == "__main__":
 
     # Load functions 
     for funcfile in metadata['analysis']['plugins']:
+        print(funcfile)
         ROOT.gInterpreter.Declare( open( funcfile ).read() )
-
-        # Say hello
-        ROOT.printHello()
 
     # Now load the definitions
     defs = importlib.import_module( metadata['analysis']['definitions'] )
