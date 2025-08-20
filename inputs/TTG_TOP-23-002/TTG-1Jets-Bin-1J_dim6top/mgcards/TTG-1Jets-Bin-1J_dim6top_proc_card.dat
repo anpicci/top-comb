@@ -1,0 +1,11 @@
+import model dim6top_LO_UFO
+
+define p = g u c d s u~ c~ d~ s~ b b~
+define j = p
+define l+ = e+ mu+ ta+
+define l- = e- mu- ta-
+define vl = ve vm vt
+define vl~ = ve~ vm~ vt~
+generate p p > t t~ a j FCNC=0 DIM6=1, (t > l+ vl b FCNC=0 DIM6=0), (t~ > l- vl~ b~ FCNC=0 DIM6=0) @0 
+
+output TTG-1Jets-Bin-1J_dim6top -nojpeg
