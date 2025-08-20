@@ -1,3 +1,4 @@
+| Coupling values | Index in LHEReweightWeight |
 | :-------- | :-------- |
 | ctG=-1.0 | 0|
 | ctG=1.0 | 1|
