@@ -1,134 +1,135 @@
 # Configuration card created on Wednesday 20. August 2025
 Below there is a mapping showing the reweighting points that can be found in the NanoAOD. Note that we only add to the first columns the couplings that are not set to 0!The full list of couplings considered for this version is: ['ctG', 'ctGI', 'ctp', 'ctpI', 'ctW', 'ctWI', 'ctZ', 'ctZI']
+Couplings set to negative values are marked in <span style="color:red"> red </span>
 
 | Coupling values | Index in LHEReweightWeight |
 | :-------- | :-------- |
-| ctG=-1.0 | 0 |
+| <span style="color:red">ctG=-1.0</span> | 0 |
 | ctG=1.0 | 1 |
-| ctGI=-1.0 | 2 |
+| <span style="color:red">ctGI=-1.0</span> | 2 |
 | ctGI=1.0 | 3 |
-| ctp=-1.0 | 4 |
+| <span style="color:red">ctp=-1.0</span> | 4 |
 | ctp=1.0 | 5 |
-| ctpI=-1.0 | 6 |
+| <span style="color:red">ctpI=-1.0</span> | 6 |
 | ctpI=1.0 | 7 |
-| ctW=-1.0 | 8 |
+| <span style="color:red">ctW=-1.0</span> | 8 |
 | ctW=1.0 | 9 |
-| ctWI=-1.0 | 10 |
+| <span style="color:red">ctWI=-1.0</span> | 10 |
 | ctWI=1.0 | 11 |
-| ctZ=-1.0 | 12 |
+| <span style="color:red">ctZ=-1.0</span> | 12 |
 | ctZ=1.0 | 13 |
-| ctZI=-1.0 | 14 |
+| <span style="color:red">ctZI=-1.0</span> | 14 |
 | ctZI=1.0 | 15 |
-| ctG=-1.0,ctGI=-1.0 | 16 |
-| ctG=-1.0,ctGI=1.0 | 17 |
-| ctG=-1.0,ctp=-1.0 | 18 |
-| ctG=-1.0,ctp=1.0 | 19 |
-| ctG=-1.0,ctpI=-1.0 | 20 |
-| ctG=-1.0,ctpI=1.0 | 21 |
-| ctG=-1.0,ctW=-1.0 | 22 |
-| ctG=-1.0,ctW=1.0 | 23 |
-| ctG=-1.0,ctWI=-1.0 | 24 |
-| ctG=-1.0,ctWI=1.0 | 25 |
-| ctG=-1.0,ctZ=-1.0 | 26 |
-| ctG=-1.0,ctZ=1.0 | 27 |
-| ctG=-1.0,ctZI=-1.0 | 28 |
-| ctG=-1.0,ctZI=1.0 | 29 |
-| ctG=1.0,ctGI=-1.0 | 30 |
+| <span style="color:red">ctG=-1.0</span>,<span style="color:red">ctGI=-1.0</span> | 16 |
+| <span style="color:red">ctG=-1.0</span>,ctGI=1.0 | 17 |
+| <span style="color:red">ctG=-1.0</span>,<span style="color:red">ctp=-1.0</span> | 18 |
+| <span style="color:red">ctG=-1.0</span>,ctp=1.0 | 19 |
+| <span style="color:red">ctG=-1.0</span>,<span style="color:red">ctpI=-1.0</span> | 20 |
+| <span style="color:red">ctG=-1.0</span>,ctpI=1.0 | 21 |
+| <span style="color:red">ctG=-1.0</span>,<span style="color:red">ctW=-1.0</span> | 22 |
+| <span style="color:red">ctG=-1.0</span>,ctW=1.0 | 23 |
+| <span style="color:red">ctG=-1.0</span>,<span style="color:red">ctWI=-1.0</span> | 24 |
+| <span style="color:red">ctG=-1.0</span>,ctWI=1.0 | 25 |
+| <span style="color:red">ctG=-1.0</span>,<span style="color:red">ctZ=-1.0</span> | 26 |
+| <span style="color:red">ctG=-1.0</span>,ctZ=1.0 | 27 |
+| <span style="color:red">ctG=-1.0</span>,<span style="color:red">ctZI=-1.0</span> | 28 |
+| <span style="color:red">ctG=-1.0</span>,ctZI=1.0 | 29 |
+| ctG=1.0,<span style="color:red">ctGI=-1.0</span> | 30 |
 | ctG=1.0,ctGI=1.0 | 31 |
-| ctG=1.0,ctp=-1.0 | 32 |
+| ctG=1.0,<span style="color:red">ctp=-1.0</span> | 32 |
 | ctG=1.0,ctp=1.0 | 33 |
-| ctG=1.0,ctpI=-1.0 | 34 |
+| ctG=1.0,<span style="color:red">ctpI=-1.0</span> | 34 |
 | ctG=1.0,ctpI=1.0 | 35 |
-| ctG=1.0,ctW=-1.0 | 36 |
+| ctG=1.0,<span style="color:red">ctW=-1.0</span> | 36 |
 | ctG=1.0,ctW=1.0 | 37 |
-| ctG=1.0,ctWI=-1.0 | 38 |
+| ctG=1.0,<span style="color:red">ctWI=-1.0</span> | 38 |
 | ctG=1.0,ctWI=1.0 | 39 |
-| ctG=1.0,ctZ=-1.0 | 40 |
+| ctG=1.0,<span style="color:red">ctZ=-1.0</span> | 40 |
 | ctG=1.0,ctZ=1.0 | 41 |
-| ctG=1.0,ctZI=-1.0 | 42 |
+| ctG=1.0,<span style="color:red">ctZI=-1.0</span> | 42 |
 | ctG=1.0,ctZI=1.0 | 43 |
-| ctGI=-1.0,ctp=-1.0 | 44 |
-| ctGI=-1.0,ctp=1.0 | 45 |
-| ctGI=-1.0,ctpI=-1.0 | 46 |
-| ctGI=-1.0,ctpI=1.0 | 47 |
-| ctGI=-1.0,ctW=-1.0 | 48 |
-| ctGI=-1.0,ctW=1.0 | 49 |
-| ctGI=-1.0,ctWI=-1.0 | 50 |
-| ctGI=-1.0,ctWI=1.0 | 51 |
-| ctGI=-1.0,ctZ=-1.0 | 52 |
-| ctGI=-1.0,ctZ=1.0 | 53 |
-| ctGI=-1.0,ctZI=-1.0 | 54 |
-| ctGI=-1.0,ctZI=1.0 | 55 |
-| ctGI=1.0,ctp=-1.0 | 56 |
+| <span style="color:red">ctGI=-1.0</span>,<span style="color:red">ctp=-1.0</span> | 44 |
+| <span style="color:red">ctGI=-1.0</span>,ctp=1.0 | 45 |
+| <span style="color:red">ctGI=-1.0</span>,<span style="color:red">ctpI=-1.0</span> | 46 |
+| <span style="color:red">ctGI=-1.0</span>,ctpI=1.0 | 47 |
+| <span style="color:red">ctGI=-1.0</span>,<span style="color:red">ctW=-1.0</span> | 48 |
+| <span style="color:red">ctGI=-1.0</span>,ctW=1.0 | 49 |
+| <span style="color:red">ctGI=-1.0</span>,<span style="color:red">ctWI=-1.0</span> | 50 |
+| <span style="color:red">ctGI=-1.0</span>,ctWI=1.0 | 51 |
+| <span style="color:red">ctGI=-1.0</span>,<span style="color:red">ctZ=-1.0</span> | 52 |
+| <span style="color:red">ctGI=-1.0</span>,ctZ=1.0 | 53 |
+| <span style="color:red">ctGI=-1.0</span>,<span style="color:red">ctZI=-1.0</span> | 54 |
+| <span style="color:red">ctGI=-1.0</span>,ctZI=1.0 | 55 |
+| ctGI=1.0,<span style="color:red">ctp=-1.0</span> | 56 |
 | ctGI=1.0,ctp=1.0 | 57 |
-| ctGI=1.0,ctpI=-1.0 | 58 |
+| ctGI=1.0,<span style="color:red">ctpI=-1.0</span> | 58 |
 | ctGI=1.0,ctpI=1.0 | 59 |
-| ctGI=1.0,ctW=-1.0 | 60 |
+| ctGI=1.0,<span style="color:red">ctW=-1.0</span> | 60 |
 | ctGI=1.0,ctW=1.0 | 61 |
-| ctGI=1.0,ctWI=-1.0 | 62 |
+| ctGI=1.0,<span style="color:red">ctWI=-1.0</span> | 62 |
 | ctGI=1.0,ctWI=1.0 | 63 |
-| ctGI=1.0,ctZ=-1.0 | 64 |
+| ctGI=1.0,<span style="color:red">ctZ=-1.0</span> | 64 |
 | ctGI=1.0,ctZ=1.0 | 65 |
-| ctGI=1.0,ctZI=-1.0 | 66 |
+| ctGI=1.0,<span style="color:red">ctZI=-1.0</span> | 66 |
 | ctGI=1.0,ctZI=1.0 | 67 |
-| ctp=-1.0,ctpI=-1.0 | 68 |
-| ctp=-1.0,ctpI=1.0 | 69 |
-| ctW=-1.0,ctp=-1.0 | 70 |
-| ctW=1.0,ctp=-1.0 | 71 |
-| ctWI=-1.0,ctp=-1.0 | 72 |
-| ctWI=1.0,ctp=-1.0 | 73 |
-| ctZ=-1.0,ctp=-1.0 | 74 |
-| ctZ=1.0,ctp=-1.0 | 75 |
-| ctZI=-1.0,ctp=-1.0 | 76 |
-| ctZI=1.0,ctp=-1.0 | 77 |
-| ctp=1.0,ctpI=-1.0 | 78 |
+| <span style="color:red">ctp=-1.0</span>,<span style="color:red">ctpI=-1.0</span> | 68 |
+| <span style="color:red">ctp=-1.0</span>,ctpI=1.0 | 69 |
+| <span style="color:red">ctW=-1.0</span>,<span style="color:red">ctp=-1.0</span> | 70 |
+| ctW=1.0,<span style="color:red">ctp=-1.0</span> | 71 |
+| <span style="color:red">ctWI=-1.0</span>,<span style="color:red">ctp=-1.0</span> | 72 |
+| ctWI=1.0,<span style="color:red">ctp=-1.0</span> | 73 |
+| <span style="color:red">ctZ=-1.0</span>,<span style="color:red">ctp=-1.0</span> | 74 |
+| ctZ=1.0,<span style="color:red">ctp=-1.0</span> | 75 |
+| <span style="color:red">ctZI=-1.0</span>,<span style="color:red">ctp=-1.0</span> | 76 |
+| ctZI=1.0,<span style="color:red">ctp=-1.0</span> | 77 |
+| ctp=1.0,<span style="color:red">ctpI=-1.0</span> | 78 |
 | ctp=1.0,ctpI=1.0 | 79 |
-| ctW=-1.0,ctp=1.0 | 80 |
+| <span style="color:red">ctW=-1.0</span>,ctp=1.0 | 80 |
 | ctW=1.0,ctp=1.0 | 81 |
-| ctWI=-1.0,ctp=1.0 | 82 |
+| <span style="color:red">ctWI=-1.0</span>,ctp=1.0 | 82 |
 | ctWI=1.0,ctp=1.0 | 83 |
-| ctZ=-1.0,ctp=1.0 | 84 |
+| <span style="color:red">ctZ=-1.0</span>,ctp=1.0 | 84 |
 | ctZ=1.0,ctp=1.0 | 85 |
-| ctZI=-1.0,ctp=1.0 | 86 |
+| <span style="color:red">ctZI=-1.0</span>,ctp=1.0 | 86 |
 | ctZI=1.0,ctp=1.0 | 87 |
-| ctW=-1.0,ctpI=-1.0 | 88 |
-| ctW=1.0,ctpI=-1.0 | 89 |
-| ctWI=-1.0,ctpI=-1.0 | 90 |
-| ctWI=1.0,ctpI=-1.0 | 91 |
-| ctZ=-1.0,ctpI=-1.0 | 92 |
-| ctZ=1.0,ctpI=-1.0 | 93 |
-| ctZI=-1.0,ctpI=-1.0 | 94 |
-| ctZI=1.0,ctpI=-1.0 | 95 |
-| ctW=-1.0,ctpI=1.0 | 96 |
+| <span style="color:red">ctW=-1.0</span>,<span style="color:red">ctpI=-1.0</span> | 88 |
+| ctW=1.0,<span style="color:red">ctpI=-1.0</span> | 89 |
+| <span style="color:red">ctWI=-1.0</span>,<span style="color:red">ctpI=-1.0</span> | 90 |
+| ctWI=1.0,<span style="color:red">ctpI=-1.0</span> | 91 |
+| <span style="color:red">ctZ=-1.0</span>,<span style="color:red">ctpI=-1.0</span> | 92 |
+| ctZ=1.0,<span style="color:red">ctpI=-1.0</span> | 93 |
+| <span style="color:red">ctZI=-1.0</span>,<span style="color:red">ctpI=-1.0</span> | 94 |
+| ctZI=1.0,<span style="color:red">ctpI=-1.0</span> | 95 |
+| <span style="color:red">ctW=-1.0</span>,ctpI=1.0 | 96 |
 | ctW=1.0,ctpI=1.0 | 97 |
-| ctWI=-1.0,ctpI=1.0 | 98 |
+| <span style="color:red">ctWI=-1.0</span>,ctpI=1.0 | 98 |
 | ctWI=1.0,ctpI=1.0 | 99 |
-| ctZ=-1.0,ctpI=1.0 | 100 |
+| <span style="color:red">ctZ=-1.0</span>,ctpI=1.0 | 100 |
 | ctZ=1.0,ctpI=1.0 | 101 |
-| ctZI=-1.0,ctpI=1.0 | 102 |
+| <span style="color:red">ctZI=-1.0</span>,ctpI=1.0 | 102 |
 | ctZI=1.0,ctpI=1.0 | 103 |
-| ctW=-1.0,ctWI=-1.0 | 104 |
-| ctW=-1.0,ctWI=1.0 | 105 |
-| ctW=-1.0,ctZ=-1.0 | 106 |
-| ctW=-1.0,ctZ=1.0 | 107 |
-| ctW=-1.0,ctZI=-1.0 | 108 |
-| ctW=-1.0,ctZI=1.0 | 109 |
-| ctW=1.0,ctWI=-1.0 | 110 |
+| <span style="color:red">ctW=-1.0</span>,<span style="color:red">ctWI=-1.0</span> | 104 |
+| <span style="color:red">ctW=-1.0</span>,ctWI=1.0 | 105 |
+| <span style="color:red">ctW=-1.0</span>,<span style="color:red">ctZ=-1.0</span> | 106 |
+| <span style="color:red">ctW=-1.0</span>,ctZ=1.0 | 107 |
+| <span style="color:red">ctW=-1.0</span>,<span style="color:red">ctZI=-1.0</span> | 108 |
+| <span style="color:red">ctW=-1.0</span>,ctZI=1.0 | 109 |
+| ctW=1.0,<span style="color:red">ctWI=-1.0</span> | 110 |
 | ctW=1.0,ctWI=1.0 | 111 |
-| ctW=1.0,ctZ=-1.0 | 112 |
+| ctW=1.0,<span style="color:red">ctZ=-1.0</span> | 112 |
 | ctW=1.0,ctZ=1.0 | 113 |
-| ctW=1.0,ctZI=-1.0 | 114 |
+| ctW=1.0,<span style="color:red">ctZI=-1.0</span> | 114 |
 | ctW=1.0,ctZI=1.0 | 115 |
-| ctWI=-1.0,ctZ=-1.0 | 116 |
-| ctWI=-1.0,ctZ=1.0 | 117 |
-| ctWI=-1.0,ctZI=-1.0 | 118 |
-| ctWI=-1.0,ctZI=1.0 | 119 |
-| ctWI=1.0,ctZ=-1.0 | 120 |
+| <span style="color:red">ctWI=-1.0</span>,<span style="color:red">ctZ=-1.0</span> | 116 |
+| <span style="color:red">ctWI=-1.0</span>,ctZ=1.0 | 117 |
+| <span style="color:red">ctWI=-1.0</span>,<span style="color:red">ctZI=-1.0</span> | 118 |
+| <span style="color:red">ctWI=-1.0</span>,ctZI=1.0 | 119 |
+| ctWI=1.0,<span style="color:red">ctZ=-1.0</span> | 120 |
 | ctWI=1.0,ctZ=1.0 | 121 |
-| ctWI=1.0,ctZI=-1.0 | 122 |
+| ctWI=1.0,<span style="color:red">ctZI=-1.0</span> | 122 |
 | ctWI=1.0,ctZI=1.0 | 123 |
-| ctZ=-1.0,ctZI=-1.0 | 124 |
-| ctZ=-1.0,ctZI=1.0 | 125 |
-| ctZ=1.0,ctZI=-1.0 | 126 |
+| <span style="color:red">ctZ=-1.0</span>,<span style="color:red">ctZI=-1.0</span> | 124 |
+| <span style="color:red">ctZ=-1.0</span>,ctZI=1.0 | 125 |
+| ctZ=1.0,<span style="color:red">ctZI=-1.0</span> | 126 |
 | ctZ=1.0,ctZI=1.0 | 127 |
 | SM | 128 |
