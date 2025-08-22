@@ -18,6 +18,8 @@ def parse_latex_scientific(s):
             base = float(match.group(1))
             exponent = int(match.group(2))
             return base * 10**exponent
+        else:
+            return s
 
 # --- Parse LaTeX into DataFrame ---
 def parse_latex_table(filename):
