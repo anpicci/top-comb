@@ -1,0 +1,2180 @@
+\documentclass[a4paper]{article}
+\pdfoutput=1
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+%\usepackage[UKenglish]{babel}
+\usepackage[numbers, elide, sort&compress]{natbib}
+\usepackage{lmodern, amsmath, amssymb, xcolor, a4wide, graphicx, datetime, rotating, adjustbox, array}
+
+% bold applies to math too
+\makeatletter\g@addto@macro\bfseries{\boldmath}\makeatother
+
+% hyperref
+\usepackage[colorlinks=true, citecolor=blue, urlcolor=blue, linkcolor=blue, breaklinks=true, pdfpagelabels=false]{hyperref}
+\def\figureautorefname~#1\null{Fig.\,#1\null}
+\renewcommand{\appendixautorefname}{Appendix}
+\renewcommand{\sectionautorefname}{Section}
+\renewcommand{\subsectionautorefname}{Section}
+\def\equationautorefname~#1\null{Eq.\,(#1)\null}
+\newcommand{\fullref}[2]{\hyperref[#2]{#1\,\ref*{#2}}}
+\makeatletter
+\newcommand{\mg}{\texttt{MG5\_aMC@NLO}}
+\newcommand{\rcite}[1]{\hyper@@link[cite]{}{cite.#1}{Ref.\,\cite*{#1}}}
+\makeatother
+\newcommand*{\eqsref}[2]{\hyperref[#1]{Eqs.\,(\ref*{#1}--}\hyperref[#2]{\ref*{#2})}}
+
+% footer
+\makeatletter
+%\renewcommand{\@oddhead}{}%\hfill\thepage}
+\renewcommand{\@oddfoot}{\hfill\thepage}
+%\setlength{\headheight}{20mm}
+\setlength{\footskip}{2.5cm}
+\makeatother
+
+% amsmath page breaks
+\allowdisplaybreaks[4]
+
+% overbar in parentheses
+% [see for instance www.desy.de/~obehnke/fragc/LaTeX/zeus/zeus_def.tex]
+\makeatletter
+\newcommand{\parenbar}{\mathpalette\p@renb@r}
+\def\p@renb@r#1#2{%
+	\vbox{%
+		\ifx#1\scriptscriptstyle\dimen@.7em\dimen@ii.20em\else%
+		\ifx#1\scriptstyle	\dimen@.8em\dimen@ii.25em\else%
+					\dimen@.9em\dimen@ii.35em\fi\fi%
+		\offinterlineskip%
+		\ialign{%
+			\hfill##\hfill\cr
+			\vbox{\hrule width\dimen@ii height .35pt}\cr
+			\noalign{\vskip-.35ex}%
+			\hbox to\dimen@{$\mathchar300\hfil\mathchar301$}\cr
+			\noalign{\vskip-.35ex}%
+			$#1#2$\cr%
+		}%
+	}%
+}%
+\makeatother
+
+% shorthands
+\newcommand*{\caret}{\,\hat{\,}\,}
+
+\newcommand{\gmu}{\gamma^\mu}
+\newcommand{\ie}{{\it i.e.}}
+\newcommand{\eg}{{\it e.g.}}
+\newcommand{\lag}{{\cal L}}
+\newcommand*{\tmp}[4]{\ensuremath{%
+	{#4%
+	\ifx\empty#3\empty\ifx\empty#1\empty\else^{#1}\fi\else^{#1(#3)}\fi%
+	\ifx\empty#2\empty\else_{#2}\fi}%
+}}
+\newcommand*{\cc }[4][]{\tmp{#2}{#3}{#4}{#1{C}}}
+\newcommand*{\ccc}[4][]{\tmp{#2}{#3}{#4}{#1{c}}}
+\newcommand*{\oo }[4][]{\tmp{#2}{#3}{#4}{#1{Q}}}
+\newcommand*{\qq }[4][]{\tmp{#2}{#3}{#4}{#1{O}}}
+
+\let\Re\undefined
+\let\Im\undefined
+\DeclareMathOperator{\Re}{Re}
+\DeclareMathOperator{\Im}{Im}
+\newcommand{\ReIm}{{}_{\Re}^{[\Im]}\!}
+
+\newcommand{\warsaw}[1]{\scriptsize\ensuremath{\equiv#1}}
+
+\newcommand{\hc}[1]{{}^\ddagger #1}%{\hspace{+2mm}\raisebox{.5mm}{$\cdot$}\hspace{-2mm}#1}}
+
+\newcommand*{\sw}{s_W}
+\newcommand*{\cw}{c_W}
+
+\newcommand{\FDF}{(\varphi^\dagger i\!\!\overleftrightarrow{D}_\mu\varphi)}
+\newcommand{\FDFI}{(\varphi^\dagger i\!\!\overleftrightarrow{D}^I_\mu\varphi)}
+
+\newcommand*{\sd}{\sigma_{\mu\nu}}
+\newcommand*{\su}{\sigma^{\mu\nu}}
+
+\renewcommand{\check}{\checkmark}
+\DeclareMathOperator{\diag}{diag}
+
+% comments
+\newcommand{\gd}[1]{\textcolor{green!50!black}{#1}}
+\newcommand{\cz}[1]{\textcolor{blue!50!black}{#1}}
+\newcommand{\rien}[1]{}
+
+% affiliations
+\newcounter{affiliation}
+\newcommand{\aff}[1]{$^{\ref{aff:#1}}$}
+\newcommand{\twoaff}[2]{$^{\ref{aff:#1},\ref{aff:#2}}$}
+\newcommand{\threeaff}[3]{$^{\ref{aff:#1},\ref{aff:#2},\ref{aff:#3}}$}
+\newcommand{\naff}[2]{\refstepcounter{affiliation}\label{aff:#1}$^{\arabic{affiliation}}$\,#2\\}
+
+\title{\vspace*{-37mm}%
+{\normalsize\hfill CERN-LPCC-2018-01\\}\vspace*{37mm}
+Interpreting top-quark LHC measurements\\in the standard-model effective field theory
+%\\{\large Theory note for the LHC TOP Working Group}
+}
+
+\author{\hspace*{-.0\textwidth}\parbox{1.\textwidth}{\centering
+J.\,A.\,Aguilar Saavedra,\aff{Granada}
+C.\,Degrande,\aff{CERN}
+G.\,Durieux,\aff{DESY}
+\\
+F.\,Maltoni,\aff{UCLouvain}
+E.\,Vryonidou,\aff{CERN}
+C.\,Zhang\aff{IHEP}
+(editors),
+\\
+D.\,Barducci,\aff{SISSA_INFN}
+I.\,Brivio,\aff{NBIA}
+V.\,Cirigliano,\aff{LosAlamos}
+W.\,Dekens,\twoaff{LosAlamos}{NewMexico}
+J.\,de Vries,\aff{Nikhef}
+C.\,Englert,\aff{Glasgow}
+M.\,Fabbrichesi,\aff{INFN_Trieste}
+C.\,Grojean,\twoaff{DESY}{Berlin}
+U.\,Haisch,\twoaff{CERN}{Oxford}
+Y.\,Jiang,\aff{NBIA}
+J.\,Kamenik,\twoaff{JSI_Ljubljana}{U_Ljubljana}
+M.\,Mangano,\aff{CERN}
+D.\,Marzocca,\aff{INFN_Trieste}
+E.\,Mereghetti,\aff{LosAlamos}
+K.\,Mimasu,\aff{UCLouvain}
+L.\,Moore,\aff{UCLouvain}
+G.\,Perez,\aff{Weizmann}
+T.\,Plehn,\aff{Heidelberg}
+F.\,Riva,\aff{CERN}
+M.\,Russell,\aff{Heidelberg}
+J.\,Santiago,\aff{CAFPE_Granada}
+M.\,Schulze,\aff{Berlin}
+Y.\,Soreq,\aff{MIT}
+A.\,Tonero,\aff{UNIFAL}
+M.\,Trott,\aff{NBIA}
+S.\,Westhoff,\aff{Heidelberg}
+C.\,White,\aff{QueenMary}
+A.\,Wulzer,\threeaff{CERN}{EPFL}{Padova_INFN}
+J.\,Zupan.\aff{Cincinati}
+%\\to be completed
+\\[5mm]\small
+\naff{Granada}{Departamento de Física Teórica y del Cosmos, U.\ de Granada, E-18071 Granada, Spain}
+\naff{CERN}{CERN, Theoretical Physics Department, Geneva 23 CH-1211, Switzerland}
+\naff{DESY}{DESY, Notkestraße 85, D-22607 Hamburg, Germany}
+\naff{UCLouvain}{Centre for Cosmology, Particle Physics and Phenomenology (CP3), Université catholique de Louvain, B-1348 Louvain-la-Neuve, Belgium}
+\naff{IHEP}{Institute of High Energy Physics, Chinese Academy of Sciences, Beijing 100049, China}
+\naff{SISSA_INFN}{SISSA and INFN, Sezione di Trieste, via Bonomea 265, 34136 Trieste, Italy}
+\naff{NBIA}{Niels Bohr International Academy and Discovery Center, Niels Bohr Institute, University of Copenhagen, DK-2100 Copenhagen, Denmark}
+\naff{LosAlamos}{Theoretical Division, Los Alamos National Laboratory, Los Alamos, NM 87545, USA}
+\naff{NewMexico}{New Mexico Consortium, Los Alamos Research Park, Los Alamos, NM 87544, USA}
+\naff{Nikhef}{Nikhef, Theory Group, Science Park 105, 1098 XG, Amsterdam, The Netherlands}
+\naff{Glasgow}{SUPA, School of Physics and Astronomy, University of Glasgow, Glasgow G12 8QQ, UK}
+\naff{INFN_Trieste}{INFN, Sezione di Trieste, Via Valerio 2, 34127 Trieste, Italy}
+\naff{Berlin}{Institut für Physik, Humboldt-Universität zu Berlin, D-12489 Berlin, Germany}
+\naff{Oxford}{Rudolf Peierls Centre for Theoretical Physics, University of Oxford, OX1 3NP Oxford, UK}
+\naff{JSI_Ljubljana}{Jožef Stefan Institute, Jamova 39, 1000 Ljubljana, Slovenia}
+\naff{U_Ljubljana}{Faculty of Mathematics and Physics, University of Ljubljana, Jadranska 19, 1000 Ljubljana, Slovenia}
+\naff{Weizmann}{Department of Particle Physics and Astrophysics, Weizmann Institute of Science,\\Rehovot 7610001, Israel}
+\naff{Heidelberg}{Institut für Theoretische Physik, Universität Heidelberg, Germany}
+\naff{CAFPE_Granada}{CAFPE and Departamento de Física Teórica y del Cosmos, U.\ de Granada, E-18071 Granada, Spain}
+\naff{MIT}{Center for Theoretical Physics, Massachusetts Institute of Technology, Cambridge, MA 02139, USA}
+\naff{UNIFAL}{UNIFAL-MG, Rodovia José Aurélio Vilela 11999, 37715-400 Poços de Caldas, MG, Brazil}
+\naff{QueenMary}{Centre for Research in String Theory, School of Physics and Astronomy, Queen Mary University of London, 327 Mile End Road, London E1 4NS, UK}
+\naff{EPFL}{Institut de Théorie des Phénomènes Physiques, EPFL, Lausanne, Switzerland}
+\naff{Padova_INFN}{Dipartimento di Fisica e Astronomia, Universitá di Padova and INFN Padova, Italy}
+\naff{Cincinati}{Department of Physics, University of Cincinnati, Cincinnati, Ohio 45221,USA}
+}}
+\date{}
+%\date{v1, \shortdate\today, \currenttime}
+
+
+\begin{document}
+\thispagestyle{empty}
+\maketitle
+%\renewcommand{\abstractname}{\vspace{-\baselineskip}}
+\begin{abstract}
+This note proposes common standards and prescriptions for the effective-field-theory interpretation of top-quark measurements at the LHC.
+\end{abstract}
+
+\newpage
+\setcounter{tocdepth}{1}
+\tableofcontents
+
+\section{Introduction}
+
+Summarising efforts undertaken under the auspices of the LHC TOP Working Group, this theory note aims at establishing basic common standards for the interpretation of top-quark measurements at the LHC in the standard-model effective field theory (SMEFT).
+
+Guiding principles are first stated (\autoref{sec:principles}). In a nutshell, we rely on the Warsaw basis of gauge-invariant dimension-six operators, focus on the ones which give rise to top-quark interactions (\autoref{sec:operators}) and limit ourselves to the tree level. Three different assumptions about beyond-the-standard-model (BSM) flavour structures are considered to prioritize studies among the otherwise overwhelming number of four-fermion operators (\autoref{sec:flavour}). Top-quark flavour-changing neutral currents (FCNCs) are examined separately (\autoref{sec:fcnc}). For convenience, degrees of freedom are defined from combinations of Warsaw-basis operator coefficients (\hyperref[app:dof]{Appendices\,\ref{app:dof}} and \ref{app:less_restrictive_flavour}). They are aligned with the directions of the effective-field-theory (EFT) parameter space which appear in given processes, in interferences with standard-model (SM) amplitudes, and in top-quark interactions with some of the gauge boson mass eigenstates. Naming and normalization conventions are fixed. Indicative constraints on these degrees of freedom are compiled in \autoref{sec:dof_limits}. Model implementations are provided for tree-level Monte Carlo simulation (\autoref{sec:ufo}). Finally, a simple example of analysis strategy is outlined to illustrate how the challenges of a global EFT treatment could be addressed and to identify the experimental outputs that would be useful in this case (\autoref{sec:strategy}). It rests on the common knowledge established over the years through many EFT studies in the top-quark, Higgs, electroweak or flavour sectors. The literature quoted in this note is by no means comprehensive or even representative of the fields of top-quark physics and EFTs.
+
+
+\section{Guiding principles}
+\label{sec:principles}
+\begin{enumerate}\itemsep0pt \topsep0pt \parsep0pt
+	\item The so-called Warsaw basis of dimension-six operators~\cite{Grzadkowski:2010es} is adopted. See also Ref.\,\cite{AguilarSaavedra:2008zc, Zhang:2010dr} for early discussions of top-quark related operators.
+
+	\item Our discussion exclusively concerns processes involving at least a top quark. Only operators involving such a particle are considered. Other operators affecting the considered processes are assumed to be well constrained by measurements in processes that do not involve top quarks. This assumption may not always be justified and explicit checks should be performed. It was for instance shown that jet production sufficiently tightly constrain modifications to the triple gluon vertex~\cite{Krauss:2016ely}.
+
+	\item Three different assumptions about BSM flavour structures are considered ---mostly based on symmetries--- to effectively reduce the overwhelming number of four-quark operators~\cite{AguilarSaavedra:2010zi}. A baseline scenario is defined. Less and more restrictive assumptions are also considered. Top-quark FCNC operators are treated separately.
+	      
+		Minimal flavour violation in the quark sector is used in the baseline scenario, under the assumption of a unit Cabibbo-Kobayashi-Maskawa (CKM) matrix and finite Yukawa couplings only for the top and bottom quarks, i.e.\ we impose a $U(2)_q\times U(2)_u \times U(2)_d$ flavour symmetry among the first two generations. In the lepton sector, flavour diagonality, i.e.\ $[U(1)_{l+e}]^3$, is chosen as baseline.
+	      
+	\item For convenience, we identify the linear combinations of Warsaw-basis operators that appear in interferences with SM amplitudes and in interactions with physical fields after electroweak symmetry breaking. This may reduce the number of relevant parameters and unconstrained combinations in a given measurement. Independent combinations are defined and referred to as \emph{degrees of freedom} from now on. Normalizations and notations are fixed. We recommend to provide experimental and theoretical results in terms of those parameters in the future. We refrain from stating which degrees of freedom are relevant for which process as such a statement is observable dependent. Different factorization schemes (four- or five-flavour) and approximations (e.g., about the CKM matrix, light fermion masses and Yukawa couplings, or subleading electroweak contributions) would impact numerical results. We recommend to determine systematically the dependence of each observable of interest on the listed degrees of freedom. Some illustrative dependences are provided in \hyperref[sec:dependences]{Appendix\,\ref{sec:dependences}} for total rates. More sophisticated observables may be sensitive to additional degrees of freedom or have enhanced dependences on particular combinations.
+
+	\item As a starting point, we rely on a tree-level description, working at zeroth order in the loop expansion. All tree-level contributions are considered on an equal footing. Hierarchies between them are only derived from the available experimental constraints. The dependence of a specific observable on a given EFT parameter is possibly omitted only if other measurements constrain that parameter much below the level of sensitivity of this observable. As a result, the inclusion of its dependence should affect neither the pre-existing constraints on that parameter, nor the resulting constraints on others, in a combination of this new measurement with existing ones. This approach is very phenomenological and agnostic about specific theories. In practice, as further and further constraints are collected and combined, a picture will progressively emerge of what specific measurement is particularly relevant to constrain a given direction in parameter space.
+	      
+		The higher-order dependences of observables on SM couplings will be considered in a second step. They could either induce corrections to existing tree-level contributions, or generate a dependence on new EFT parameters. A discussion of next-to-leading order QCD effects on EFT predictions is planned. A variety of results is already available in the literature \cite{Zhang:2014rja, Degrande:2014tta, Rontsch:2014cca, Franzosi:2015osa, Rontsch:2015una, Zhang:2016omx, Bylund:2016phk, Maltoni:2016yxb}.
+\end{enumerate}
+
+\section{Operator definitions}
+\label{sec:operators}
+The definitions of the operators that will be relevant to our discussion ---those which contain a top quark for a suitable flavour assignment--- are collected here. The associated degrees of freedom, following the flavour assumptions detailed in \autoref{sec:flavour}, will be defined in \autoref{app:dof} and used in the rest of this note. The notation employed in this section is that of Ref.~\cite{Grzadkowski:2010es} with flavour indices labelled by $ijkl$; left-handed fermion doublets denoted by $q$, $l$; right-handed fermion singlets by $u$, $d$, $e$; the Higgs doublet by $\varphi$; the antisymmetric $SU(2)$ tensor by $\varepsilon\equiv i\tau^2$; $\tilde{\varphi}=\varepsilon\varphi^*$; $\FDF\equiv \varphi^\dagger(iD_\mu \varphi) - (iD_\mu\varphi^\dagger) \varphi$; $\FDFI\equiv \varphi^\dagger\tau^I(iD_\mu \varphi) - (iD_\mu\varphi^\dagger) \tau^I\varphi$ where $\tau^I$ are the Pauli matrices; $T^A\equiv \lambda^A/2$ where $\lambda^A$ are Gell-Mann matrices.
+\pagebreak[3]
+\begin{align}
+\noalign{Four-quark operators:}
+	\qq{1}{qq}{ijkl}
+	&= (\bar q_i \gamma^\mu q_j)(\bar q_k\gamma_\mu q_l)
+	\label{eq:LLLL_1}
+	,\\
+	\qq{3}{qq}{ijkl}
+	&= (\bar q_i \gamma^\mu \tau^I q_j)(\bar q_k\gamma_\mu \tau^I q_l)
+	\label{eq:LLLL_2}
+	,\\
+	\qq{1}{qu}{ijkl}
+	&= (\bar q_i \gamma^\mu q_j)(\bar u_k\gamma_\mu u_l)
+	,\\
+	\qq{8}{qu}{ijkl}
+	&= (\bar q_i \gamma^\mu T^A q_j)(\bar u_k\gamma_\mu T^A u_l)
+	,\\
+	\qq{1}{qd}{ijkl}
+	&= (\bar q_i \gamma^\mu q_j)(\bar d_k\gamma_\mu d_l)
+	,\\
+	\qq{8}{qd}{ijkl}
+	&= (\bar q_i \gamma^\mu T^A q_j)(\bar d_k\gamma_\mu T^A d_l)
+	,\\
+	\qq{}{uu}{ijkl}
+	&=(\bar u_i\gamma^\mu u_j)(\bar u_k\gamma_\mu u_l)
+	,\\
+	\qq{1}{ud}{ijkl}
+	&=(\bar u_i\gamma^\mu u_j)(\bar d_k\gamma_\mu d_l)
+	,\\
+	\qq{8}{ud}{ijkl}
+	&=(\bar u_i\gamma^\mu T^A u_j)(\bar d_k\gamma_\mu T^A d_l)
+	,\\
+	\hc{\qq{1}{quqd}{ijkl}}
+	&=(\bar q_i u_j)\:\varepsilon\;
+	  (\bar q_k d_l)
+	,\\
+	\hc{\qq{8}{quqd}{ijkl}}
+	&=(\bar q_iT^A u_j)\;\varepsilon\;
+	  (\bar q_kT^A d_l)
+	,\\
+\noalign{Two-quark operators:}
+	\hc{\qq{}{u\varphi}{ij}}
+	&=\bar{q}_i u_j\tilde\varphi\: (\varphi^{\dagger}\varphi)
+	,\\
+	\qq{1}{\varphi q}{ij}
+	&=\FDF (\bar{q}_i\gamma^\mu q_j)
+	,\\
+	\qq{3}{\varphi q}{ij}
+	&=\FDFI (\bar{q}_i\gamma^\mu\tau^I q_j)
+	,\\
+	\qq{}{\varphi u}{ij}
+	&=\FDF (\bar{u}_i\gamma^\mu u_j)
+	,\\
+	\hc{\qq{}{\varphi ud}{ij}}
+	&=(\tilde\varphi^\dagger iD_\mu\varphi)
+	  (\bar{u}_i\gamma^\mu d_j)
+	,\\
+	\hc{\qq{}{uW}{ij}}
+	&=(\bar{q}_i\sigma^{\mu\nu}\tau^Iu_j)\:\tilde{\varphi}W_{\mu\nu}^I
+	,\\
+	\hc{\qq{}{dW}{ij}}
+	&=(\bar{q}_i\sigma^{\mu\nu}\tau^Id_j)\:{\varphi} W_{\mu\nu}^I
+	,\\
+	\hc{\qq{}{uB}{ij}}
+	&=(\bar{q}_i\sigma^{\mu\nu} u_j)\quad\:\tilde{\varphi}B_{\mu\nu}
+	,\\
+	\hc{\qq{}{uG}{ij}}
+	&=(\bar{q}_i\sigma^{\mu\nu}T^Au_j)\:\tilde{\varphi}G_{\mu\nu}^A
+	,\\
+\noalign{Two-quark-two-lepton operators:}
+	\qq{1}{lq}{ijkl}
+	&=(\bar l_i\gamma^\mu l_j)
+	  (\bar q_k\gamma^\mu q_l)
+	,\\
+	\qq{3}{lq}{ijkl}
+	&=(\bar l_i\gamma^\mu \tau^I l_j)
+	  (\bar q_k\gamma^\mu \tau^I q_l)
+	,\\
+	\qq{}{lu}{ijkl}
+	&=(\bar l_i\gamma^\mu l_j)
+	  (\bar u_k\gamma^\mu u_l)
+	,\\
+	\qq{}{eq}{ijkl}
+	&=(\bar e_i\gamma^\mu e_j)
+	  (\bar q_k\gamma^\mu q_l)
+	,\\
+	\qq{}{eu}{ijkl}
+	&=(\bar e_i\gamma^\mu e_j)
+	  (\bar u_k\gamma^\mu u_l)
+	,\\
+	\hc{\qq{1}{lequ}{ijkl}}
+	&=(\bar l_i e_j)\;\varepsilon\;
+	  (\bar q_k u_l)
+	,\\
+	\hc{\qq{3}{lequ}{ijkl}}
+	&=(\bar l_i \sigma^{\mu\nu} e_j)\;\varepsilon\;
+	  (\bar q_k \sigma_{\mu\nu} u_l)
+	,\\
+	\hc{\qq{}{ledq}{ijkl}}
+	&=(\bar l_i e_j)
+	  (\bar d_k q_l)
+	,\\
+\noalign{Baryon- and lepton-number-violating operators:\footnote{In the latest version of Ref.\,\cite{Grzadkowski:2010es}, $\qq{1,3}{qqq}{}$ are merged into one single operator with $SU(2)_L$ indices mixed between the two fermion bilinears. The two conventions are technically speaking equivalent~\cite{Abbott:1980zj}.}}
+	\hc{\qq{}{duq}{ijkl}}
+	&=(\overline{d^c}_{i\alpha}			u_{j\beta})
+	  (\overline{q^c}_{k\gamma}	\varepsilon	l_l)
+	  \;\epsilon^{\alpha\beta\gamma}
+	,\\
+	\hc{\qq{}{qqu}{ijkl}}
+	&=(\overline{q^c}_{i\alpha}	\varepsilon	q_{j\beta})
+	  (\overline{u^c}_{k\gamma}	e_l)
+	  \;\epsilon^{\alpha\beta\gamma}
+	,\\
+	\hc{\qq{1}{qqq}{ijkl}}
+	&=(\overline{q^c}_{i\alpha}	\varepsilon	q_{j\beta})
+	  (\overline{q^c}_{k\gamma}	\varepsilon	l_l)
+	  \;\epsilon^{\alpha\beta\gamma}
+	,\\
+	\hc{\qq{3}{qqq}{ijkl}}
+	&=(\overline{q^c}_{i\alpha}	\tau^I\varepsilon	q_{j\beta})
+	  (\overline{q^c}_{k\gamma}	\tau^I\varepsilon	l_l)
+	  \;\epsilon^{\alpha\beta\gamma}
+	,\\
+	\hc{\qq{}{duu}{ijkl}}
+	&=(\overline{d^c}_{i\alpha}	u_{j\beta})
+	  (\overline{u^c}_{k\gamma}	e_l)
+	  \;\epsilon^{\alpha\beta\gamma}
+	,
+\end{align}
+Non-Hermitian operators are marked with a double dagger (only in the above list): $\hc{\qq{}{}{}}$. For Hermitian operators which involve vector Lorentz bilinears, complex conjugation is equivalent to the transposition of generation indices: $\qq{}{}{ij}{}^* = \qq{}{}{ji}$ and by extension, for four-fermion operators, $\qq{}{}{ijkl}{}^* = \qq{}{}{jilk}$.
+The corresponding effective Lagrangian then takes the form:
+\begin{equation}
+\mathcal{L} =
+ \sum_a \left( \frac{\cc{}{a}{}}{\Lambda^2}  \hc{\qq{}{a}{}} +\text{h.c.}\right)
++\sum_b \frac{\cc{}{b}{}}{\Lambda^2} \qq{}{b}{}\,,
+\label{eq:eft_lagrangian}
+\end{equation}
+where the conjugates of the Hermitian operators, labelled here with an index $b$, are not added. Conventionally and unless otherwise specified, the arbitrary scale $\Lambda$ will be set to $1\,$TeV. Equivalently, one could consider that numerical values quoted are in units of TeV$^{-2}$ for the dimensionful coefficients $\tilde{C}_i\equiv C_i/\Lambda^2$. It is understood that the implicit sum over flavour indices only includes independent combinations, i.e., the symmetry in flavour space of the operator coefficients is taken into account.
+
+\section{Flavour assumptions}
+\label{sec:flavour}
+As mentioned in the introduction, prioritizing the study of certain flavour structures is required among the otherwise overwhelming number of four-quark operators.
+%
+In the lepton sector, it seems manageable to only assume flavour diagonality,  i.e. $[U(1)_{l+e}]^3$ which includes a separate $U(1)_l\times U(1)_e$ diagonal subgroup for each of the three lepton generations. This leaves independent parameters for each lepton-antilepton pair of a given generation. This assumption adopted as baseline could, for instance, easily be further restricted to $[U(1)_{l} \times U(1)_{e}]^3$, $U(3)_{l+e}$ or even $U(3)_l\times U(3)_e$. As in the quark sector (see below), the third generation of leptons could also be put aside and $U(2)$ symmetries assumed among the first two generations.
+%
+We discuss different flavour assumptions for the quark sector in the next three sections, starting with a baseline symmetry (\autoref{sec:41}) subsequently made less and more restrictive (\hyperref[sec:flavour-less-restrictive]{Sections\,\ref{sec:flavour-less-restrictive}} and \ref{sec:flavour-more-restrictive}).
+
+\subsection{Baseline \texorpdfstring{$U(2)_q\times U(2)_u\times U(2)_d$}{U(2)q x U(2)u x U(2)d} scenario}\label{sec:41}
+
+As a baseline flavour scenario in the quark sector and motivated ---as detailed below--- by the minimal flavour violation (MFV) ansatz~\cite{Chivukula:1987py, Hall:1990ac, DAmbrosio:2002vsn}, we impose a $U(2)_q\times U(2)_u\times U(2)_d$ symmetry among the first two generations. The MFV expansion of quark bilinear coefficients is the following:
+\begin{flalign}
+	\bar q_i q_j&: a_1 \mathbb{I}+a_2 Y_u Y_u^\dagger+a_3 Y_d Y_d^\dagger +\cdots
+	\\
+        \bar u_i u_j&: b_1 \mathbb{I}+b_2 Y_u^\dagger Y_u+\dots
+	\\
+	\bar d_i d_j&: c_1 \mathbb{I} + c_2 Y_d^\dagger Y_d +\dots
+	\\
+	\bar u_i d_j&: d_1 Y_u^\dagger Y_d+\dots
+	\\
+	\bar q_i u_j&: e_1 Y_u + e_2 Y_u Y_u^\dagger Y_u+e_3 Y_d Y_d^\dagger Y_u+\dots
+	\\
+	\bar q_i d_j&: f_1 Y_d + f_2 Y_d Y_d^\dagger Y_d+f_3 Y_u Y_u^\dagger Y_d+\dots
+\end{flalign}
+where $a_1$, $b_1$, etc.\ are order-one coefficients (see Ref.\,\cite{Kagan:2009bn} for the resummation  of large contributions in such series). As a first approximation, we assume a unit CKM matrix, and retain only the top and bottom Yukawa couplings, so that $Y_u=\diag(0,0,y_t)$ and $Y_d=\diag(0,0,y_b)$. When considering low-energy constraints and restoring the full CKM matrix, one would need to worry about whether UV flavour structures are aligned with the up-, down-quark sectors, or in between those limits~\cite{Gedalia:2010zs}. Denoting the left-handed quark doublet and right-handed quark singlets of the third generation as $Q$, $t$, and $b$,
+\begin{align*}
+        \bar q_i q_i,\ \bar u_i u_i,\ \bar d_i d_i\quad
+	&\mbox{bilinears are allowed in the first two generations,}
+	\\
+        \bar Q Q,\ \bar t t,\ \bar b b,\ 
+        \bar t b,\ \bar Q t,\ \bar Q b\quad
+	&\mbox{bilinears are allowed in the third generation,}
+\end{align*}
+under the above assumptions.
+The coefficients of the first-generation bilinears do not depend on the
+$i\in\{1,2\}$ index which is thus implicitly summed over. Fierz transformations may be required on four-fermion operators to bring such quark-antiquark pairs in the same Lorentz bilinear.
+%
+Equivalently, a $U(2)_q\times U(2)_u\times U(2)_d$ symmetry is assumed between the first two quark generations and no restriction is imposed on the third-generation bilinears. This assumption simplifies four-fermion operators but does not affect third-generation two-fermion ones.
+%
+Compared to flavour diagonality, i.e. $[U(1)_{q+u+d}]^3$, which would just force quarks and antiquarks to appear in same-flavour pairs, $U(2)_q\times U(2)_u\times U(2)_d$ effectively imposes the following additional requirements:
+\begin{enumerate}
+\item the right-handed charged currents of the first generations ($\bar u d$, $\bar du$) are forbidden, \label{item:light-r-cc}
+\item the chirality-flipping bilinears of the first generations ($\bar qu$, $\bar qd$) are forbidden, \label{item:light-ch-flip}
+\item the coefficients of the bilinears of the first and second generations are forced to be identical.
+\end{enumerate}%list}
+The $U(2)_q\times U(2)_u\times U(2)_d$ flavour symmetry assumption is used by default in this note where not otherwise specified. The following numbers of degrees of freedom are produced for the operators of each category of field content:
+\begin{center}
+\begin{tabular}[t]{r@{\quad}l}
+four heavy quarks & $11+2$ CPV\\
+two light and two heavy quarks & $14$\\
+two heavy quarks and bosons & $9+6$ CPV\\
+two heavy quarks and two leptons & $(8+3\text{ CPV}) \times 3$ lepton flavours
+\end{tabular}
+\end{center}
+where we counted separately CP-conserving and CP-violating (CPV) parameters. They are constructed explicitly in \autoref{app:dof} and listed in \autoref{tab:limits} together with their definitions in terms of Warsaw-basis operator coefficients.
+
+Finally, a more restrictive variant of this $U(2)_q\times U(2)_u\times U(2)_d$ scenario would retain only the four-fermion operators and exclude the operators with two heavy quarks and bosons. This would be justified when heavy bosons only couple to the SM fermions, so that the low-energy effects are dominated by the tree-level exchanges of heavy mediators between fermionic currents.
+
+\subsection{Less restrictive \texorpdfstring{$U(2)_{q+u+d}$}{U(2)q+u+d} scenario}
+\label{sec:flavour-less-restrictive}
+In order to allow for the light-quark bilinears listed in \autoref{item:light-r-cc} and \autoref{item:light-ch-flip} above, one can limit the flavour symmetry imposed to $U(2)_{q+u+d}$ only, the diagonal subgroup of $U(2)_q\times U(2)_u\times U(2)_d$. The additional $10+10$~CPV degrees of freedom that then appear for operators containing two light and two heavy quarks are discussed in \autoref{app:less_restrictive_flavour}.
+
+\subsection{More restrictive \emph{top-philic} scenario}
+\label{sec:flavour-more-restrictive}
+A more restrictive \emph{top-philic} scenario is not obtained by imposing a specific flavour symmetry but rather by assuming that new physics couples dominantly to the left-handed doublet and right-handed up-type quark singlet of the third generation as well as to bosons. All possible operators with this field content are thus constructed. Purely bosonic operators which lead to flavour-universal effects are discarded. A projection onto the Warsaw basis is subsequently performed, notably by employing the equations of motion to trade operators with more derivatives for operators with more fields. In this process, the CKM matrix is again approximated by a unit matrix and all Yukawa couplings but the top and bottom ones are neglected. Only a limited number of independent Lorentz and colour structures are generated. In terms of the degrees of freedom of the baseline scenario, the ones generated in this case are:
+\begin{align}
+&\hspace{-7mm}
+	\ccc{[I]}{t\varphi}{}	,\qquad
+	\ccc{-}{\varphi q}{}	,\qquad
+	\ccc{3}{\varphi q}{}	,\qquad
+	\ccc{}{\varphi t}{}	,\qquad
+	\ccc{[I]}{tW}{}		,\qquad
+	\ccc{[I]}{tB}{}		,\qquad
+	\ccc{[I]}{tG}{}		,\qquad
+	\\
+&\hspace{-7mm}
+	\ccc{[I]}{\varphi tb}{}	\quad\text{and}\quad
+	\ccc{[I]}{bW}{}		\qquad\text{appear proportional to $y_b$}
+	\\
+&\hspace{-7mm}
+	\ccc{1}{QQ}{}	,\qquad
+	\ccc{8}{QQ}{}	,\qquad
+	\ccc{1}{Qt}{}	,\qquad
+	\ccc{8}{Qt}{}	,\qquad
+	\ccc{1}{tt}{}	,\\
+\ccc{}{QDW}{}&
+	= \ccc{3,1}{Qq}{}
+	= \ccc{3}{Ql}{\ell},\\
+\ccc{}{QDB}{}&
+	= 6\ccc{1,1}{Qq}{}
+	= \frac{3}{2}\ccc{1}{Qu}{}
+	= -3\ccc{1}{Qd}{}
+	= -3\ccc{1}{Qb}{}
+	= -2\ccc{1}{Ql}{\ell}
+	= - \ccc{}{Qe}{\ell},\\
+\ccc{}{tDB}{}&
+	= 6\ccc{1}{tq}{}
+	= \frac{3}{2}\ccc{1}{tu}{}
+	= -3\ccc{1}{td}{}
+	= -3\ccc{1}{tb}{}
+	= -2\ccc{}{tl}{\ell}
+	= - \ccc{}{te}{\ell},\\
+\ccc{}{QDG}{}&
+	= \ccc{8}{Qq}{}
+	= \ccc{8}{Qu}{}
+	= \ccc{8}{Qd}{}
+	= \ccc{8}{Qb}{},\\[2mm]
+\ccc{}{tDG}{}&
+	= \ccc{8}{tq}{}
+	= \ccc{8}{tu}{}
+	= \ccc{8}{td}{}
+	= \ccc{8}{tb}{}.
+\end{align}
+All other degrees of freedom then vanish. Counting the degrees of freedom in this scenario, distinguishing operator categories by their field content, one obtains:
+\begin{center}
+\begin{tabular}[t]{r@{\quad}l}\\
+two heavy quarks and bosons & $9+6$ CPV\\
+four heavy quarks & $5$\\
+four fermions & $5$.
+\end{tabular}
+\end{center}
+
+
+
+\section{Example of EFT analysis strategy}
+\label{sec:strategy}
+
+An example of analysis strategy is sketched in this section to illustrate how the challenges of global EFT interpretations could be addressed and to highlight what would, in that case, be useful experimental outputs. It relies on fiducial observables defined at, and unfolded to, the particle level.\footnote{A higher level, like the parton one, could be envisioned but would enhance the model-dependence of the unfolding. If advantageous, the \emph{forward folding} of particle-level predictions to the detector level could be considered instead.\label{foot:unfold-level}} We stress that other strategies could be equally suitable, more practical to implement in some cases or lead to better sensitivities, by avoiding unfolding. As our aim is illustrative only and as it is in any case difficult to make prescriptions applicable to any type of experimental analysis, we refrain from considering other possibilities in detail. We expect, however, many of the points raised and recommendations made to apply more generally to other analysis strategies. A wealth of EFT analyses has for instance been carried out in the Higgs and electroweak sectors at the LHC and treats issues related to those discussed here (see e.g.\ Refs.\,\cite{Butter:2016cvz, Murphy:2017omb, DiVita:2017eyz, Falkowski:2016cxu, Brivio:2016fzo, Englert:2015hrx}).
+
+The approach presented here is meant to be simultaneously practical and useful on a long-term basis. Importantly, it allows for relatively precise reinterpretations without full detector simulation. It could thus easily benefit from future improvements in the accuracy of our EFT predictions and adapt to the evolving picture of global EFT constraints or to changes in underlying assumptions. It should allow to derive robust global constraints and be applicable in a wide variety of situations but could however not lead to the tightest constraints on individual operators. Our rationale is that global constraints have more value than individual ones. A global analysis covers systematically the theory space in direct vicinity of the SM and is able to identify new physics through correlated deviations in precise measurements. A tentative \emph{recipe} could be the following:
+
+%\newcommand*{\footlevel}{$^\text{\ref{foot:unfold-level}}$}
+
+\begin{enumerate}
+\item Define observables at the particle level in a fiducial phase-space volume close enough to the detector level so as to make the unfolding model independent.
+	\begin{enumerate}
+	\item Several bins of a differential distribution would qualify as examples of observables. A total rate would qualify too, as well as ratios~\cite{Plehn:2015cta, Schulze:2016qas}, asymmetries, etc.
+	\item One could also consider observables that are based on multivariate analysis (MVA) techniques. The binned MVA output then yields suitable observables (or, e.g., one bin in several MVA outputs, each maximizing sensitivity to different operator coefficients). The trained classifier(s) should then be provided, for instance as \texttt{C++} code taking as input a particle-level event sample or kinematic variables.
+	\item Statistically optimal observables~\cite{Atwood:1991ka, Davier:1992nw, Diehl:1993br}, similar to matrix element methods (see also Ref.\,\cite{Brehmer:2016nyr, Brehmer:2017lrt}), could be very useful from both theoretical and experimental points of view. Their definitions rely on firm theoretical bases, and encode our physical understanding instead of requiring a resource-intensive and opaque training. They moreover constitute a discrete set exactly sufficient to maximally exploit the available kinematic information on which the effect of higher-order corrections (see e.g.\ Ref.\,\cite{Gritsan:2016hjl}) or systematic uncertainties can be transparently studied. Applications in experimental analyses include anomalous triple gauge coupling studies at LEP~\cite{Abbiendi:2003mk, Achard:2004ji, Schael:2004tq, Abdallah:2010zj} and, recently, CP properties of the Higgs boson in di-tau final state~\cite{Aad:2016nal}.
+	\end{enumerate}
+
+\item Unfold the measurement of these observables, as well as the estimates for the various SM contributions, to the particle level.
+      \label{item:composition}
+	\begin{enumerate}
+	\item For a suitably defined fiducial region, the particle and detector levels should be sufficiently close to each other for the unfolding to be performed under the SM hypothesis only. Full simulation at various EFT parameter points would then be avoided altogether. The validity of this approximation should however be checked explicitly. \label{item:fiducial-goodness}
+	\item The SM contributions would include both the \emph{signal} and \emph{backgrounds} of a SM measurement. It is important to detail the background composition as these processes could have some EFT dependence which may be neglected at first but which could be desirable to account for at some later point in time. \label{item:sm_contrib}
+	\end{enumerate}
+
+\item For the various measurements, provide the statistical and systematics likelihoods, error source breakdown, their correlations, and whether they follow a flat or Gaussian distribution.
+      
+\item[] Notice that the information above should be sufficient for anybody able to generate an EFT (or any NP) sample at the particle level to set constraints. In order to obtain global EFT constraints, one could further proceed as follows.
+
+\item \label{item:dim-6-expansion} Compute, numerically or analytically, for each observable $O^k$, the linear $S_i$ and quadratic $S_{ij}$ contributions of dimension-six operators, in addition to the SM contributions $B_l$ already mentioned in \autoref{item:sm_contrib}. Schematically, the expansion in powers of dimension-six operator coefficients can the be written as:
+      \begin{equation}
+      O^k = B_l^k 
+      	+ \frac{C_i}{\Lambda^2} S_i^k 
+      	+ \frac{C_i C_j}{\Lambda^4} S_{ij}^k
+      	+ \cdots
+      \label{eq:observable}
+      \end{equation}
+      Quadratic and higher powers of dimension-six operator coefficients can be generated at tree level when several operator insertions are possible in one amplitude. The expansion of normalized distributions, ratios, asymmetries, or of the total width appearing in top-quark propagators also generates such higher powers. In some cases, the interference between SM amplitudes and EFT ones could be suppressed (see for instance helicity selection rules discussed in Ref.\,\cite{Azatov:2016sqh} and references therein) or even vanishingly small (in the case of FCNCs for instance). The dominant contribution could then arise at the quadratic level. Operators of dimension larger than six, in particular that of dimension-eight which were not considered in this note, also start contributing at order $1/\Lambda^4$ in the EFT expansion.
+	
+	\begin{enumerate}
+	\item At tree level, with \mg, if a different coupling order \texttt{EFT$_\texttt{i}$} is given to each of the relevant $N$ operator coefficients $C_i$, the computation of $S_i^k$ and $S_{ij}^k$ can most easily be done by generating at most $N+N(N+1)/2$ samples (see \autoref{sec:ufo} for more details, and for the \texttt{DIM6\_i\^{}2==1} syntax of \mg~\cite{Alwall:2014hca} in particular). If the approximation in \autoref{item:fiducial-goodness} holds, these samples do not need to be passed through detector simulation.
+
+	\item As explained in \autoref{sec:principles}, it is in principle desirable to include all operators that contribute at some given loop order, say first at the tree level. Exceptions could be made for operators that are much better constrained than the others, at the time at which the limits are extracted. This comparison of the relative strength of different measurements could however evolve with time and the goodness of this approximation be re-evaluated.
+	\end{enumerate}
+
+\item Within some statistical framework, use the measured $O^k$, the estimated $B^k_l$ with their statistical and systematic uncertainties, and the $S_i^k$, $S_{ij}^k$ to derive global constraints on the $C_i$ operator coefficients.
+      
+	\begin{enumerate}
+	\item It is instructive to also quote individual constraints, set by considering one operator at a time. A comparison between global and individual constraints gives some indication about the magnitude of approximate degeneracies between EFT parameters.
+	
+	\item For easy combination with other measurements, provide the full covariance matrices of uncertainties on the $C_i$ determination in the Gaussian approximation. The eigenvectors of its inverse corresponding to vanishing eigenvalues indicate which directions of the EFT parameter space remain unconstrained by the measured observables. Other eigenvectors and eigenvalues provide the constraints in other directions.
+	
+	\item \label{item:linear-and-quadratic} Repeat this procedure twice, with and without including the $S_{ij}^k$ quadratic EFT contributions. The comparison between those two sets of results can explicitly establish where quadratic dimension-six EFT contributions are subleading compared to linear ones. Remarkably, when the linear dependence dominates, the constraints obtained can easily be translated from one basis of dimension-six operators to the other and are therefore of greater generality.
+	
+	\end{enumerate}
+
+\item \label{item:validity-Ecut} For the purpose of this note, let us define our EFT description to be valid in the regime where it is dominated by dimension-six operator contributions, at the linear level or at some finite higher order. Determining the relative magnitude of the coefficients of operators of various dimensions requires a specific model or power counting. Moreover, the magnitudes of operator-coefficient contributions to a specific observable also depend on $E$, the characteristic energy scale of the process examined. In a production process at the LHC, the reconstructed partonic centre-of-mass energy is often, theoretically, such a suitable quantity. Other proxies may also be considered like $H_T$, the scalar sum of all transverse energies. Their correlation with the physically relevant variables should then be studied, as done for instance in Ref.\,\cite{Falkowski:2016cxu} (see Fig.\,2 and related discussion). In decays, this characteristic scale $E$ is the mass of the decaying particle.
+      
+      When it is practically feasible, displaying the variation of the limit as a function of an upper cut on $E$ at $E_\text{cut}$ (see \autoref{fig:lim-Ecut}) allows for the valid interpretation of EFT results in a larger class of models~\cite{Brehmer:2015rna, Contino:2016jqw}: featuring a new-physics scale lower than the nominal $E$, or leading to significant contributions from operators of dimension larger than six when no $E_\text{cut}$ is applied.
+      
+      Interpreting EFT results in specific models proceeds by expressing each $C_i/\Lambda^2$ in terms of the model couplings and mass scales, through a so-called \emph{matching} procedure. The EFT description of a resonance of mass $M$ would be dominated by the operators of lowest dimension when $M\gg E_\text{cut}$. Stricter constraints may apply for instance if the resonance has a large width.
+
+\begin{figure}
+\begin{minipage}[b]{.5\textwidth}\centering
+	\includegraphics[scale=1]{perturbativity.mps}
+\end{minipage}\hfill
+\begin{minipage}[b]{.49\textwidth}
+\caption{Illustration of the limit set on an EFT parameter as function of a cut on the characteristic energy scale of the process considered (see \autoref{item:validity-Ecut}). Qualitatively, one expects the limits to be progressively degraded as $E_\text{cut}$ is pushed towards lower and lower values. At high cut values, beyond the energy directly accessible in the process considered, a plateau should be reached. The regions excluded when the dimension-six EFT is truncated to linear and quadratic orders are delimited by solid lines (see \autoref{item:linear-and-quadratic}). The hatched regions indicate where the dimension-six EFT loses perturbativity (see \autoref{item:perturbativity}). In practice, curves will not be symmetric with respect to $C_i/\Lambda^2=0$.}
+\label{fig:lim-Ecut}
+\end{minipage}%
+\end{figure}
+
+\item \label{item:perturbativity} Besides validity, the quantum perturbativity of the dimension-six EFT can be examined using the same picture. This perturbativity is a necessary condition for the validity (defined as in the previous item) and can be established without reference to a specific model or power counting.
+	\begin{enumerate}
+
+	\item This quantum perturbativity of the dimension-six EFT is examined through the sum of contributions involving more and more operator insertions in diagrams with higher and higher numbers of loops. The convergence of such a series (involving one additional operator insertion per loop) requires that $C_i (E_\text{cut}/4\pi\Lambda)^2$ be smaller than a constant which would roughly be of order one if the normalization of $C_i$ is \emph{natural} to the observable considered. The exact condition would need to be determined on a case-by-case basis. It defines a hyperbola in the $(C_i/\Lambda^2,E_\text{cut}^2)$ plane. At tree level, all allowed powers of $C_i/\Lambda^2$ can moreover become relevant as soon as $C_i (E_\text{cut}/\Lambda)^2$ approaches a constant, possibly of order one. If contributions from higher dimensional operators at the same order in $1/\Lambda$ had similar magnitudes, they would also become relevant at that point.
+	      
+	\item If it exists, the point at which the perturbativity hyperbola crosses the limit curves establishes a minimal $E_\text{cut}$ that has to be imposed for the limit computed perturbatively to make sense. For a sufficiently tight constraint, the limit curves would only cross the perturbativity hyperbola for a cut value beyond the maximal energy directly accessible in the process considered.
+	      
+	\item If it exists, the point at which the $C_i(E_\text{cut}/\Lambda)^2=\text{\it constant}$ hyperbola crosses the limit curve provides a sense of where higher-order terms in the tree-level expansion in powers of dimension-six operator coefficients could become relevant. In particular, one may expect the linear and quadratic limits to start diverging around that point.
+	      
+	\item When discussing the relevance of higher-order contributions, definite statements are difficult to make, as is always the case when trying to estimate the terms not computed in a truncated series. As mentioned in \autoref{item:dim-6-expansion}, it is worth bearing in mind the first term could for instance have an accidental suppression as it generally arises from the interference of a SM amplitude with an EFT one.
+	\end{enumerate}
+
+\end{enumerate}
+
+
+\section{Summary and outlook}
+In this note, we established the first bases of a framework for the EFT interpretation of top-quark measurements at the LHC. Experimental collaborations and theorists are encouraged to use this common language in future publications to facilitate comparisons and combinations. Having mentioned the caveats associated with those choices, we limited our scope to dimension-six operators of the Warsaw basis which contain a top quark, prioritized the study of possible flavour structures with consistent flavour scenarios, defined the degrees of freedom relevant in each case, compiled existing indicative constraints on these parameters, discussed the use of simulation tools to extract their dependence, and tabulated several benchmark results. An example of analysis strategy was also sketched to illustrate one possible way in which the challenges of a global EFT analysis could be addressed. The experimental outputs that are in that case desirable were highlighted. It is expected that the statements made in the discussion of this example could be transposed to concrete analyses and adapted to different strategies.
+
+Having laid those bases, we did not address more involved issues like next-to-leading order corrections (especially in QCD), theoretical uncertainties, or the treatment of unstable tops. These important topics may deserve further discussion in the LHC TOP Working Group. It is left to the communities of both theorists and experimentalists to study the observables that are best suited to constrain particular direction of the EFT parameter space and to examine the complementarity between them as well as between different processes. Combining the constraints from various sources or determining which dependences are relevant in each observable are tasks that should also be addressed to make progress in the program outlined here.
+%
+Ultimately, it will be important to combine top-quark, Higgs and electroweak measurements within the SMEFT. Studies targeting these two other sectors are discussed in the corresponding LHC HXS and EW Working Groups. Several methodological points raised in this note, such as those discussed in \autoref{sec:strategy}, have also been addressed in these contexts, see for example Ref.\,~\cite{deFlorian:2016spz}.
+
+Finally, as stressed several times in this note, the global EFT picture will necessarily evolve with time as new measurements and more accurate predictions become available. Some of the assumptions made here may therefore need to be revised in the future as a finer picture is obtained.
+
+
+\section*{Acknowledgements}
+We would like to warmly thank the experimentalists of the ATLAS and CMS Collaborations having provided us with extensive feedback on the content of this note, the participants to the LHC TOP Working Group meetings in which it was discussed, and the conveners of the Working Group for their support.
+
+\appendix
+
+\begin{table}
+\renewcommand{\arraystretch}{1.2}%
+\vspace{-3cm}
+%\hspace*{-1.5cm}
+	\begin{tabular}{@{}l@{}ll}
+	\multicolumn{2}{@{}l@{}}{Four-heavy ($11+2\text{ CPV}$ d.o.f.)}
+		& Indicative direct limits
+	\\[0mm]\hline\noalign{\vskip1mm}
+	$\ccc{1}{QQ}{}$
+		&\warsaw{2\cc{1}{qq}{3333}-\frac{2}{3}\cc{3}{qq}{3333}}
+	\\  
+	$\ccc{8}{QQ}{}$
+		&\warsaw{8\cc{3}{qq}{3333}}
+	\\
+	!$\ccc{+}{QQ}{}$
+		&\warsaw{\cc{1}{qq}{3333}+\cc{3}{qq}{3333}}
+		& $[-2.92, 2.80]$ ($E_{cut}= 3\,$ TeV) \cite{Zhang:2017mls}
+	\\
+	$\ccc{1}{Qt}{}$
+		&\warsaw{\cc{1}{qu}{3333}}
+		& $[-4.97,4.90]$ ($E_{cut}= 3\,$TeV) \cite{Zhang:2017mls}
+	\\
+	$\ccc{8}{Qt}{}$
+		&\warsaw{\cc{8}{qu}{3333}}
+		& $[-10.3,9.33]$ ($E_{cut}= 3\,$TeV) \cite{Zhang:2017mls}
+	\\
+	$\ccc{1}{Qb}{}$
+		&\warsaw{\cc{1}{qd}{3333}}
+	\\
+	$\ccc{8}{Qb}{}$
+		&\warsaw{\cc{8}{qd}{3333}}
+	\\
+	$\ccc{1}{tt}{}$
+		&\warsaw{\cc{}{uu}{3333}}
+		& $[-2.92,2.80]$ ($E_{cut}= 3\,$TeV) \cite{Zhang:2017mls}
+	\\
+	$\ccc{1}{tb}{}$
+		&\warsaw{\cc{1}{ud}{3333}}
+	\\
+	$\ccc{8}{tb}{}$
+		&\warsaw{\cc{8}{ud}{3333}}
+	\\
+	$\ccc{1[I]}{QtQb}{}$
+		&\warsaw{\ReIm\{\cc{1}{quqd}{3333}\}}
+	\\
+	$\ccc{8[I]}{QtQb}{}$
+		&\warsaw{\ReIm\{\cc{8}{quqd}{3333}\}}
+	\\[0mm]
+% two-light-two-heavy
+	\multicolumn{2}{@{}l}{Two-light-two-heavy (14 d.o.f.)}
+	\\[0mm]\hline\noalign{\vskip1mm}
+	$\ccc{3,1}{Qq}{}$
+		&\warsaw{\cc{3}{qq}{ii33} +\frac{1}{6}(\cc{1}{qq}{i33i} -\cc{3}{qq}{i33i})}
+		& $[-0.66,1.24]$ \cite{Buckley:2015lku}, $[-3.11,3.10]$ \cite{Zhang:2017mls}
+	\\$\ccc{3,8}{Qq}{}$
+		&\warsaw{\cc{1}{qq}{i33i}-\cc{3}{qq}{i33i}}
+		& $[-6.06,6.73]$ \cite{Zhang:2017mls}
+	\\$\ccc{1,1}{Qq}{}$
+		&\warsaw{\cc{1}{qq}{ii33} +\frac{1}{6}\cc{1}{qq}{i33i} +\frac{1}{2}\cc{3}{qq}{i33i}}
+		& $[-3.13,3.15]$ \cite{Zhang:2017mls}
+	\\$\ccc{1,8}{Qq}{}$
+		&\warsaw{\cc{1}{qq}{i33i}+3\cc{3}{qq}{i33i}}
+		& $[-6.92,4.93]$ \cite{Zhang:2017mls}
+	\\$\ccc{1}{Qu}{}$
+		&\warsaw{\cc{1}{qu}{33ii}}
+		& $[-3.31,3.44]$ \cite{Zhang:2017mls}
+	\\$\ccc{8}{Qu}{}$
+		&\warsaw{\cc{8}{qu}{33ii}}
+		& $[-8.13,4.05]$ \cite{Zhang:2017mls}
+	\\$\ccc{1}{Qd}{}$
+		&\warsaw{\cc{1}{qd}{33ii}}
+		& $[-4.98,5.02]$ \cite{Zhang:2017mls}
+	\\$\ccc{8}{Qd}{}$
+		&\warsaw{\cc{8}{qd}{33ii}}
+		& $[-11.7,9.39]$ \cite{Zhang:2017mls}
+	\\$\ccc{1}{tq}{}$
+		&\warsaw{\cc{1}{qu}{ii33}}
+		& $[-2.84,2.84]$ \cite{Zhang:2017mls}
+	\\$\ccc{8}{tq}{}$
+		&\warsaw{\cc{8}{qu}{ii33}}
+		& $[-6.80,3.49]$ \cite{Zhang:2017mls}
+	\\$\ccc{1}{tu}{}$
+		&\warsaw{\cc{}{uu}{ii33}+\frac{1}{3} \cc{}{uu}{i33i}}
+		& $[-3.62,3.57]$ \cite{Zhang:2017mls}
+	\\$\ccc{8}{tu}{}$
+		&\warsaw{2 \cc{}{uu}{i33i}}
+		& $[-8.05,4.75]$ \cite{Zhang:2017mls}
+	\\$\ccc{1}{td}{}$
+		&\warsaw{\cc{1}{ud}{33ii}}
+		& $[-4.95,5.04]$ \cite{Zhang:2017mls} 
+	\\$\ccc{8}{td}{}$
+		&\warsaw{\cc{8}{ud}{33ii}}
+		& $[-11.8,9.31]$ \cite{Zhang:2017mls} 
+	\\[1mm]
+	\multicolumn{2}{@{}l@{}}{Two-heavy ($9 + 6$ CPV d.o.f.)}
+	\\[0mm]\hline\noalign{\vskip1mm}
+% two quarks
+	$\ccc{[I]}{t\varphi}{}$
+		&\warsaw{\ReIm\{\cc{}{u\varphi}{33}\}}
+	\\$\ccc{-}{\varphi q}{}$
+		&\warsaw{\cc{1}{\varphi q}{33}-\cc{3}{\varphi q}{33}}
+		& $\ccc{1}{\varphi q}{}$
+		  $[-3.1,3.1]$ \cite{Buckley:2015lku},
+		  $[-8.3,8.6]$ \cite{Englert:2017dev}
+	\\$\ccc{3}{\varphi Q}{}$
+		&\warsaw{\cc{3}{\varphi q}{33}}
+		& $[-4.1,2.0]$ \cite{Buckley:2015lku},
+		  $[-8.6,8.3]$ \cite{Englert:2017dev}
+	\\$\ccc{}{\varphi t}{}$
+		&\warsaw{\cc{}{\varphi u}{33}}
+		& $[-9.7,8.3]$ \cite{Buckley:2015lku},
+		  $[-9.1,9.1]$ \cite{Englert:2017dev}
+	\\$\ccc{[I]}{\varphi tb}{}$
+		&\warsaw{\ReIm\{\cc{}{\varphi ud}{33}\}}
+	\\$\ccc{[I]}{tW}{}$
+		&\warsaw{\ReIm\{\cc{}{uW}{33}\}}
+		&  $\ccc{}{tW}{}$
+		  $[-4.0,3.5]$ \cite{Buckley:2015lku},
+		  $[-4.1,4.1]$ \cite{Englert:2017dev}
+	\\$\ccc{[I]}{tZ}{}$
+		&\warsaw{\ReIm\{-\sw\cc{}{uB}{33}+\cw\cc{}{uW}{33}\}}
+%	\\$!\ccc{[I]}{tB}{}$
+%		&\warsaw{\ReIm\{\cc{}{uB}{33}\}}
+		& $\ccc{}{tB}{}$
+		  $[-6.9,4.6]$ \cite{Buckley:2015lku},
+		  $[-7.6,7.6]$ \cite{Englert:2017dev}
+	\\$\ccc{[I]}{bW}{}$
+		&\warsaw{\ReIm\{\cc{}{dW}{33}\}}
+	\\$\ccc{[I]}{tG}{}$
+		&\warsaw{\ReIm\{\cc{}{uG}{33}\}}
+		& $c_{tG}$  $[-1.32,1.24]$ \cite{Buckley:2015lku}
+	\\[0mm]
+	\multicolumn{3}{@{}l@{}}{Two-heavy-two-lepton ($8+3$ CPV d.o.f. $\times 3$ lepton flavours)}
+	\\\hline\noalign{\vskip1mm}
+	$\ccc{3}{Ql}{\ell}$
+		&\warsaw{\cc{3}{lq}{\ell\ell33}}
+	\\$\ccc{-}{Ql}{\ell}$
+		&\warsaw{\cc{1}{lq}{\ell\ell33}-\cc{3}{lq}{\ell\ell33}}
+	\\$\ccc{}{Qe}{\ell}$
+		&\warsaw{\cc{}{eq}{\ell\ell33}}
+	\\$\ccc{}{tl}{\ell}$
+		&\warsaw{\cc{}{lu}{\ell\ell33}}
+	\\$\ccc{}{te}{\ell}$
+		&\warsaw{\cc{}{eu}{\ell\ell33}}
+	\\$\ccc{S[I]}{t}{\ell}$
+		&\warsaw{\ReIm\{\cc{1}{lequ}{\ell\ell33}\}}
+	\\$\ccc{T[I]}{t}{\ell}$
+		&\warsaw{\ReIm\{\cc{3}{lequ}{\ell\ell33}\}}
+	\\$\ccc{S[I]}{b}{\ell}$
+		&\warsaw{\ReIm\{\cc{}{ledq}{\ell\ell33}\}}
+	\\\hline
+\end{tabular}
+\caption{Indicative limits on top-quark operator coefficients for $\Lambda=1$ TeV. For details on the fit procedure, information on the input data and set of operators over which the results are marginalised please consult the corresponding references (see also Ref.~\cite{Buckley:2015nca}). Coefficients marked with a `!' are not independent of the ones previously defined.}
+\label{tab:limits}
+\end{table}
+
+
+\section{Indicative constraints}
+\label{sec:dof_limits}
+As a reference, we collect here various limits set by theoretical studies on the relevant degrees of freedom. We note that there is presently no study considering all the operators listed above and therefore no marginalised constraints are available. Typically, the fits considering one operator at a time (or marginalising over a smaller subset of operators) provide more stringent constraints. The limits listed should therefore only serve as a guidance for potential sensitivity studies or fits. Direct limits arising from the top-quark measurements are given in \autoref{tab:limits}, where available. Indirect limits from low-energy observables also exist, some of which can be very strong yet more model dependent. Limits from $B$ decays, dilepton production, electroweak precision observables, as well as electric dipole moments and CP asymmetries are discussed in the following three subsections. 
+
+%
+% from David Marzocca
+%
+\input{bdecays.tex}
+%
+
+\subsection{Indirect constraints from electroweak precision observables}
+Electroweak precision observables (EWPOs) provide additional constraints on
+the top-quark operators.  These measurements include the $Z$-pole data from LEP
+and SLC, the fermion pair production and $W$ pair production from LEP2, $W$ mass
+and width measurements from LEP and Tevatron, and other low-energy measurements
+such as DIS and atomic parity violation. These measurements do not directly
+involve resonant top quarks. The constraints come only from the top-quark
+loop-induced contributions in the two-point functions of the electroweak gauge
+bosons, which are modified by top-quark operators.  Unlike in the SM, these
+contributions are in general UV divergent, and therefore they need to be interpreted
+with care.  On the one hand, we aim to get as much information as possible,
+while on the other hand, we would like to base our approach only on minimum set
+of assumptions, so that the resulting constraints are meaningful for a wide
+range of BSM scenarios.  The approach adopted in Refs.~\cite{Greiner:2011tt,
+Zhang:2012cd} is an example of a reasonable balance between these two aspects.
+
+Consider the following subset of the two-heavy degrees of freedom
+\begin{flalign}
+	\ccc{-}{\varphi Q}{},
+	\quad \ccc{3}{\varphi Q}{},
+	\quad \ccc{}{\varphi t}{},
+	\quad \ccc{}{tW}{},
+	\quad \ccc{}{tB}{},
+	\quad \ccc{}{bW}{}
+\end{flalign}
+that are relevant in the EWPOs.  One specific contribution, 
+\begin{flalign}
+	\ccc{-}{\varphi Q}{}+2\ccc{3}{\varphi Q}{}\,,
+\end{flalign}
+corresponds to $Z\to b\bar b$ and can be constrained at the tree-level.
+All the other degrees of freedom enter only through the modification of the self-energies of $W$, $Z$ and $\gamma$ at the loop level.  These contributions consist of two parts:
+\begin{description}
+	\item[(a)] the UV poles and the corresponding logarithmic terms,
+	\item[(b)] the remaining finite terms.
+\end{description}
+The UV poles in the first part need to be cancelled by the renormalization of the following two non-top operators, to get physical results:
+\begin{flalign}
+	&\qq{}{\varphi WB}{}=\left( \varphi^\dagger\tau^I\varphi \right)
+	W_{\mu\nu}^I B^{\mu\nu}
+	\\
+	&\qq{}{\varphi D}{}=(\varphi^\dagger D^\mu \varphi)^*(\varphi^\dagger D_\mu \varphi)
+\end{flalign}
+In other words, the top-quark operators mix into these two
+operators.\footnote{This statement is basis dependent.  In this study we use
+	the ``HISZ'' basis~\cite{Hagiwara:1993ck}, which is convenient for
+	oblique physics effects, but we keep the definitions of $\qq{}{\varphi
+	WB}{}$ and $\qq{}{\varphi D}{}$ to be consistent with the Warsaw basis.
+	The physics result is basis-independent.  In the Warsaw basis, some of
+	the counter terms for the oblique parameters will be provided by other
+	operators involving fermion fields.}
+After the renormalization, contribution (a) gives a linear $q^2$-dependent
+part in all the self-energy functions $\Pi_{VV}(q^2)$. These contributions can
+be identified as a change of the $S$ and $T$ parameters.  It is well known that
+the EWPOs places stringent bounds on the $S$ and $T$ parameters, and so
+naively one could apply these bounds to constrain the top-quark operators.
+However, given that $\qq{}{\varphi WB}{}$ and $\qq{}{\varphi D}{}$ are
+included to obtain physical results, they need to be incorporated in the
+calculations of $S$ and $T$.  One finds, for example for $\ccc{}{tW}{}$,
+\begin{flalign}
+	\hat S = \frac{c_{\varphi WB}(\mu)v^2}{\Lambda^2}\frac{c_W}{s_W}
+	-N_c\frac{g\ccc{}{tW}{}}{4\pi^2}\frac{\sqrt{2}vm_t}{4\Lambda^2}
+	\frac{5}{3}\ln\frac{m_t^2}{\mu^2}
+	\label{eq:sparam}
+\end{flalign}
+which prevents us from directly setting bounds on $\ccc{}{tW}{}$, as the value of $c_{\varphi WB}(\mu)$ is unknown. Here $\mu$ is the renormalization scale. Indicative bounds may be obtained by assuming ``no accidental cancellation'' between the two terms, allowing us to set $c_{\varphi WB}(\mu)=0$. However, since the mixing effect exits, the results strongly depend on the scale $\mu$ at which this assumption is made.\footnote{The most constraining bounds obtained in this way corresponds to setting $\mu=\Lambda$ in \autoref{eq:sparam} and assuming $c_{\varphi WB}(\Lambda)=0$. This is often called the renormalization-group-induced bounds in the literature. They are however strongly model-dependent as assumptions about the matching scale are required, and are not consistent with the global EFT picture as a bottom-up approach. Therefore we do not discuss these bounds here and refer the interested readers to Refs.~\cite{Brod:2014hsa, deBlas:2015aea, Feruglio:2016gvd, Feruglio:2017rjo}.}
+
+Nevertheless, useful information can be obtained from contribution (b). By definition the $S$ and $T$ parameters assume a linear $q^2$ dependence for all two-point functions $\Pi_{VV}(q^2)$.  This is not the case when loop-contributions are the dominant ones, in particular the finite terms in (b) are in general not linear $q^2$ functions. On the other hand, the EWPOs contain more information than the $S$ and $T$ parameters.  To extract this information, one needs to abandon the oblique parameter formalism and perform a global fit for all measurements, including the top-loop contributions in all theory predictions. $c_{\varphi WB}(\mu)$ and $c_{\varphi D}(\mu)$ should be included, to obtain physical predictions. In the resulting $\chi^2$, one then marginalizes over the $c_{\varphi WB}(\mu)$ and $c_{\varphi D}(\mu)$ coefficients. The remaining constraints become weaker, but they are more reliable as they do not depend on any specific assumptions on these two coefficients.  One can also check that the constraints obtained in this way are independent of the renormalization scale $\mu$, to confirm that these results are physical.
+
+The details of this analysis can be found in Ref.~\cite{Zhang:2012cd}. We summarize the results on the relevant degrees of freedom, as indicative constraints in \autoref{tab:ewpo}, assuming only one top operator is considered at a time.\footnote{Ref.\,\cite{Efrati:2015eaa} also constrained both $\ccc{-}{\varphi q}{}+2\ccc{3}{\varphi Q}{}$ and $\ccc{-}{\varphi q}{}$ by combining $e^+e^-\to Z\to b\bar{b}$ measurements with single top-quark $t$-channel production at hadron colliders.}
+
+\begin{table}
+\renewcommand{\arraystretch}{1.2}%
+	\begin{tabular}{l@{\;}l@{\hspace{2cm}}c@{\hspace{2cm}}}
+	\multicolumn{2}{l}{Two-heavy}
+		&% Indicative indirect EWPO limits
+	\\[0mm]\hline\noalign{\vskip1mm}
+
+	$\ccc{-}{\varphi q}{}+2\ccc{3}{\varphi Q}{}$
+		&\warsaw{\cc{1}{\varphi q}{33}+\cc{3}{\varphi q}{33}}
+		& $0.016\pm0.021$
+	\\$\ccc{-}{\varphi q}{}$
+		&\warsaw{\cc{1}{\varphi q}{33}-\cc{3}{\varphi q}{33}}
+		& $2.0\pm2.7$
+	\\$\ccc{}{\varphi t}{}$
+		&\warsaw{\cc{}{\varphi u}{33}}
+		& $1.8\pm1.9$
+	\\$\ccc{}{tW}{}$
+		&\warsaw{\Re\{\cc{}{uW}{33}\}}
+		& $-0.4\pm1.2$
+	\\$\ccc{}{tB}{}$
+		&\warsaw{\Re\{\cc{}{uB}{33}\}}
+		& $4.8\pm5.3$
+	\\$\ccc{}{bW}{}$
+		&\warsaw{\Re\{\cc{}{dW}{33}\}}
+		& $11\pm13$
+	\\[1mm]\hline
+\end{tabular}
+\caption{Indicative limits on top-quark operators arising from precision electroweak observables, with $\Lambda=1\,$TeV.}
+\label{tab:ewpo}
+\end{table}
+
+As a final remark, apart from $O_{\varphi WB}$ and $O_{\varphi D}$, one could certainly include more non-top operators and perform a more global EW fit. The results will be more model-independent, at the cost of weakening the limits one would get after marginalizing over the non-top operators. The reason for only incorporating the $O_{\varphi WB}$ and $O_{\varphi D}$ operators here, is that they are the only ones to which the top-quark operators mix, and therefore the minimum set of operators one has to incorporate in order to extract exactly the part (b) contributions, which are $\mu$ independent and therefore more physical. This however implies that the resulting limits are based on the assumption that the dominant BSM effects are captured by top-quark operators.
+
+
+%
+% from Wouter Dekens, Jordy de Vries, Vincenzo Cirigliano, Emanuele Mereghetti
+%
+\input{low-energy.tex}
+%
+
+
+\section{UFO models}
+\label{sec:ufo}
+The \texttt{dim6top} implementation of the degrees of freedom introduced in this note, as well the \texttt{SMEFTsim} implementation of Warsaw-basis operators will be described in this appendix. Such UFO~\cite{Degrande:2011ua} models can be used for Monte Carlo simulation.
+
+\subsection{The \texttt{dim6top} implementation}
+The flavour-, $B$- and $L$-conserving parameters implemented in the \texttt{dim6top} UFO model (available at \url{https://feynrules.irmp.ucl.ac.be/wiki/dim6top}) are listed in \autoref{tab:ufo_parameters}. The FCNC degrees of freedom defined in \autoref{sec:fcnc} and implemented in this model are listed in \autoref{tab:dim6top_fcnc}.
+
+% flavour and B,L conserving parameters
+\begin{table}[p]
+\vspace*{-3cm}%
+\begin{minipage}[b]{.5\textwidth}
+\scalebox{.8}{\begin{tabular}{@{}l@{}c@{}l@{}}
+	\multicolumn{2}{@{}l}{Four-heavy}
+	\\\hline\noalign{\vskip 1mm}
+	$\ccc{1}{QQ}{}$ &
+		{\tt cQQ1} \\
+	$\ccc{8}{QQ}{}$ &
+		{\tt cQQ8} \\
+	$\ccc{1}{Qt}{}$ &
+		{\tt cQt1} \\
+	$\ccc{8}{Qt}{}$ &
+		{\tt cQt8} \\
+	$\ccc{1}{Qb}{}$ &
+		{\tt cQb1} \\
+	$\ccc{8}{Qb}{}$ &
+		{\tt cQb8} \\
+	$\ccc{1}{tt}{}$ &
+		{\tt ctt1}\\
+	$\ccc{1}{tb}{}$ &
+		{\tt ctb1}\\
+	$\ccc{8}{tb}{}$ &
+		{\tt ctb8}\\
+	$\ccc{1[I]}{QtQb}{}$ &
+		{\tt cQtQb1[I]}
+			& ({\tt I} stands for imaginary part)\\
+	$\ccc{8[I]}{QtQb}{}$ &
+		{\tt cQtQb8[I]}
+\\[2mm]
+\multicolumn{2}{@{}l}{Two-heavy-two-light}
+\\\hline\noalign{\vskip 1mm}
+	$\ccc{3,1}{Qq}{}$ &
+	{\tt cQq13} & $U(2)_q\times U(2)_u\times U(2)_d$ assumed\\
+	$\ccc{3,8}{Qq}{}$ &
+	{\tt cQq83} & \\
+	$\ccc{1,1}{Qq}{}$ &
+	{\tt cQq11}\\
+	$\ccc{1,8}{Qq}{}$ &
+	{\tt cQq81}\\
+	$\ccc{1}{Qu}{}$ &
+	{\tt cQu1}\\
+	$\ccc{8}{Qu}{}$ &
+	{\tt cQu8}\\
+	$\ccc{1}{Qd}{}$ &
+	{\tt cQd1}\\
+	$\ccc{8}{Qd}{}$ &
+	{\tt cQd8}\\
+	$\ccc{1}{tq}{}$ &
+	{\tt ctq1}\\
+	$\ccc{8}{tq}{}$ &
+	{\tt ctq8}\\
+	$\ccc{1}{tu}{}$ &
+	{\tt ctu1}\\
+	$\ccc{8}{tu}{}$ &
+	{\tt ctu8}\\
+	$\ccc{1}{td}{}$ &
+	{\tt ctd1}\\
+	$\ccc{8}{td}{}$ &
+	{\tt ctd8}
+\\[2mm]
+\multicolumn{2}{@{}l}{Two-heavy}
+\\\hline\noalign{\vskip 1mm}
+	$\ccc{[I]}{t\varphi}{}$&
+	{\tt ctp,ctpI} &\\
+	$\ccc{-}{\varphi Q}{} $& 
+	{\tt cpQM}\\
+	$\ccc{3}{\varphi Q}{} $&
+	{\tt cpQ3}\\
+	$\ccc{}{\varphi t}{} $&
+	{\tt cpt}\\
+	$\ccc{}{\varphi b}{} $&
+	{\tt cpb} & (implemented but involves no top)\\
+	$\ccc{[I]}{\varphi tb}{} $&
+	{\tt cptb,cptbI}\\
+	$\ccc{[I]}{tW}{} $& 
+	{\tt ctW,ctWI}\\
+	$\ccc{[I]}{tZ}{} $&
+	{\tt ctZ,ctZI}\\
+	$\ccc{[I]}{bW}{} $&
+	{\tt cbW,cbWI} &\\
+	$\ccc{[I]}{tG}{} $&
+	{\tt ctG,ctGI}
+\\[2mm]
+\multicolumn{2}{@{}l}{Two-heavy-two-lepton}
+\\\hline\noalign{\vskip 1mm}
+	$\ccc{3}{Ql}{\ell} $& 
+	{\tt cQl3(l)} &
+	assuming lepton flavour diagonality:\\
+	$\ccc{-}{Ql}{\ell} $& 
+	{\tt cQlM(l)} &
+	 \quad $\texttt{(l)}\in\{1,2,3\}$\\
+	$\ccc{}{Qe}{\ell} $&
+	{\tt cQe}\\
+	$\ccc{}{tl}{\ell} $&
+	{\tt ctl(l)}\\
+	$\ccc{}{te}{\ell} $&
+	{\tt cte(l)}\\
+	$\ccc{S[I]}{t}{\ell} $&
+	{\tt ctlS[I](l)} & \\
+        $\ccc{T[I]}{t}{\ell} $&
+	{\tt ctlT[I](l)}\\
+	$\ccc{S[I]}{b}{\ell} $&
+        {\tt cblS[I](l)}
+\\[2mm]
+\multicolumn{3}{@{}l}{Two-heavy-two-light, preserving only $U(2)_{q+u+d}$}
+\\\hline\noalign{\vskip 1mm}
+	$\ccc{1[I]}{tQqu}{}$	& \texttt{ctQqu1[I]}	\\
+	$\ccc{8[I]}{tQqu}{}$	& \texttt{ctQqu8[I]}	\\
+	$\ccc{1[I]}{bQqd}{}$	& \texttt{cbQqd1[I]}	\\
+	$\ccc{8[I]}{bQqd}{}$	& \texttt{cbQqd8[I]}	\\
+	$\ccc{1[I]}{Qtqd}{}$	& \texttt{cQtqd1[I]}	\\
+	$\ccc{8[I]}{Qtqd}{}$	& \texttt{cQtqd8[I]}	\\
+	$\ccc{1[I]}{Qbqu}{}$	& \texttt{cQbqu1[I]}	\\
+	$\ccc{8[I]}{Qbqu}{}$	& \texttt{cQbqu8[I]}	\\
+	$\ccc{1[I]}{btud}{}$	& \texttt{cbtud1[I]}	\\
+	$\ccc{8[I]}{btud}{}$	& \texttt{cbtud8[I]}	\\\hline
+\end{tabular}}
+\caption{\texttt{dim6top} UFO model parameter names for the flavour-, $B$- and $L$-conserving degrees of freedom defined in \hyperref[app:dof]{Appendices\,\ref{app:dof}} and \ref{app:less_restrictive_flavour}.}
+\label{tab:ufo_parameters}
+\end{minipage}\quad
+%\end{table}
+% FCNC parameters
+%\begin{table}[p]
+%\vspace{-3cm}
+\begin{minipage}[b]{.5\textwidth}
+\scalebox{.75}{\begin{tabular}{lrl@{}}
+	\multicolumn{2}{@{}l}{One-light-three-heavy}
+	\\\hline\noalign{\vskip1mm}
+	\ccc{1[I]}{qq}{333a}
+		& \texttt{cqq11[I]x333(a)}	
+		& $\texttt{(a)}\in\{1,2\}$: light quark gen.
+	\\
+	\ccc{3[I]}{qq}{333a}
+		& \texttt{cqq13[I]x333(a)}
+		& \hspace{.5cm}{\tt I}: imaginary part\\
+	\ccc{ [I]}{uu}{333a}
+		& \texttt{cuu1[I]x333(a)}
+		&\\
+	\ccc{1[I]}{qu}{333a}
+		& \texttt{cqu1[I]x333(a)}
+		&\\
+	\ccc{8[I]}{qu}{333a}
+		& \texttt{cqu8[I]x333(a)}
+		&\\
+	\ccc{1[I]}{qu}{3a33}
+		& \texttt{cqu1[I]x3(a)33}
+		&\\
+	\ccc{8[I]}{qu}{3a33}
+		& \texttt{cqu8[I]x3(a)33}
+		&\\
+	\ccc{1[I]}{qd}{333a}
+		& \texttt{cqd1[I]x333(a)}
+		&\\
+	\ccc{8[I]}{qd}{333a}
+		& \texttt{cqu8[I]x333(a)}
+		&\\
+	\ccc{1[I]}{qd}{3a33}
+		& \texttt{cqd1[I]x3(a)33}
+		&\\
+	\ccc{8[I]}{qd}{3a33}
+		& \texttt{cqd8[I]x3(a)33}
+		&\\
+	\ccc{1[I]}{ud}{333a}
+		& \texttt{cud1[I]x333(a)}
+		&\\
+	\ccc{8[I]}{ud}{333a}
+		& \texttt{cud8[I]x333(a)}
+		&\\
+	\ccc{1[I]}{ud}{3a33}
+		& \texttt{cud1[I]x3(a)33}
+		&\\
+	\ccc{8[I]}{ud}{3a33}
+		& \texttt{cud8[I]x3(a)33}
+		&\\
+	\ccc{1[I]}{quqd}{333a}
+		& \texttt{cquqd1[I]x333(a)}
+		&\\
+	\ccc{1[I]}{quqd}{33a3}
+		& \texttt{cquqd1[I]x33(a)3}
+		&\\
+	\ccc{1[I]}{quqd}{3a33}
+		& \texttt{cquqd1[I]x3(a)33}
+		&\\
+	\ccc{1[I]}{quqd}{a333}
+		& \texttt{cquqd1[I]x(a)333}
+		&\\
+	\ccc{8[I]}{quqd}{333a}
+		& \texttt{cquqd8[I]x333(a)}
+		&\\
+	\ccc{8[I]}{quqd}{33a3}
+		& \texttt{cquqd8[I]x33(a)3}
+		&\\
+	\ccc{8[I]}{quqd}{3a33}
+		& \texttt{cquqd8[I]x3(a)33}
+		&\\
+	\ccc{8[I]}{quqd}{a333}
+		& \texttt{cquqd8[I]x(a)333}
+\\[2mm]
+\multicolumn{2}{@{}l}{Three-light-one-heavy}
+\\\hline\noalign{\vskip1mm}
+	\ccc{1,1[I]}{qq}{3a}
+		& \texttt{cqq11[I]x3(a)ii}
+		&\\
+	\ccc{3,1[I]}{qq}{3a}
+		& \texttt{cqq13[I]x3(a)ii}
+		&\\
+	\ccc{1,8[I]}{qq}{3a}
+		& \texttt{cqq81[I]x3(a)ii}
+		&\\
+	\ccc{3,8[I]}{qq}{3a}
+		& \texttt{cqq83[I]x3(a)ii}
+		&\\
+	\ccc{1[I]}{uu}{3a}
+		& \texttt{cuu1[I]x3(a)ii}
+		&\\
+	\ccc{8[I]}{uu}{3a}
+		& \texttt{cuu8[I]x3(a)ii}
+		&\\
+	\ccc{1[I]}{ud}{3a}
+		& \texttt{cud1[I]x3(a)ii}
+		&\\
+	\ccc{8[I]}{ud}{3a}
+		& \texttt{cud8[I]x3(a)ii}
+		&\\
+	\ccc{1[I]}{qu}{3a}
+		& \texttt{cqu1[I]x3(a)ii}
+		&\\
+	\ccc{8[I]}{qu}{3a}
+		& \texttt{cqu8[I]x3(a)ii}
+		&\\
+	\ccc{1[I]}{qu}{a3}
+		& \texttt{cqu1[I]xii3(a)}
+		&\\
+	\ccc{8[I]}{qu}{a3}
+		& \texttt{cqu8[I]xii3(a)}
+		&\\
+	\ccc{1[I]}{qd}{3a}
+		& \texttt{cqd1[I]x3(a)ii}
+		&\\
+	\ccc{8[I]}{qd}{3a}
+		& \texttt{cqd8[I]x3(a)ii}
+		&
+\\[2mm]
+\multicolumn{2}{@{}l}{One-light-one-heavy}
+\\\hline\noalign{\vskip 1mm}
+	\ccc{[I]}{t\varphi}{3a}
+		& \texttt{ctp[I]x3(a)}
+		& \\
+	\ccc{[I]}{t\varphi}{a3}
+		& \texttt{ctp[I]x(a)3}
+		& \\
+	\ccc{-[I]}{\varphi q}{3+a}
+		& \texttt{cpQM[I]x3(a)}
+		& \\
+	\ccc{3[I]}{\varphi q}{3+a}
+		& \texttt{cpQ3[I]x3(a)}
+		& \\
+	\ccc{[I]}{\varphi u}{3+a}
+		& \texttt{cpt[I]x3(a)}
+		& \\
+	\ccc{[I]}{\varphi ud}{3a}
+		& \texttt{cptb[I]x3(a)}
+		& \\
+	\ccc{[I]}{\varphi ud}{a3}
+		& \texttt{cptb[I]x(a)3}
+		& \\
+	\ccc{[I]}{uW}{3a}
+		& \texttt{ctW[I]x3(a)}
+		& \\
+	\ccc{[I]}{uW}{a3}
+		& \texttt{ctW[I]x(a)3}
+		& \\
+	\ccc{[I]}{uZ}{3a}
+		& \texttt{ctZ[I]x3(a)}
+		& \\
+	\ccc{[I]}{uZ}{a3}
+		& \texttt{ctZ[I]x(a)3}
+		& \\
+	\ccc{[I]}{dW}{3a}
+		& \texttt{cdW[I]x3(a)}
+		& \\
+	\ccc{[I]}{dW}{a3}
+		& \texttt{cdW[I]x(a)3}
+		& \\
+	\ccc{[I]}{uG}{3a}
+		& \texttt{cdG[I]x3(a)}
+		& \\
+	\ccc{[I]}{uG}{a3}
+		& \texttt{cdG[I]x(a)3}
+		&
+\\[2mm]
+\multicolumn{2}{@{}l}{One-light-one-heavy-two-lepton}
+\\\hline\noalign{\vskip1mm}
+	\ccc{3}{lq}{\ell,3+a}
+		& \texttt{cQl3[I]x(l)x3(a)}
+		& $\texttt{(l)}\in\{1,2,3\}$ lepton gen.\\
+	\ccc{-}{lq}{\ell,3+a}
+		& \texttt{cQlM[I]x(l)x3(a)}
+		& \\
+	\ccc{}{eq}{\ell,3+a}
+		& \texttt{cQe[I]x(l)x3(a)}
+		& \\
+	\ccc{}{lu}{\ell,3+a}
+		& \texttt{ctl[I]x(l)x3(a)}
+		& \\
+	\ccc{}{eu}{\ell,3+a}
+		& \texttt{cte[I]x(l)x3(a)}
+		& \\
+	\ccc{S}{lequ}{\ell,3a}
+		& \texttt{ctlS[I]x(l)x3(a)}
+		& \\
+	\ccc{S}{lequ}{\ell,a3}
+		& \texttt{ctlS[I]x(l)x(a)3}
+		& \\
+	\ccc{T}{lequ}{\ell,3a}
+		& \texttt{ctlT[I]x(l)x3(a)}
+		& \\
+	\ccc{T}{lequ}{\ell,a3}
+		& \texttt{ctlT[I]x(l)x(a)3}
+		& \\
+	\ccc{S}{ledq}{\ell,3a}
+		& \texttt{cblS[I]x(l)x3(a)}
+		& (implemented but involve\\
+	\ccc{S}{ledq}{\ell,a3}
+		& \texttt{cblS[I]x(l)x(a)3}
+		& \quad no top FCNC)
+\\\hline
+\end{tabular}}
+\caption{\texttt{dim6top} UFO model parameter names for the FCNC degrees of freedom introduced in \autoref{sec:fcnc}.}
+\label{tab:dim6top_fcnc}
+\end{minipage}
+\end{table}
+
+\paragraph{General comments}
+\begin{list}{--}{\topsep 3pt \itemsep 0pt \parsep 3pt}
+	\item The implementation is a tree-level one.
+	
+	\item $\Lambda$ is conventionally fixed to $1\,$TeV. Equivalently, EFT input parameters can be thought of as being the dimensionful $\tilde{c}_i\equiv c_i/\Lambda^2$ expressed in units of TeV$^{-2}$.
+        \item The CKM matrix is assumed to be a unit matrix.
+	\item The masses of $u,d,s,c,e,\mu$ fermions are set to zero by default.
+	\item The unitary gauge is used and Goldstone bosons are removed.
+	\item Are only added to the Lagrangian, the Hermitian conjugates of the non-Hermitian operators, and independent flavour assignments.
+	
+	\item Two versions of the model are made available. In the first one, \texttt{dim6top\_LO\_UFO}, all the flavour-, $B$- and $L$-conserving parameters are assigned the same \emph{coupling order}: \texttt{DIM6=1}. Similarly, all the flavour-changing parameters are assigned one single \emph{coupling order}: \texttt{FCNC=1}.
+	
+	In a second version, \texttt{dim6top\_LO\_UFO\_each\_coupling\_order}, an individual \emph{coupling order} is additionally assigned to each EFT parameter: the \texttt{cQQ1} and \texttt{cqq11x3331} parameters are for instance assigned \texttt{DIM6\_cQQ1} and \texttt{FCNC\_cqq11x3331} \emph{coupling orders}.
+	
+	This allows for the selection of individual degrees-of-freedom interferences in \mg, using a syntax such as
+	\\\texttt{> generate p p > t t\~{} FCNC=0 DIM6\^{}2==1 DIM6\_ctZ\^{}2==1}
+	\\\texttt{> generate p p > t t\~{} FCNC=0 DIM6\^{}2==2 DIM6\_ctZ\^{}2==1 DIM6\_ctW\^{}2==1}
+	\\which would for instance respectively yield the interference between SM amplitudes and that in which \texttt{ctZ} is inserted once, and between amplitudes in which \texttt{ctZ} and \texttt{ctW} are inserted once. Specifying the order of the squared amplitude is however not supported yet when decay chains are specified.
+	
+	A positive \texttt{QED=n} \emph{coupling order} has also been assigned to EFT parameters corresponding to operators involving \texttt{n} Higgs doublet fields in the unbroken phase. Given that the Higgs vacuum expectation value has \texttt{QED$=-$1}, this avoids technical problems related to the appearance of interactions with net negative \texttt{QED} \emph{coupling order}.
+	
+\end{list}
+
+\paragraph{Syntax}
+\begin{itemize}
+	\item In \mg, import the model by
+	\\\texttt{> import model dim6top\_LO\_UFO}, or
+	\\\texttt{> import model dim6top\_LO\_UFO\_each\_coupling\_order}
+
+	\item By default, the bottom quark is massive and the four-flavour scheme is used. Loading the model with a restriction card where \texttt{MB=0} would automatically switch to the five flavour scheme. One can otherwise redefine manually:
+	\\\texttt{> define p = p b b\~}
+	\\\texttt{> define j = p}
+	\\and set \texttt{MB=0} in the \texttt{param\_card}. For consistency, one may then also set \texttt{ymb=0}.
+
+	\item Processes can be generated through commands like
+	\\\texttt{> generate p p > t t\~{} FCNC=0 DIM6=1}
+	which allows for one (or no) insertion of a parameter of \texttt{DIM6} \emph{coupling order} per amplitude.
+	
+	
+	\item To focus on the leading QCD amplitudes, one can also restrict their maximal allowed \texttt{QED} order using for instance:
+	\\\texttt{> generate p p > t t\~{} ~~FCNC=0 DIM6=1 QED=0}
+	\\\texttt{> generate p p > t t\~{} Z FCNC=0 DIM6=1 QED=1}
+\end{itemize}
+
+
+% \url{http://feynrules.irmp.ucl.ac.be/wiki/SMEFT}
+
+\subsection{The \texttt{SMEFTsim} implementation}
+{\input{smeftsim.tex}}
+
+\subsection{Benchmark results}
+\label{sec:dependences}
+The linear and quadratic EFT dependences of some total rates are displayed in \hyperref[tab:lin_pair]{Tables~\ref{tab:lin_pair}}-\ref{tab:quad_tjh}. These are meant to provide benchmark results against which simulation procedures could be checked. They are also indicative of which degree of freedom is relevant for which process.
+
+These numbers are obtained using \mg\ (v2.6.0 or 2.6.1)~\cite{Alwall:2014hca} for the $13\,$TeV LHC, with \texttt{nn23lo1} as PDF set. All fermion masses and Yukawa couplings but the top ones (\texttt{MT=172}) are taken vanishing. The five-flavour scheme, default running renormalization and factorization scales are used, and simple $p_T>20\,$GeV, $|\eta|<2.5$, $\Delta R>0.4$ generation cuts are imposed on ($b$-)jets, charged leptons and photons.
+
+All tree-level contributions are included irrespectively of their \texttt{QED} order. Additional dependences may also be generated: with finite fermion masses and Yukawas (especially the bottom ones), when considering other observables (e.g., sensitive to CPV contributions), beyond the tree level (e.g., at NLO in QCD or when accounting for loop-induced Higgs couplings), etc. Cuts may also affect the hierarchies of sensitivities.
+
+
+Obtained with \texttt{dim6top}, these benchmark results have been cross checked with {\tt SMEFTsim\_A} version 2.0, in the flavour general setup and with the $\{\hat\alpha_\text{ew}, \hat{m}_Z,\hat{G}_F\}$ input scheme (equally valid results can be obtained with set B and/or switching to a $\{\hat{m}_{W}, \hat{m}_Z,\hat{G}_F\}$ input scheme):
+\begin{list}{--}{\topsep 3pt \itemsep 0pt \parsep 3pt}
+	
+	\item A set of dedicated restriction cards is provided with the \texttt{SMEFTsim\_A\_general\_alphaScheme} model to reproduce these numerical results. All of them set to zero the masses and Yukawa couplings of all fermions except the bottom and top quarks. They also approximate the CKM matrix by a unit matrix and fix the input parameters to values consistent with those adopted in \texttt{dim6top}. In particular they modify
+	\begin{center}
+	\begin{tabular}{llll}
+	{\tt MB = ymb = 4.7},& {\tt MT = 172.0},& {\tt MH = 125.0}, & {\tt MW = 79.824360}  \\
+	{\tt aEW = 7.818608e-03},& {\tt aS = 0.1184}
+	\end{tabular}
+	\end{center}
+compared to the default settings.
+In addition:
+	\begin{description}
+	\item[\tt restrict\_SMlimit\_top:] sets to zero all the Wilson coefficients. This restriction is available for all the flavour setups.
+	\item[\tt restrict\_TopEFT:] sets to 1 the absolute values of all the Wilson coefficients that are relevant for top physics and to 0 the remaining ones. This restriction is available for all the flavour setups, and the list of coefficients retained in each case is given in \autoref{tab:parameters_topEFT_rst}.
+	\item[\tt restrict\_(ci)\_top:] with {\tt (ci)} one of the degrees of freedom of \autoref{tab:ufo_parameters} in the notation of \texttt{dim6top}: 
+	turns on the combination of Wilson coefficients equivalent to setting {\tt ci = 1}, while vanishing the others.
+	\end{description}
+ 
+	\item As \texttt{dim6top} does not include loop-level interactions of the Higgs ($hgg$, $h\gamma\gamma$, or $hZ\gamma$), a meaningful comparison with \texttt{SMEFTsim} would require setting \texttt{SMHLOOP=0}.
+
+	\item \texttt{SMEFTsim} utilizes the opposite convention, compared to \texttt{dim6top}, for the sign of covariant derivatives (schematically: $D_\mu = \partial_\mu + i A_\mu)$. At the linear level, some interferences with SM amplitudes are affected, in particular those proportional to \texttt{ctW[I]} and \texttt{ctZ[I]}.
+	
+	\item Due to different choices concerning the inclusion of non-independent flavour contractions (only independent flavour assignments are included in \texttt{dim6top} while all are in \texttt{SMEFTsim}), factor-of-two differences arise when considering the coefficients {\tt cQq83, cQq81, cQq13, cQq11, ctu1, ctu8}, that stem from operators with four identical fields: $Q_{qq}^{1,3}$, $O_{uu}$.
+
+	\item Due to the different parametrization of complex coefficients (in (Abs, Arg) rather than (Re, Im)), the evaluation of $S_i^k$ for purely imaginary coefficients can be less accurate in \texttt{SMEFTsim}.
+
+	\item In \texttt{SMEFTsim}, due to the internal implementation of Warsaw basis operators instead of the degrees of freedom specific to top-quark physics, some small interferences may need to be obtained from cancellations between large contributions and thus suffer from larger numerical uncertainties. This concerns for instance the evaluation of the vanishing linear dependence on the colour octet {\tt cQq83} in single top production. Phenomenological consequences may be limited.
+\end{list}
+
+
+\section{Flavour-, \texorpdfstring{$B$}{B}- and \texorpdfstring{$L$}{L}-conserving degrees of freedom}
+\label{app:dof}
+
+Let us define the EFT degrees of freedom, operator category by operator category. We recommend to quote results in terms of these degrees of freedom. Their definitions, in terms of Warsaw-basis operator coefficients are also summarized in \autoref{tab:limits}.
+
+\subsection{Four-heavy operators}
+We consider first four-quark operators. All vector ($\bar LL\bar LL$, $\bar LL\bar RR$, $\bar RR\bar RR$) operators have real $\cc{}{}{3333}=\cc{}{}{3333}^*$ coefficients, unlike the scalar ($\bar LR\bar LR$) ones. For $\bar LL\bar LL$ operators, one can define the colour singlet and octets that would or not interfere with the QCD amplitudes:\footnote{Note that we wrote matrix equations involving operators as $O=M^To$. The Lagrangian $C^TO$ terms are then equated to $c^To$ to establish the definition of the coefficients of the $o$ operators as $c\equiv M\,C$.}
+\begin{equation}
+	\begin{pmatrix}
+		\qq{1}{qq}{3333}	\\
+		\qq{3}{qq}{3333}
+	\end{pmatrix}
+	=
+	\begin{pmatrix}
+		1	& -1/3	\\
+		0	&  4
+	\end{pmatrix}^{\!\!T}
+	\left(\begin{array}{@{(}l@{\,}r@{\,}r@{)\:(}l@{\,}r@{\,}r@{)}}
+	 \bar Q		\gamma_\mu& & Q	
+	&\bar Q		\gamma^\mu& & Q
+	\\
+	 \bar Q		\gamma_\mu& T^A& Q	
+	&\bar Q		\gamma^\mu& T^A& Q
+	\end{array}\right),
+\end{equation}
+where $Q$ represents the third-generation left-handed quark doublet, while $t$ and $b$ will represent the right-handed quark singlets in the unbroken electroweak phase. In the electroweak broken phase, one further obtains:
+\begin{equation}
+	\begin{pmatrix}
+	\qq{1}{qq}{3333}\\
+	\qq{3}{qq}{3333}
+	\end{pmatrix}
+	=
+	\begin{pmatrix}
+	1	& 1	\\
+	2	& -2/3	\\
+	0	& 8	\\
+	1	& 1		
+	\end{pmatrix}^{\!\!T}
+	\begin{pmatrix}
+	(\bar t\gamma^\mu P_L t)(\bar t\gamma_\mu P_L t)\\
+	(\bar t\gamma^\mu P_L t)(\bar b\gamma_\mu P_L b)\\
+	(\bar t\gamma^\mu T^A P_L t)(\bar b\gamma_\mu T^A P_L b)\\
+	(\bar b\gamma^\mu P_L b)(\bar b\gamma_\mu P_L b)
+	\end{pmatrix}
+\end{equation}
+which is useful to identify the colour singlet and octet combinations of two top and two $b$ quarks, four tops and four $b$'s. We use the combinations leading to $\bar tt\bar bb$ interactions as independent degrees of freedom. No further manipulation is performed on other operators featuring four heavy quarks. One thus defines:\begin{equation}
+	\begin{aligned}
+	\ccc{1}{QQ}{} &\equiv 2\cc{1}{qq}{3333}-\frac{2}{3}\cc{3}{qq}{3333}, \\
+	\ccc{8}{QQ}{} &\equiv 8\cc{3}{qq}{3333},	\\
+	\end{aligned}
+	\qquad
+	\begin{aligned}
+	\ccc{1}{Qt}{} &\equiv  \cc{1}{qu}{3333},	\\
+	\ccc{8}{Qt}{} &\equiv  \cc{8}{qu}{3333},	\\
+	\ccc{1}{Qb}{} &\equiv  \cc{1}{qd}{3333},	\\
+	\ccc{8}{Qb}{} &\equiv  \cc{8}{qd}{3333},	\\
+	\end{aligned}
+	\qquad
+	\begin{aligned}
+	\ccc{1}{tt}{} &\equiv  \cc{1}{uu}{3333},	\\
+	\end{aligned}
+	\qquad
+	\begin{aligned}
+	\ccc{1}{tb}{} &\equiv  \cc{1}{ud}{3333},	\\
+	\ccc{8}{tb}{} &\equiv  \cc{8}{ud}{3333},
+	\end{aligned}
+\end{equation}
+and
+\begin{equation}
+	\ccc{1[I]}{QtQb}{}	\equiv	\ReIm\{\cc{1}{quqd}{3333}\},	\qquad
+	\ccc{8[I]}{QtQb}{}	\equiv	\ReIm\{\cc{8}{quqd}{3333}\}.
+\end{equation}
+In total, there are thus $11+2\text{ CPV}$ degrees of freedom for four-heavy operators. One can also define the combination $\ccc{+}{QQ}{}\equiv \cc{1}{qq}{3333}+\cc{8}{qq}{3333} = (3\, \ccc{1}{QQ}{} + \ccc{8}{QQ}{})/6$ which appears in front of operators involving four left-handed top and bottom quarks but is not independent of the ones defined above.
+
+\subsection{Two-light-two-heavy operators}
+Scalar operators involving a light-quark current are not allowed by our baseline flavour assumption (see \autoref{app:less_restrictive_flavour} where this assumption is relaxed). The coefficients of the vector $\bar LL\bar LL$ operators $\qq{3,1}{qq}{}$ have the following symmetries under permutations of their generation indices:
+\begin{equation*}
+		\cc{}{qq}{ijkl} = \cc{}{qq}{klij},
+	\qquad	\cc{}{qq}{jilk} = \cc{}{qq}{ijkl}^*,
+	\qquad (\text{and thus } \cc{}{qq}{lkji} = \cc{}{qq}{ijkl}^*),
+\end{equation*}
+which namely implies that $\cc{}{qq}{iijj}$ and $\cc{}{qq}{ijji}$ elements are real.
+From the $\cc{}{qq}{ijkl}$ and $\cc{}{qq}{klij}$ combinations, only one is thus
+retained in the sum over flavour indices in the EFT
+Lagrangian of \autoref{eq:eft_lagrangian}. For each of these two operators,
+there are thus two independent assignments of third-generation indices to a
+quark-antiquark pairs that are compatible with our $U(2)_q\times U(2)_u\times U(2)_d$ baseline flavour symmetry:
+\begin{flalign}
+	\cc{}{qq}{ii33}=\cc{}{qq}{ii33}^*
+	=
+	\cc{}{qq}{33ii}=\cc{}{qq}{33ii}^*
+	,\qquad 
+	\cc{}{qq}{i33i}=\cc{}{qq}{i33i}^*
+	=
+	\cc{}{qq}{3ii3}=\cc{}{qq}{3ii3}^*
+	.
+\end{flalign}
+To understand better the structure of their interferences with SM amplitudes it is useful to decompose them, using Fierz identities, onto quadrilinears featuring a heavy- and a light-quark bilinear. One obtains:
+\begin{equation}
+	\begin{pmatrix}
+		\qq{1}{qq}{3aii}	\\
+		\qq{1}{qq}{3iia}	\\
+		\qq{3}{qq}{3aii}	\\
+		\qq{3}{qq}{3iia}	\\
+	\end{pmatrix}
+	=
+	\begin{pmatrix}
+		1	& 1/6	& 0	&  1/2	\\
+		0	& 1/6	& 1	& -1/6	\\
+		0	& 1	& 0	&  3	\\
+		0	& 1	& 0	& -1
+	\end{pmatrix}^{\!\!T}
+	\left(\begin{array}{@{(}l@{\,}r@{\,}r@{)\:(}l@{\,}r@{\,}r@{)}}
+	 \bar Q		\gamma_\mu& & Q	
+	&\bar q_i	\gamma^\mu& & q_i
+	\\
+	 \bar Q		\gamma_\mu& &\tau^I Q
+	&\bar q_i	\gamma^\mu& &\tau^I q_i
+	\\
+	 \bar Q		\gamma_\mu& T^A& Q	
+	&\bar q_i	\gamma^\mu& T^A& q_i
+	\\
+	 \bar Q		\gamma_\mu& T^A&\tau^I Q	
+	&\bar q_i	\gamma^\mu& T^A&\tau^I q_i
+	\end{array}\right)
+	,
+\end{equation}
+and similarly, for the $\bar RR\bar RR$ operator $\qq{}{uu}{}$ :
+\begin{equation}
+	\begin{pmatrix}
+	\qq{}{uu}{ii33}\\
+	\qq{}{uu}{i33i}
+	\end{pmatrix}
+	=
+	\begin{pmatrix}
+	1	& 1/3\\
+	0	& 2
+	\end{pmatrix}^{\!\!T}
+	\left(\begin{array}{@{(}l@{\,}r@{\,}r@{)\:(}l@{\,}r@{\,}r@{)}}
+	 \bar t		\gamma_\mu& & t	
+	&\bar u_i	\gamma^\mu& & u_i
+	\\
+	 \bar t		\gamma_\mu& T^A& t	
+	&\bar u_i	\gamma^\mu& T^A& u_i
+	\end{array}\right)
+	.
+\end{equation}
+There are four four-quark operators of $\bar LL\bar RR$ type in the Warsaw basis: $\qq{1}{qu}{ijkl}$, $\qq{8}{qu}{ijkl}$, $\qq{1}{qd}{ijkl}$, $\qq{8}{qd}{ijkl}$ which form six degrees of freedom when accounting for the two $\cc{}{qu}{ii33}=\cc{}{qu}{ii33}^*$ and $\cc{}{qu}{33ii}=\cc{}{qu}{33ii}^*$ flavour assignments. Altogether, one thus defines the following degrees of freedom for two-light-two-heavy operators:
+\begin{gather}
+\begin{aligned}
+	\ccc{1,1}{Qq}{}&\equiv
+		\cc{1}{qq}{ii33}
+		+\frac{1}{6}\cc{1}{qq}{i33i}
+		+\frac{1}{2}\cc{3}{qq}{i33i},
+	\\
+	\ccc{3,1}{Qq}{}&\equiv
+		\cc{3}{qq}{ii33}
+		+\frac{1}{6}(\cc{1}{qq}{i33i}-\cc{3}{qq}{i33i}),
+	\\
+	\ccc{1,8}{Qq}{}&\equiv
+		\cc{1}{qq}{i33i}+3\cc{3}{qq}{i33i},
+	\\
+	\ccc{3,8}{Qq}{}&\equiv
+		\cc{1}{qq}{i33i}-\cc{3}{qq}{i33i},
+\end{aligned}
+\qquad
+\begin{aligned}
+	\ccc{1}{tu}{} &\equiv \cc{}{uu}{ii33} +\frac{1}{3} \cc{}{uu}{i33i},	\\
+	\ccc{8}{tu}{} &\equiv 2 \cc{}{uu}{i33i},	\\
+	\ccc{1}{td}{} &\equiv \cc{1}{ud}{33ii},		\\
+	\ccc{8}{td}{} &\equiv \cc{8}{ud}{33ii},		\\
+\end{aligned}
+\qquad
+\begin{aligned}
+	\ccc{1}{tq}{}	&\equiv\cc{1}{qu}{ii33},		\\
+	\ccc{1}{Qu}{}	&\equiv\cc{1}{qu}{33ii},		\\
+	\ccc{1}{Qd}{}	&\equiv\cc{1}{qd}{33ii},		\\
+	\ccc{8}{tq}{}	&\equiv\cc{8}{qu}{ii33},		\\
+	\ccc{8}{Qu}{}	&\equiv\cc{8}{qu}{33ii},		\\
+	\ccc{8}{Qd}{}	&\equiv\cc{8}{qd}{33ii},		\\
+\end{aligned}
+\end{gather}
+where $i$ is either $1$ or $2$. In total, there are thus $14$ degrees of freedom for two-light-two-heavy operators.
+
+\subsection{Two-heavy operators}
+The operator involving two quarks and boson which possibly contain a top quark where listed in \autoref{sec:operators}. There are a few choices to be made in the definitions of the associated degrees of freedom, in view of the electroweak broken phase decomposition of $\qq{}{\varphi q}{}$
+\begin{equation}
+	\begin{pmatrix}
+	\qq{1}{\varphi q}{33}\\
+	\qq{3}{\varphi q}{33}
+	\end{pmatrix}
+	=
+	\begin{pmatrix}
+	-1	& 1	\\
+	1	& 1	\\
+	0	& 1	\\
+	0	& 1
+	\end{pmatrix}^{\!\!T}
+	\left(\begin{array}{@{}c*{3}{@{\,}c}@{}}
+	\frac{+e}{2\sw\cw}	&(\bar t\gamma^\mu P_L t)	&Z_\mu	&(v+h)^2\\
+	\frac{-e}{2\sw\cw}	&(\bar b\gamma^\mu P_L b)	&Z_\mu	&(v+h)^2\\
+	\frac{e}{\sw\sqrt{2}}	&(\bar t\gamma^\mu P_L b)	&W^+_\mu&(v+h)^2\\
+	\frac{e}{\sw\sqrt{2}}	&(\bar b\gamma^\mu P_L t)	&W^-_\mu&(v+h)^2
+	\end{array}\right),
+\end{equation}
+and of electroweak dipole operators:
+\begin{equation}
+	\begin{pmatrix}
+	\qq{}{uB}{33}\\
+	\qq{}{uW}{33}
+	\end{pmatrix}
+	=
+	\begin{pmatrix}
+	\cw	& \sw	\\
+	-\sw	& \cw	\\
+	0	& 2	
+	\end{pmatrix}^{\!\!T}
+	\left(\begin{array}{@{}c*{2}{@{\,}c}@{}}
+		(\bar t\sigma^{\mu\nu} P_R t)	&A_{\mu\nu}	&(v+h)\\
+		(\bar t\sigma^{\mu\nu} P_R t)	&Z_{\mu\nu}	&(v+h)\\
+		(\bar b\sigma^{\mu\nu} P_R t)	&W^-_{\mu\nu}	&(v+h)
+	\end{array}\right)
+	,
+\end{equation}
+where $\sw$ and $\cw$ are the sine and cosine of the weak mixing angle (in the unitary gauge). Among the possible definitions, we choose to use as degrees of freedom the combinations that involve charged $W$, $Z$ bosons and tops in the broken phase. In this sector, one thus defines:
+\begin{gather}
+	\begin{aligned}
+	\ccc{[I]}{t\varphi}{}	&\equiv \ReIm\{\cc{}{u\varphi}{33}\},	\\
+	\end{aligned}
+	\qquad
+	\begin{aligned}
+	\ccc{-}{\varphi Q}{}	&\equiv \cc{1}{\varphi q}{33}-\cc{3}{\varphi q}{33},	\\
+	\ccc{3}{\varphi Q}{}	&\equiv \cc{3}{\varphi q}{33},	\\
+	\ccc{}{\varphi t}{}	&\equiv \cc{}{\varphi u}{33},	\\
+%	\ccc{}{\varphi b}{}	&\equiv \cc{}{\varphi d}{33},	\\
+	\ccc{[I]}{\varphi tb}{}	&\equiv \ReIm\{\cc{}{\varphi ud}{33}\},	\\
+	\end{aligned}
+	\qquad
+	\begin{aligned}
+	\ccc{[I]}{tW}{}		&\equiv \ReIm\{\cc{}{uW}{33}\} ,	\\
+	\ccc{[I]}{tZ}{}		&\equiv \ReIm\{-\sw\cc{}{uB}{33}+\cw\cc{}{uW}{33}\},\\
+	\ccc{[I]}{bW}{}		&\equiv \ReIm\{\cc{}{dW}{33}\} ,	\\
+	\ccc{[I]}{tG}{}		&\equiv \ReIm\{\cc{}{uG}{33}\} .
+	\end{aligned}
+\end{gather}
+On the other hand, the combination of $\qq{1,3}{\varphi q}{33}$ operators that modifies the SM coupling of the $b$ quark to the $Z$ is $\ccc{+}{\varphi Q}{} \equiv \cc{3}{\varphi q}{33}+\cc{1}{\varphi q}{33} = \ccc{-}{\varphi Q}{}+2\ccc{3}{\varphi Q}{}$ and the combination appearing electromagnetic dipole of the top is $\ccc{[I]}{tA}{} \equiv \ReIm\{\cw \cc{}{uB}{33}+\sw \cc{}{uW}{33}\} = (\ccc{[I]}{tW}{}-\cw \ccc{[I]}{tZ}{})/\sw$. In total, there are thus $9+6\text{ CPV}$ degrees of freedom for two-heavy operators.
+
+
+\subsection{Two-heavy-two-lepton operators}
+Let us know address the definition of the degrees of freedom associated to the operators involving two quarks and two leptons. We decompose the $\qq{1,3}{lq}{}$ operators in the broken phase,
+\begin{equation}
+	\begin{pmatrix}
+	\qq{1}{lq}{\ell\ell33}\\
+	\qq{3}{lq}{\ell\ell33}
+	\end{pmatrix}
+	=
+	\begin{pmatrix}
+	1	& 1	\\
+	1	& -1	\\
+	1	& -1	\\
+	1	& 1	\\
+	0	& 2	\\
+	0	& 2	
+	\end{pmatrix}^{\!\!T}
+	\begin{pmatrix}
+	(\bar\nu_\ell	\gamma^\mu P_L\nu_\ell)(\bar t\gamma_\mu P_Lt)\\
+	(\bar\nu_\ell	\gamma^\mu P_L\nu_\ell)(\bar b\gamma_\mu P_Lb)\\
+	(\bar\ell	\gamma^\mu P_L\ell    )(\bar t\gamma_\mu P_Lt)\\
+	(\bar\ell	\gamma^\mu P_L\ell    )(\bar b\gamma_\mu P_Lb)\\
+	(\bar\nu_\ell	\gamma^\mu P_L\ell    )(\bar b\gamma_\mu P_Lt)\\
+	(\bar\ell	\gamma^\mu P_L\nu_\ell)(\bar t\gamma_\mu P_Lb)\\
+	\end{pmatrix},
+\end{equation}
+and select as degrees of freedom the combinations that give rise to a top-quark interaction with a pair of charged leptons, and to charged currents. One therefore defines:
+\begin{equation}
+	\begin{aligned}
+	\ccc{-}{Ql}{\ell}	&\equiv \cc{1}{lq}{\ell\ell33}-\cc{3}{lq}{\ell\ell33},\\
+	\ccc{3}{Ql}{\ell}	&\equiv \cc{3}{lq}{\ell\ell33}	,\\
+	\end{aligned}
+	\qquad
+	\begin{aligned}
+	\ccc{}{tl}{\ell}	&\equiv \cc{}{lu}{\ell\ell33} 	,\\
+	\ccc{}{Qe}{\ell}	&\equiv \cc{}{eq}{\ell\ell33}	,\\
+	\end{aligned}
+	\qquad
+	\begin{aligned}
+	\ccc{}{te}{\ell}	&\equiv \cc{}{eu}{\ell\ell33}	,\\
+	\end{aligned}
+	\qquad
+	\begin{aligned}
+	\ccc{S[I]}{t}{\ell}	&\equiv \ReIm\{\cc{1}{lequ}{\ell\ell33}\}	,\\
+	\ccc{T[I]}{t}{\ell}	&\equiv \ReIm\{\cc{3}{lequ}{\ell\ell33}\}	,\\
+	\ccc{S[I]}{b}{\ell}	&\equiv \ReIm\{\cc{3}{ledq}{\ell\ell33}\}	.
+	\end{aligned}
+\end{equation}
+These constitute $8+3\text{ CPV}$ degrees of freedom, for each of the three generations of leptons.
+
+\section{Less restrictive flavour symmetry}
+\label{app:less_restrictive_flavour}
+We examine here the consequences of relaxing the flavour symmetry among the first two generations of quarks from $U(2)_q\times U(2)_u\times U(2)_d$ to $U(2)_{q+u+d}$. New contributions are only generated in the two-light--two-heavy category of four-quark operators as flavour-diagonal chirality-flipping light quark-antiquark pairs as well as right-handed charged currents within the first generations are now allowed.
+
+\subsection{Four-quark \texorpdfstring{$\bar LL\bar RR$}{LLRR} operators}
+For this category of operators, the $(i33i)$ and $(3ii3)$ flavour assignments become allowed:
+\begin{flalign}
+	\cc{1}{qu}{i33i}=\cc{1}{qu}{3ii3}^*
+	,
+	\qquad
+	\cc{8}{qu}{i33i}=\cc{8}{qu}{3ii3}^*
+	,\\[1mm]
+	\cc{1}{qd}{i33i}=\cc{1}{qd}{3ii3}^*
+	,
+	\qquad
+	\cc{8}{qd}{i33i}=\cc{8}{qd}{3ii3}^*
+	.
+\end{flalign}
+Using Fierz identities, one then obtains:
+\begin{equation}
+	\begin{pmatrix}
+	\qq{1}{qu}{i33i}\\
+	\qq{8}{qu}{i33i}
+	\end{pmatrix}
+	=
+	\begin{pmatrix}
+	-2/3	&-8/9\\
+	-4	&2/3
+	\end{pmatrix}^{\!\!T}
+	\left(\begin{array}{@{(}l@{}c@{}c@{}l@{)\:(}l@{}c@{}c@{}l@{)}}
+	 \bar t		&	&	&Q
+	&\bar q_i	&	&	&u_i
+	\\
+	 \bar t		&	&T^A	&Q
+	&\bar q_i	&	&T^A	&u_i
+	\end{array}\right)
+\end{equation}
+and similarly for $\qq{}{qd}{}$ operators. The corresponding degrees of freedom
+\begin{equation}
+\begin{aligned}
+	\ccc{1[I]}{tQqu}{}
+	&=\ReIm\{
+		-\frac{2}{3} \cc{1}{qu}{i33i} -\frac{8}{9} \cc{8}{qu}{i33i}
+	\},\\
+	\ccc{1[I]}{bQqd}{}
+	&=\ReIm\{
+		-\frac{2}{3} \cc{1}{qd}{i33i} -\frac{8}{9} \cc{8}{qd}{i33i}
+	\},
+\end{aligned}
+\qquad
+\begin{aligned}
+	\ccc{8[I]}{tQqu}{}
+	&=\ReIm\{
+		-4\cc{1}{qu}{i33i} +\frac{2}{3} \cc{8}{qu}{i33i}
+	\},\\
+	\ccc{8[I]}{bQqd}{}
+	&=\ReIm\{
+		-4\cc{1}{qd}{i33i} +\frac{2}{3} \cc{8}{qd}{i33i}
+	\},
+\end{aligned}
+\end{equation}
+are complex.
+
+
+\subsection{Four-quark \texorpdfstring{$\bar LR\bar LR$}{LRLR} operators} The $\qq{}{quqd}{}$ operators belong to that category. Proceeding to the Fierz decomposition:
+\begin{equation}
+	\begin{pmatrix}
+	\qq{1}{quqd}{i33i}	\\
+	\qq{1}{quqd}{3ii3}	\\[2mm]
+	%
+	\qq{8}{quqd}{i33i}	\\
+	\qq{8}{quqd}{3ii3}	
+	\end{pmatrix}
+	=
+	\begin{pmatrix}
+	-1/6	&0	&-2/9	&0\\
+	-1	&0	&1/6	&0\\
+	-1/24	&0	&-1/18	&0\\
+	-1/4	&0	&1/24	&0\\[2mm]
+	%
+	0	&-1/6	&0	&-2/9\\
+	0	&-1	&0	&1/6\\
+	0	&-1/24	&0	&-1/18\\
+	0	&-1/4	&0	&1/24
+	\end{pmatrix}^{\!\!T}
+	\left(\begin{array}{@{(}l@{}c@{}c@{}l@{)\:\varepsilon\:(}l@{}c@{}c@{}l@{)}}
+	 \bar Q		&	&	&t
+	&\bar q_i	&	&	&d_i
+	\\
+	 \bar Q		&	&T^A	&t
+	&\bar q_i	&	&T^A	&d_i
+	\\
+	 \bar Q		&\sd	&	&t
+	&\bar q_i	&\su	&	&d_i
+	\\
+	 \bar Q		&\sd	&T^A	&t
+	&\bar q_i	&\su	&T^A	&d_i
+	\\[2mm]
+	%
+	 \bar Q		&	&	&b
+	&\bar q_i	&	&	&u_i
+	\\
+	 \bar Q		&	&T^A	&b
+	&\bar q_i	&	&T^A	&u_i
+	\\
+	 \bar Q		&\sd	&	&b
+	&\bar q_i	&\su	&	&u_i
+	\\
+	 \bar Q		&\sd	&T^A	&b
+	&\bar q_i	&\su	&T^A	&u_i
+	\end{array}\right),
+\end{equation}
+one can for instance select the scalar operator coefficients as independent degrees of freedom:
+\begin{equation}
+	\begin{aligned}
+	\ccc{1[I]}{Qtqd}{}
+	&=\ReIm\{
+		-\frac{1}{6} \cc{1}{quqd}{i33i} -\frac{2}{9} \cc{8}{quqd}{i33i}
+	\},\\
+	\ccc{1[I]}{Qbqu}{}
+	&=\ReIm\{
+		-\frac{1}{6} \cc{1}{quqd}{3ii3} -\frac{2}{9} \cc{8}{quqd}{3ii3}
+	\},
+	\end{aligned}
+	\qquad
+	\begin{aligned}
+	\ccc{8[I]}{Qtqd}{}
+	&=\ReIm\{
+		-\cc{1}{quqd}{i33i} +\frac{1}{6} \cc{8}{quqd}{i33i}
+	\},\\
+	\ccc{8[I]}{Qbqu}{}
+	&=\ReIm\{
+		-\cc{1}{quqd}{3ii3} +\frac{1}{6} \cc{8}{quqd}{3ii3}
+	\},
+	\end{aligned}
+\end{equation}
+which are complex.
+
+\subsection{Four-quark \texorpdfstring{$\bar RR\bar RR$}{RRRR} operators}
+In this category, new structures only arise for $\qq{}{ud}{}$ operators. The Fierz decomposition gives:
+\begin{equation}
+	\begin{pmatrix}
+	\qq{1}{ud}{i33i}	\\
+	\qq{8}{ud}{i33i}	
+	\end{pmatrix}
+	=
+	\begin{pmatrix}
+	1/3	&4/9\\
+	2	&-1/3
+	\end{pmatrix}^{\!\!T}
+	\left(\begin{array}{@{(}l@{}c@{}c@{}l@{)\:(}l@{}c@{}c@{}l@{)}}
+	 \bar b		&\gamma_\mu	&	&t
+	&\bar u_i	&\gamma^\mu	&	&d_i
+	\\
+	 \bar b		&\gamma_\mu	&T^A	&t
+	&\bar u_i	&\gamma^\mu	&T^A	&d_i
+	\end{array}\right),
+\end{equation}
+and two additional complex degrees of freedom can be defined:
+\begin{equation}
+\ccc{1[I]}{btud}{}
+=\ReIm\{
+	\frac{1}{3} \cc{1}{ud}{i33i} +\frac{4}{9} \cc{8}{ud}{i33i}
+\},
+\qquad
+\ccc{8[I]}{btud}{}
+=\ReIm\{
+	2\cc{1}{ud}{i33i} -\frac{1}{3} \cc{8}{ud}{i33i}
+\}.
+\end{equation}
+
+
+\section{FCNC degrees of freedom}
+\label{sec:fcnc}
+We now somewhat relax the benchmark flavour symmetry imposed to consider the important case of top-quark FCNC interactions. We therefore assume the $U(2)_q\times U(2)_u\times U(2)_d$ is broken by a small parameter connecting generations $3$ and $a\in\{1,2\}$. In each operator, a quark-antiquark pair mixing these two generations arises at the linear order in this breaking parameter. We restrict ourselves to this order and require the other quark bilinear in a four-quark operator to still satisfy the $U(2)_q\times U(2)_u\times U(2)_d$ symmetry, possibly after a Fierz transformation has been applied. We now construct the degrees of freedom satisfying this condition, operator type by operator type.
+
+\subsection{One-light-one-heavy operators}
+The FCNC operators in this category are trivially obtained from the flavour conserving ones. Note Hermitian couplings $\cc{}{}{ji}^*=\cc{ij}{}{}$ have complex off-diagonal components. The degrees of freedom are the following:
+\begin{equation}
+\begin{aligned}
+\ccc{[I]}{t\varphi}{3a} &\equiv \ReIm\{\cc{}{u\varphi}{3a}\},\\
+\ccc{[I]}{t\varphi}{a3} &\equiv \ReIm\{\cc{}{u\varphi}{a3}\},
+\end{aligned}
+\qquad
+\begin{aligned}
+\ccc{-[I]}{\varphi q}{3+a}  &\equiv \ReIm\{\cc{1}{\varphi q}{3a}-\cc{3}{\varphi q}{3a}\},\\
+\ccc{3[I]}{\varphi q}{3+a}  &\equiv \ReIm\{\cc{3}{\varphi q}{3a}\},\\
+\ccc{[I]}{\varphi u}{3+a}  &\equiv \ReIm\{\cc{}{\varphi u}{3a}\},\\
+\ccc{[I]}{\varphi ud}{3a} &\equiv \ReIm\{\cc{}{\varphi ud}{3a}\},\\
+\ccc{[I]}{\varphi ud}{a3} &\equiv \ReIm\{\cc{}{\varphi ud}{a3}\},\\
+\end{aligned}
+\qquad
+\begin{aligned}
+\ccc{[I]}{uW}{3a} &\equiv \ReIm\{\cc{}{uW}{3a}\},\\
+\ccc{[I]}{uW}{a3} &\equiv \ReIm\{\cc{}{uW}{a3}\},\\
+\ccc{[I]}{uZ}{3a} &\equiv \ReIm\{-\sw\cc{}{uB}{3a}+\cw\cc{}{uW}{3a}\},\\
+\ccc{[I]}{uZ}{a3} &\equiv \ReIm\{-\sw\cc{}{uB}{a3}+\cw\cc{}{uW}{a3}\},\\
+\ccc{[I]}{dW}{3a} &\equiv \ReIm\{\cc{}{dW}{3a}\},\\
+\ccc{[I]}{dW}{a3} &\equiv \ReIm\{\cc{}{dW}{a3}\},\\
+\ccc{[I]}{uG}{3a} &\equiv \ReIm\{\cc{}{uG}{3a}\},\\
+\ccc{[I]}{uG}{a3} &\equiv \ReIm\{\cc{}{uG}{a3}\}.\\
+\end{aligned}
+\end{equation}
+Altogether, these are $15$ CP-conserving degrees of freedom and $15$ CP-violating ones.
+
+\subsection{One-light-one-heavy-two-lepton operators}
+There is no difficulty either to list the FCNC degrees of freedom for operators containing two quarks and two leptons:
+\begin{equation}
+\begin{aligned}
+\ccc{3}{lq}{\ell,3+a} &\equiv \ReIm\{\cc{3}{lq}{\ell\ell 3a}\},\\
+\ccc{-}{lq}{\ell,3+a} &\equiv \ReIm\{\cc{-}{lq}{\ell\ell 3a}\},\\
+\ccc{}{eq}{\ell,3+a} &\equiv \ReIm\{\cc{}{eq}{\ell\ell 3a}\},\\
+\ccc{}{lu}{\ell,3+a} &\equiv \ReIm\{\cc{}{lu}{\ell\ell 3a}\},\\
+\ccc{}{eu}{\ell,3+a} &\equiv \ReIm\{\cc{}{eu}{\ell\ell 3a}\},\\
+\end{aligned}
+\qquad
+\begin{aligned}
+\ccc{S}{lequ}{\ell,3a} &\equiv \ReIm\{\cc{1}{lequ}{\ell\ell 3a}\},\\
+\ccc{S}{lequ}{\ell,a3} &\equiv \ReIm\{\cc{1}{lequ}{\ell\ell a3}\},\\
+\ccc{T}{lequ}{\ell,3a} &\equiv \ReIm\{\cc{3}{lequ}{\ell\ell 3a}\},\\
+\ccc{T}{lequ}{\ell,a3} &\equiv \ReIm\{\cc{3}{lequ}{\ell\ell a3}\},\\
+%\ccc{S}{ledq}{\ell,3a} &\equiv \ReIm\{\cc{}{ledq}{\ell\ell 3a}\},\\
+%\ccc{S}{ledq}{\ell,a3} &\equiv \ReIm\{\cc{}{ledq}{\ell\ell a3}\},\\
+\end{aligned}
+\end{equation}
+These form $9+9\text{ CPV}$ degrees of freedom.
+
+\subsection{One-light-three-heavy operators}
+
+We consider first operators involving three third-generation and one first- or second-generation quarks.
+The $\bar LL\bar LL$ operators featuring one light field and three heavy ones
+satisfy $\qq{1,3}{qq}{333a} =\qq{1,3}{qq}{3a33} =\qq{1,3}{qq}{33a3}^*
+=\qq{1,3}{qq}{a333}^*$. So we impose the same equality on their coefficients and
+retain only one of them as independent complex parameter. In the broken
+electroweak phase, these operators are decomposed as follows:
+\begin{equation}
+	\begin{pmatrix}
+		\qq{1}{qq}{333a}
+		\\\qq{3}{qq}{333a}
+	\end{pmatrix}
+	=
+	\begin{pmatrix}
+		1	& 1	\\
+		1/3	& 5/3	\\
+		2	& -2	\\
+		1/3	& 5/3	\\
+		2	& -2	\\
+		1	& 1
+	\end{pmatrix}^{\!\!T}
+	\left(\begin{array}{@{(}l@{\,}r@{)\:(}l@{\,}r@{)}}
+	 \bar t		\gamma_\mu& P_L t	
+	&\bar t		\gamma^\mu& P_L u_a	
+	\\
+	 \bar t		\gamma_\mu& P_L b	
+	&\bar b		\gamma^\mu& P_L u_a	
+	\\
+	 \bar t		\gamma_\mu& T^A P_L b	
+	&\bar b		\gamma^\mu& T^A P_L u_a	
+	\\
+	 \bar b		\gamma_\mu& P_L t	
+	&\bar t		\gamma^\mu& P_L d_a	
+	\\
+	 \bar b		\gamma_\mu& T^A P_L t	
+	&\bar t		\gamma^\mu& T^A P_L d_a	
+	\\
+	 \bar b		\gamma_\mu& P_L b	
+	&\bar b		\gamma^\mu& P_L d_a
+	\end{array}\right).
+\label{eq:fcnc_lll_1l3h}
+\end{equation}
+Note here that only the $\bar tt\bar tu$ and $\bar bb\bar bd$ field combinations unambiguously arise from flavour-changing neutral current interactions. Both combinations arise proportional to $\cc{1}{qq}{333a}+\cc{3}{qq}{333a}$. The other field combinations could have been generated by flavour off-diagonal charged currents. The colour singlet $\bar tb\bar bu$ and $\bar bt\bar td$ operators for instance interfere with CKM-suppressed SM charged currents, while the octets do not.
+%
+The single $\bar RR\bar RR$ operator contributing to three top production also
+satisfies $\qq{}{uu}{333a} =\qq{}{uu}{3a33} =\qq{}{uu}{33a3}^* =\qq{}{uu}{a333}^*$ while $\qq{}{ud}{333a} = \qq{}{ud}{33a3}^*$ and $\qq{}{ud}{3a33} = \qq{}{ud}{a333}^*$.
+%
+Similarly the $\bar LL\bar RR$ operators satisfies $\qq{1,8}{qu}{333a} =
+\qq{1,8}{qu}{33a3}^*$ and $\qq{1,8}{qu}{3a33} = \qq{1,8}{qu}{a333}^*$.
+%
+The $\bar LR\bar LR$ operators have no symmetry of this kind.
+%
+So, the relevant degrees of freedom are
+\begin{gather}
+\begin{aligned}
+	\ccc{1[I]}{qq}{333a}	&=	\ReIm\{\cc{1}{qq}{333a}\}	,\\
+	\ccc{3[I]}{qq}{333a}	&=	\ReIm\{\cc{3}{qq}{333a}\}	,\\
+	\ccc{ [I]}{uu}{333a}	&=	\ReIm\{\cc {}{uu}{333a}\}	,\\
+\end{aligned}
+\qquad
+\begin{aligned}
+	\ccc{1[I]}{qu}{333a}	&=	\ReIm\{\cc{1}{qu}{333a}\}	,\\
+	\ccc{8[I]}{qu}{333a}	&=	\ReIm\{\cc{8}{qu}{333a}\}	,\\
+	\ccc{1[I]}{qu}{3a33}	&=	\ReIm\{\cc{1}{qu}{3a33}\}	,\\
+	\ccc{8[I]}{qu}{3a33}	&=	\ReIm\{\cc{8}{qu}{3a33}\}	,
+\end{aligned}
+\qquad
+\begin{aligned}
+	\ccc{1[I]}{qd}{333a}	&=	\ReIm\{\cc{1}{qd}{333a}\}	,\\
+	\ccc{8[I]}{qd}{333a}	&=	\ReIm\{\cc{8}{qd}{333a}\}	,\\
+	\ccc{1[I]}{qd}{3a33}	&=	\ReIm\{\cc{1}{qd}{3a33}\}	,\\
+	\ccc{8[I]}{qd}{3a33}	&=	\ReIm\{\cc{8}{qd}{3a33}\}	,
+\end{aligned}
+\\[3mm]
+\begin{aligned}
+	\ccc{1[I]}{ud}{333a}	&=	\ReIm\{\cc{1}{ud}{333a}\}	,\\
+	\ccc{8[I]}{ud}{333a}	&=	\ReIm\{\cc{8}{ud}{333a}\}	,\\
+	\ccc{1[I]}{ud}{3a33}	&=	\ReIm\{\cc{1}{ud}{3a33}\}	,\\
+	\ccc{8[I]}{ud}{3a33}	&=	\ReIm\{\cc{8}{ud}{3a33}\}	,
+\end{aligned}
+\qquad
+\begin{aligned}
+	\ccc{1[I]}{quqd}{333a}	&=	\ReIm\{\cc{1}{quqd}{333a}\}	,\\
+	\ccc{1[I]}{quqd}{33a3}	&=	\ReIm\{\cc{1}{quqd}{33a3}\}	,\\
+	\ccc{1[I]}{quqd}{3a33}	&=	\ReIm\{\cc{1}{quqd}{3a33}\}	,\\
+	\ccc{1[I]}{quqd}{a333}	&=	\ReIm\{\cc{1}{quqd}{a333}\}	,
+\end{aligned}
+\qquad
+\begin{aligned}
+	\ccc{8[I]}{quqd}{333a}	&=	\ReIm\{\cc{8}{quqd}{333a}\}	,\\
+	\ccc{8[I]}{quqd}{33a3}	&=	\ReIm\{\cc{8}{quqd}{33a3}\}	,\\
+	\ccc{8[I]}{quqd}{3a33}	&=	\ReIm\{\cc{8}{quqd}{3a33}\}	,\\
+	\ccc{8[I]}{quqd}{a333}	&=	\ReIm\{\cc{8}{quqd}{a333}\}	.
+\end{aligned}
+\end{gather}
+
+
+\subsection{Three-light-one-heavy operators}
+Again, we impose here the presence of a quark-antiquark pair satisfying the $U(2)_q\times U(2)_u \times U(2)_d$ symmetry. The suitable $\bar LL\bar LL$ operators satisfy the $\qq{1,3}{qq}{3aii} = \qq{1,3}{qq}{ii3a} = \qq{1,3}{qq}{a3ii}^* = \qq{1,3}{qq}{iia3}^*$, $\qq{1,3}{qq}{3iia} = \qq{1,3}{qq}{ia3i} = \qq{1,3}{qq}{i3ai}^* = \qq{1,3}{qq}{aii3}^*$ relations. Fierz transformation then lead to
+\begin{equation}
+	\begin{pmatrix}
+		\qq{1}{qq}{3aii}	\\
+		\qq{1}{qq}{3iia}	\\
+		\qq{3}{qq}{3aii}	\\
+		\qq{3}{qq}{3iia}	\\
+	\end{pmatrix}
+	=
+	\begin{pmatrix}
+		1	& 1/6	& 0	&  1/2	\\
+		0	& 1/6	& 1	& -1/6	\\
+		0	& 1	& 0	&  3	\\
+		0	& 1	& 0	& -1
+	\end{pmatrix}^{\!\!T}
+	\left(\begin{array}{@{(}l@{\,}r@{\,}r@{)\:(}l@{\,}r@{\,}r@{)}}
+	 \bar Q		\gamma_\mu& & q_a	
+	&\bar q_i	\gamma^\mu& & q_i
+	\\
+	 \bar Q		\gamma_\mu& &\tau^I q_a	
+	&\bar q_i	\gamma^\mu& &\tau^I q_i
+	\\
+	 \bar Q		\gamma_\mu& T^A& q_a	
+	&\bar q_i	\gamma^\mu& T^A& q_i
+	\\
+	 \bar Q		\gamma_\mu& T^A&\tau^I q_a	
+	&\bar q_i	\gamma^\mu& T^A&\tau^I q_i
+	\end{array}\right)
+\end{equation}
+and one can thus define the following degrees of freedom:
+\begin{align}
+	\ccc{1,1[I]}{qq}{3a}&\equiv
+	\ReIm\{
+	\cc{1}{qq}{3aii}
+	+\frac{1}{6}\cc{1}{qq}{3iia}
+	+\frac{1}{2}\cc{3}{qq}{3iia}
+	\},
+	\\
+	\ccc{3,1[I]}{qq}{3a}&\equiv
+	\ReIm\{
+	\cc{3}{qq}{3aii}
+	+\frac{1}{6}(\cc{1}{qq}{3iia}-\cc{3}{qq}{3iia})
+	\},
+	\\
+	\ccc{1,8[I]}{qq}{3a} &\equiv
+	\ReIm\{
+	\cc{1}{qq}{3iia}+3\cc{3}{qq}{3iia}
+	\},
+	\\
+	\ccc{3,8[I]}{qq}{3a} &\equiv
+	\ReIm\{
+	\cc{1}{qq}{3iia}-\cc{3}{qq}{3iia}
+	\},
+\end{align}
+in a way similar to the flavour conserving case. For $\bar RR\bar RR$ operators, one has first:
+\begin{equation}
+	\begin{pmatrix}
+	\qq{}{uu}{3aii}\\
+	\qq{}{uu}{3iia}
+	\end{pmatrix}
+	=
+	\begin{pmatrix}
+	1	& 1/3\\
+	0	& 2
+	\end{pmatrix}^{\!\!T}
+	\left(\begin{array}{@{(}l@{\,}r@{\,}r@{)\:(}l@{\,}r@{\,}r@{)}}
+	 \bar t		\gamma_\mu& & u_a	
+	&\bar u_i	\gamma^\mu& & u_i
+	\\
+	 \bar t		\gamma_\mu&T^A & u_a	
+	&\bar u_i	\gamma^\mu&T^A & u_i
+	\end{array}\right)
+\end{equation}
+in the case of the $\qq{}{uu}{}$ operator whose coefficient with different flavour assignations satisfies the same relations as that of $\qq{}{qq}{}$. One thus defines
+\begin{equation}
+	\begin{aligned}
+	\ccc{1[I]}{uu}{3a} &= \ReIm\{
+		\cc{}{uu}{3aii} + \frac{1}{3} \cc{}{uu}{3iia}
+		\},\\
+	\ccc{8[I]}{uu}{3a} &= \ReIm\{
+		2\cc{}{uu}{3iia}
+		\},
+	\end{aligned}
+\end{equation}
+while no Fierzing is required for the definition of the remaining $\bar RR\bar RR$ and $\bar LL\bar RR$ degrees of freedom:
+\begin{equation}
+	\begin{aligned}
+	\ccc{1[I]}{ud}{3a}	&= \ReIm\{\cc{1}{ud}{3aii}\},\\
+	\ccc{8[I]}{ud}{3a}	&= \ReIm\{\cc{8}{ud}{3aii}\},
+	\end{aligned}
+	\qquad
+	\begin{aligned}
+	\ccc{1[I]}{qu}{3a}	&= \ReIm\{\cc{1}{qu}{3aii}\},\\
+	\ccc{8[I]}{qu}{3a}	&= \ReIm\{\cc{8}{qu}{3aii}\},\\
+	\ccc{1[I]}{qu}{a3}	&= \ReIm\{\cc{1}{qu}{ii3a}\},\\
+	\ccc{8[I]}{qu}{a3}	&= \ReIm\{\cc{8}{qu}{ii3a}\},
+	\end{aligned}
+	\qquad
+	\begin{aligned}
+	\ccc{1[I]}{qd}{3a}	&= \ReIm\{\cc{1}{qd}{3aii}\},\\
+	\ccc{8[I]}{qd}{3a}	&= \ReIm\{\cc{8}{qd}{3aii}\}.
+	\end{aligned}
+\end{equation}
+
+\subsection{Counting}
+In total, the counting of FCNC degrees of freedom is as follows:
+\begin{center}
+\begin{tabular}{r@{\quad}l}
+one-light-one-heavy	& $(15+15\,\text{CPV})\times 2$\\
+one-light-one-heavy-two-leptons & $(9+9\,\text{CPV})\times 2 \times 3$\\
+one-light-three-heavy	& $(23+23\,\text{CPV})\times 2$\\
+three-light-one-heavy	& $(14+14\,\text{CPV})\times 2$\\
+\end{tabular}
+\end{center}
+where the factor of two stands for the light quark flavour $a\in\{1,2\}$, and the factor of three for lepton flavours. One counts $61$ CP-even FCNC degrees of freedom without those flavour factors (and $316$ including all flavour combinations and CP-odd parameters). Global constraints deriving from direct measurements on a subset of these degrees of freedom were set in Ref.\,\cite{Durieux:2014xla}.
+
+
+\bibliographystyle{apsrev4-1_title}
+\raggedright\bibliography{eft_note}
+
+%% cut it short
+%\end{document}
+
+\begin{table}[p]
+\vspace{-3cm}\centering
+\scalebox{.65}{\input{interferences.tex}}
+\caption{Linear dependences on the various degrees of freedom of total top pair production rates at the $13\,$TeV LHC. For convenience, numerical values for the $S^k_j/\sum_l B^k_l$ ratios are provided in permil. Absolute SM rates (i.e.\ $\sum_l B^k_l$) are also quoted in picobarns. LO simulation at the parton level, the five-flavour scheme, NNPDF2.3LO1, running renormalization and factorization scales are used. Simple $p_T>20\,$GeV, $|\eta|<2.5$, $\Delta R>0.4$ cuts are imposed on ($b$-)jets, charged leptons and photons. As input parameters, $m_t=172\,$GeV (all other fermion masses and Yukawa couplings are set to zero) and $m_h=125\,$GeV are notably employed. Monte Carlo uncertainties are of the order of $15\%$, but outliers are expected given the number of quantity evaluated.
+}
+\label{tab:lin_pair}
+\end{table}
+
+\begin{table}[p]
+\vspace{-3cm}\centering
+\scalebox{.7}{\input{interferences_single_top.tex}}
+\caption{Same as \autoref{tab:lin_pair}, for single top production processes.
+}
+\label{tab:lin_single}
+\end{table}
+
+% quadratic
+
+% absolute ttbar for comparison
+%\begin{sidewaystable}[p]
+%\centering\hspace*{-3cm}
+%\adjustbox{width=.99\paperheight}{\input{squared_tt_pb.tex}}
+%\caption{Quadratic dependence on the various degrees of freedom of the total $pp\to t\bar t$ rate. Absolute values for $S_{ij}^k$ are quoted in picobarns. For more details see the legend of \autoref{tab:lin_pair}.
+%}
+%\label{tab:quad_tt_pb}
+%\end{sidewaystable}
+
+
+\begin{sidewaystable}[p]
+\centering\hspace*{-3cm}
+\adjustbox{width=.99\paperheight}{\input{squared_tt.tex}}
+\caption{Quadratic dependence on the various degrees of freedom of the total $pp\to t\bar t$ rate. For conveniences, numerical values for $S_{ij}^k/\sum_l B^k_l$ are quoted in permil.  Numerical values smaller than $10^{-5}$ are omitted. For more details see the legend of \autoref{tab:lin_pair}.
+}
+\label{tab:quad_tt}
+\end{sidewaystable}
+
+%% cut it short
+%\end{document}
+
+%\begin{sidewaystable}[p]
+%\centering\hspace*{-3cm}
+%\adjustbox{width=.99\paperheight}{\input{squared_ttbb.tex}}
+%\caption{Quadratic dependence on the various degrees of freedom of the total $pp\to t\bar tb\bar b$ rate. For conveniences, numerical values for $S_{ij}^k/\sum_l B^k_l$ are quoted in permil. For more details see the legend of \autoref{tab:lin_pair}.
+%}
+%\label{tab:quad_ttbb}
+%\end{sidewaystable}
+
+%\begin{sidewaystable}[p]
+%\centering\hspace*{-3cm}
+%\adjustbox{width=.99\paperheight}{\input{squared_tttt.tex}}
+%\caption{Quadratic dependence on the various degrees of freedom of the total $pp\to t\bar tt\bar t$ rate. For conveniences, numerical values for $S_{ij}^k/\sum_l B^k_l$ are quoted in permil. For more details see the legend of \autoref{tab:lin_pair}.
+%}
+%\label{tab:quad_tttt}
+%\end{sidewaystable}
+
+\begin{sidewaystable}[p]
+\centering\hspace*{-3cm}
+\adjustbox{width=.99\paperheight}{\input{squared_ttee.tex}}
+\caption{Quadratic dependence on the various degrees of freedom of the total $pp\to t\bar te^+e^-$ rate. For conveniences, numerical values for $S_{ij}^k/\sum_l B^k_l$ are quoted in permil. For more details see the legend of \autoref{tab:lin_pair}.
+}
+\label{tab:quad_ttee}
+\end{sidewaystable}
+
+\begin{sidewaystable}[p]
+\centering\hspace*{-3cm}
+\adjustbox{width=.99\paperheight}{\input{squared_ttev.tex}}
+\caption{Quadratic dependence on the various degrees of freedom of the total $pp\to t\bar te^+\nu$ rate. For conveniences, numerical values for $S_{ij}^k/\sum_l B^k_l$ are quoted in permil. For more details see the legend of \autoref{tab:lin_pair}.
+}
+\label{tab:quad_ttev}
+\end{sidewaystable}
+
+\begin{sidewaystable}[p]
+\centering\hspace*{-3cm}
+\adjustbox{width=.99\paperheight}{\input{squared_tta.tex}}
+\caption{Quadratic dependence on the various degrees of freedom of the total $pp\to t\bar t\gamma$ rate. For conveniences, numerical values for $S_{ij}^k/\sum_l B^k_l$ are quoted in permil. For more details see the legend of \autoref{tab:lin_pair}.
+}
+\label{tab:quad_tta}
+\end{sidewaystable}
+
+
+
+\begin{sidewaystable}[p]
+\centering\hspace*{-3cm}
+\adjustbox{width=.99\paperheight}{\input{squared_tth.tex}}
+\caption{Quadratic dependence on the various degrees of freedom of the total $pp\to t\bar th$ rate. For conveniences, numerical values for $S_{ij}^k/\sum_l B^k_l$ are quoted in permil. For more details see the legend of \autoref{tab:lin_pair}.
+}
+\label{tab:quad_tth}
+\end{sidewaystable}
+
+
+% single top
+
+\begin{sidewaystable}[p]
+\centering\hspace*{-3cm}
+\adjustbox{width=.99\paperheight}{\input{squared_tj.tex}}
+\caption{Quadratic dependence on the various degrees of freedom of the total $pp\to tj$ rate. For conveniences, numerical values for $S_{ij}^k/\sum_l B^k_l$ are quoted in permil. For more details see the legend of \autoref{tab:lin_pair}.
+}
+\label{tab:quad_tj}
+\end{sidewaystable}
+
+\begin{sidewaystable}[p]
+\centering\hspace*{-3cm}
+\adjustbox{width=.99\paperheight}{\input{squared_tev.tex}}
+\caption{Quadratic dependence on the various degrees of freedom of the total $pp\to te^-\nu$ rate. For conveniences, numerical values for $S_{ij}^k/\sum_l B^k_l$ are quoted in permil. For more details see the legend of \autoref{tab:lin_pair}.
+}
+\label{tab:quad_tev}
+\end{sidewaystable}
+
+\begin{sidewaystable}[p]
+\centering\hspace*{-3cm}
+\adjustbox{width=.99\paperheight}{\input{squared_tjee.tex}}
+\caption{Quadratic dependence on the various degrees of freedom of the total $pp\to tje^+e^-$ rate. For conveniences, numerical values for $S_{ij}^k/\sum_l B^k_l$ are quoted in permil. For more details see the legend of \autoref{tab:lin_pair}.
+}
+\label{tab:quad_tjee}
+\end{sidewaystable}
+
+\begin{sidewaystable}[p]
+\centering\hspace*{-3cm}
+\adjustbox{width=.99\paperheight}{\input{squared_tja.tex}}
+\caption{Quadratic dependence on the various degrees of freedom of the total $pp\to tj\gamma$ rate. For conveniences, numerical values for $S_{ij}^k/\sum_l B^k_l$ are quoted in permil. For more details see the legend of \autoref{tab:lin_pair}.
+}
+\label{tab:quad_tja}
+\end{sidewaystable}
+
+\begin{sidewaystable}[p]
+\centering\hspace*{-3cm}
+\adjustbox{width=.99\paperheight}{\input{squared_tjh.tex}}
+\caption{Quadratic dependence on the various degrees of freedom of the total $pp\to tjh$ rate. For conveniences, numerical values for $S_{ij}^k/\sum_l B^k_l$ are quoted in permil. For more details see the legend of \autoref{tab:lin_pair}.
+}
+\label{tab:quad_tjh}
+\end{sidewaystable}
+
+
+\end{document}

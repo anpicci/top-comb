@@ -1,0 +1,381 @@
+% mainfile: eft_note.tex
+
+%\documentclass[11pt]{article}
+%\usepackage{jheppub} 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%Packages%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\usepackage{slashed}
+%\usepackage{array,multirow}
+%\usepackage{amsmath,amsfonts,amssymb,bbm}
+%\usepackage[normalem]{ulem}
+%\usepackage[T1]{fontenc}
+%\usepackage{mathrsfs,wasysym}
+%\usepackage{units}
+%\usepackage{hyperref}
+%\usepackage{graphicx}
+%\usepackage{xcolor}
+%\usepackage{lscape}
+
+\def\nn{\nonumber}
+\def\hyp{\mathsf{y}}
+\renewcommand{\O}{\mathcal{O}}
+\newcommand{\Q}{\mathcal{Q}}
+\renewcommand{\a}{\alpha}
+\renewcommand{\b}{\beta}
+\renewcommand{\d}{\delta}
+\newcommand{\g}{\gamma}
+\newcommand{\s}{\sigma}
+\renewcommand{\dag}{\dagger}
+\newcommand{\de}{\partial}
+\newcommand{\des}{\slashed{\de}}
+\newcommand{\bsw}{s_{\bar \theta}}
+\newcommand{\bcw}{c_{\bar \theta}}
+\newcommand{\hsw}{s_{\hat \theta}}
+\newcommand{\hcw}{c_{\hat \theta}}
+\newcommand{\dsw}{\d s_\theta}
+\newcommand{\hv}{\hat{v}}
+\newcommand{\aem}{\alpha_{\rm em}}
+\renewcommand{\to}{\rightarrow}
+
+\newcommand{\cHlt}{c_{Hl}^{(3)}}
+\newcommand{\cHls}{c_{Hl}^{(1)}}
+\newcommand{\cHqt}{c_{Hq}^{(3)}}
+\newcommand{\cHqs}{c_{Hq}^{(1)}}
+\newcommand{\red}[1]{{\color{red} #1}}
+
+\let\section\subsection
+\let\subsection\subsubsection
+\let\subsubsection\paragraph
+
+%\title{SMEFTsim appendix for the top EFT note}
+%\author{Ilaria}
+
+
+%\date{\today}
+
+%\begin{document}
+
+%\section{The \texttt{SMEFTsim} implementation}
+\label{sec:smeftsim}
+
+The \texttt{SMEFTsim} package~\cite{Brivio:2017btx} (available at \url{http://feynrules.irmp.ucl.ac.be/wiki/SMEFT}) provides a complete \texttt{FeynRules}~\cite{Alloul:2013bka} implementation of the $B$-conserving dimension-six Lagrangian in the Warsaw basis~\cite{Grzadkowski:2010es}, that automatically performs the field and parameter redefinitions required to have canonically normalized kinetic terms and following from the choice of an input parameters set. The package contains \texttt{FeynRules} models as well as
+pre-exported UFO models for six different Lagrangians, corresponding to two possible input parameters sets ($\{\hat\a_{\rm ew}, \hat m_Z, \hat G_F\}$ or $\{\hat m_W, \hat m_Z, \hat G_F\}$) and to three possible assumptions on the flavour structure of the theory:
+\begin{itemize}
+ \item a {\bf flavour general} case, in which all the flavour indices are explicitly kept and the Wilson coefficients of the fermionic operators are defined as tensorial parameters.
+ \item a {\bf $U(3)^5$ flavour symmetric} case in which flavour contractions are fixed by the symmetry. The Yukawa couplings are treated as flavour-breaking spurions and consistently inserted in operators with chirality-flipping fermion currents.
+ \item a {\bf linear MFV} case~\cite{DAmbrosio:2002vsn} that, unlike the $U(3)^5$ symmetric setup, does not contain CP violating parameters beyond the CKM phase while it includes insertions of the flavour-violating spurions $Y_f Y^\dag_f$, $Y_f^\dag Y_f$ up to linear order.
+\end{itemize}
+Two versions of \texttt{SMEFTsim} are available, denominated ``set~A'' and ``set~B'': these implementations are independent but completely equivalent, and their simultaneous availability is meant to help a cross-check of the results.
+
+
+\subsubsection*{General comments}
+\begin{list}{--}{\topsep 3pt \itemsep 0pt \parsep 3pt}
+ \item Analogously to \texttt{dim6top}, \texttt{SMEFTsim} is a leading order, unitary gauge implementation.
+ \item  The Wilson coefficients are dimensionless quantities and the EFT cutoff $\Lambda$ is an external parameter of the UFO, set by default to 1~TeV ({{\tt LambdaSMEFT = 1.e+03}}). 
+ \item The definitions of the relevant parameters (in the Warsaw basis) are given in \autoref{table:param_defined_SMEFTsim}. The correspondence with the parameters used in \texttt{dim6top} can be deduced from the definitions summarized in \autoref{tab:limits}.\\
+ A {\tt QED=-1} interaction order has been assigned to {\tt LambdaSMEFT}, in order to avoid couplings with negative {\tt QED} order.\footnote{One coupling with negative {\tt QED} order is still present nonetheless, namely the $C_\varphi$ correction to the $h^3$ vertex, which plays no role here.}
+ 
+ 
+ \begin{table}[p]\scriptsize
+\renewcommand{\arraystretch}{1.2}
+ \begin{tabular}{@{}>{$}l<{$}>{\tt}p{5.4cm}>{$}l<{$}>{\tt}p{5.3cm}@{}}
+ \hline
+C_{u\varphi}^{(33)}& cuHAbs33, cuHPh33& 				C_{\varphi u}^{(33)}& cHuAbs33, cHuPh33\\
+C_{\varphi q}^{1(33)}& cHq1Abs33 &					C_{\varphi q}^{3(33)}& cHq3Abs33	\\
+C_{\varphi ud}^{(33)}& cHudAbs33, cHudPh33&		 &	\\    
+\hline
+C_{uW}^{(33)}& cuWAbs33, cuWPh33&				C_{dW}^{(33)}&	cdWAbs33, cdWPh33\\
+C_{uB}^{(33)}& cuBAbs33, cuBPh33&				C_{uG}^{(33)}&	cuGAbs33, cuGPh33\\
+C_{qq}^{1(3333)}& cqq1Abs3333&					C_{qq}^{3(3333)}& cqq3Abs3333	\\
+C_{qq}^{1(aa33)}& cqq1Abs(aa)33&				C_{qq}^{3(aa33)}& cqq3Abs(aa)33	\\
+C_{qq}^{1(a33a)}& cqq1Abs(a)33(a)&				C_{qq}^{3(aa33)}& cqq3Abs(a)33(a)\\
+C_{qu}^{1(3333)}& cqu1Abs3333&					C_{qu}^{8(3333)}& cqu8Abs3333	\\
+C_{qu}^{1(aa33)}& cqu1Abs(aa)33&				C_{qu}^{8(aa33)}& cqu8Abs(aa)33	\\
+C_{qu}^{1(33aa)}& cqu1Abs33(aa)&				C_{qu}^{8(33aa)}& cqu8Abs33(aa)	\\
+C_{qd}^{1(3333)}& cqd1Abs3333&					C_{qd}^{8(3333)}& cqdAbs3333	\\
+C_{qd}^{1(33aa)}& cqd1Abs33(aa)&				C_{qd}^{8(33(aa))}& cqdAbs33(aa)\\
+C_{uu}^{(3333)}& cuuAbs3333&					C_{uu}^{(aa33)}& cuuAbs(aa)33	\\  
+C_{uu}^{(a33a)}& cuuAbs(a)33(a)&			 & \\
+\hline
+C_{ud}^{1(3333)}& cud1Abs3333&					C_{ud}^{8(3333)}& cud8Abs3333	\\
+C_{ud}^{1(33aa)}& cud1Abs33(aa)&				C_{ud}^{8(33aa)}& cud8Abs33(aa)	\\
+C_{quqd}^{1(3333)}& cquqd1Abs3x3x3x3, cquqd1Ph3x3x3x3&		C_{quqd}^{8(3333)}&	cquqd8Abs3x3x3x3, cquqd8Ph3x3x3x3\\
+\hline
+C_{lq}^{1(ll33)}& clq1Abs(ll)33&				C_{lq}^{3(ll33)}& clq3Abs(ll)33	\\
+C_{lu}^{(ll33)}& cluAbs(ll)33 &					C_{eq}^{(ll33)}& cqeAbs33(ll)	\\
+C_{eu}^{(ll33)}& ceuAbs(ll)33&					C_{lequ}^{1(ll33)}& clequ1Abs(l)x(l)x3x3, clequ1Ph(l)x(l)x3x3	\\
+C_{lequ}^{3(ll33)}& clequ3Abs(l)x(l)x3x3, clequ3Ph(l)x(l)x3x3&	C_{ledq}^{(ll33)}&	cledqAbs(l)x(l)x3x3, cledqPh(l)x(l)x3x3\\
+\hline
+ \end{tabular}
+\caption{Flavour conserving parameters in the \texttt{SMEFTsim-A} UFO implementation, that are in direct correspondence with the degrees of freedom defined in \autoref{app:dof}.
+The index $a=\{1,2\}$ runs over the light quark generations, while $l=\{1,2,3\}$ indicates lepton flavours.
+}\label{table:param_defined_SMEFTsim}
+\vspace{1.5cm}
+%\end{table}
+%\begin{table}[t]
+\centering\footnotesize
+\renewcommand{\arraystretch}{1.3}
+ \begin{tabular}{ll@{\hspace*{8mm}}l}
+ \hline
+  flavour case& 	relevant parameters&  total number\\\hline
+  general&
+  $[C_{uH},\, C_{uB},\, C_{uW},\, C_{uG}]_{i3,3j}\,,\quad[C_{dW},\, C_{Hud}]_{3j}\,\quad [C_{Hu},\,C_{Hq}^{(1),(3)}]_{i3}\,,$			 & 618 abs. values\\
+
+  & $[C_{qq}^{(1),(3)},\,C_{uu},\,C_{qu}^{(1),(8)}]_{3jkl,i3kl,ij3l,ijk3}\,,\quad [C_{ud}^{(1),(8)},\,C_{qe},\,C_{qd}^{(1),(8)}]_{3jkl,i3kl}\,,$  & 557 phases\\
+  & $[C_{lq}^{(1),(3)},\,C_{eu},\,C_{lu},\,C_{lequ}^{(1),(3)} ]_{ij3l,ijk3}\,,\quad[C_{ledq}]_{ijk3}\,,\quad $ $[C_{quqd}^{(1),(8)}]_{3jkl,i3kl,ij3l}$ & \\
+  & $C_{H\square}$, $C_{HD}$, $C_{HWB}$, $[C_{ll}]_{1221}$,
+  $[C_{Hl}^{(3)}]_{11,22}$						 &
+  \\[3mm]
+  
+  $U(3)^5$&
+
+  $C_{uH}\,,$ $C_{Hu}\,,$ $C_{Hq}^{(1),(3)}\,,$ $C_{Hud}\,,$
+  $C_{uW}\,,$ $C_{uB}\,,$ $C_{uG}\,,$ $C_{dW}\,,$
+  $C_{qq}^{(1),(3)}\,,$
+  $C_{qq}^{(1),(3)\prime}\,,$& 34 abs. values\\
+  & $C_{lq}^{(1),(3)}\,,$
+    $C_{uu}\,,$ $C_{uu}'\,,$ 
+    $C_{ud}^{(1),(8)}\,,$ $C_{eu}\,,$
+    $C_{lu}\,,$ $C_{qe}\,,$
+    $C_{qu}^{(1),(8)}\,,$ $C_{qd}^{(1),(8)}\,,$
+    $C_{quqd}^{(1),(8)}\,,$& 8 phases\\
+  & $C_{H\square}\,,$ $C_{HD}\,,$ $C_{HWB}\,,$ $C_{ll}\,,$
+   $C'_{ll}\,,$ $C_{Hl}^{(3)}$
+  \\[3mm]
+  
+  linear MFV&
+
+  $C_{uH}\,,$ $C_{Hu}^*\,,$ $C_{Hq}^{(1),(3)**}\,,$ $C_{Hud}\,,$
+  $C_{uW}\,,$ $C_{uB}\,,$ $C_{uG}\,,$ $C_{dW}\,,$
+  $C_{qq}^{(1),(3)****}\,,$ 
+  & 83 abs. values\\
+  & $C_{qq}^{(1),(3)\prime\, ****}\,,$    $C_{lq}^{(1),(3)**}\,,$
+    $C_{uu}^{**}\,,$ $C_{uu}^{\prime\, **}\,,$ 
+    $C_{ud}^{(1),(8)**}\,,$ $C_{eu}^*\,,$
+    $C_{lu}^*\,,$ $C_{qe}^{**}\,,$
+    & \\
+  & $C_{qu}^{(1),(8)***}\,,$ $C_{qd}^{(1),(8)***}\,,$ $C_{quqd}^{(1),(8)}\,,$
+  & \\
+  & $C_{H\square}\,,$ $C_{HD}\,,$ $C_{HWB}\,,$ $C_{ll}\,,$
+   $C'_{ll}\,,$ $C_{Hl}^{(3)}$
+  \\[2mm]\hline
+ \end{tabular}
+\caption{Detailed list of the parameters that are relevant for top-quark physics for each flavour assumption in \texttt{SMEFTsim}. These are all set to 1 when importing the {\tt restrict\_TopEFT} restriction in any given model. The indices $i,j,k,l$ take values in \{1,2,3\}. The terms in the last rows are included as they contribute to top couplings via parameter redefinitions. In the MFV case all the parameters are real and coefficients with $n$ asterisks admit $n$ independent insertions of flavour-violating spurions.
+}\label{tab:parameters_topEFT_rst}
+\end{table}
+ 
+ \item Complex Wilson coefficients are parametrized by their absolute value and complex phase {\tt ciAbs Exp[I ciPh]} rather than by real and imaginary parts. When testing the imaginary part of a given operator it is therefore necessary to set the corresponding phase to $\pi/2 = 1.570796$.
+ 
+ \item The SM couplings of the Higgs boson that first arise at loop level (i.e. $hgg$, $h\gamma\gamma$, $hZ\gamma$) are included and parametrized as effective vertices with a coefficient that reproduces the SM loop function. These vertices are assigned an interaction order {\tt SMHLOOP = 1}.
+ 
+ \item All the flavour contractions are automatically implemented in the model, with a parametrization that allows to fix only the independent ones. This means that, for instance, setting $C_{qq}^{1(aa33)}=1$ introduces both the $O_{qq}^{1(aa33)}$ and $O_{qq}^{1(33aa)}$ terms in the Lagrangian. 
+
+ 
+ \item An interaction order {\tt NP=1} has been defined for the Wilson coefficients, equivalent to {\tt DIM6} in {\tt dim6top}. There is no analogue of {\tt FCNC} nor of the individual {\tt DIM6\_ci}. 
+ 
+\end{list}
+
+
+\subsubsection*{Syntax}
+\begin{itemize}
+ \item In \mg\ import the model, restricted by the file {\tt restrict\_XXX.dat} by\\
+ {\tt   > import model SMEFTsim\_A\_general\_alphaScheme-XXX}
+ 
+ All the restrictions available leave {\tt MB} and {\tt ymb} non-vanishing. It is possible to switch to the five flavour scheme either modifying manually the restriction card or setting\\
+ {\tt > define p = p b b\~{} }\\
+ {\tt > define j = p}\\
+ after importing the model and then modifying the {\tt param\_card} after generating the process output. 
+ 
+ \item Processes can be generated with\\
+ {\tt > generate p p > t t\~\ NP==1 SMHLOOP=0}\\
+to allow the insertion of one Wilson coefficient in the amplitude and excluding SM $hgg$, $h\gamma\gamma$, and $hZ\gamma$ vertices or, for instance, with\\
+{\tt > generate p p > t t\~\ NP\^{}2==1 SMHLOOP=0}\\
+to select for the interference term. {\tt QED} and {\tt QCD} interaction orders can also be specified to select for specific diagrams. To ensure the inclusion of all the tree-level SM contributions, it is advisable to specify {\tt QED<=8 QCD<=8}.
+
+\end{itemize}
+
+
+
+\rien{
+\begin{table}[h]\centering\scriptsize
+\vspace*{-2cm}
+\scalebox{.8}{\begin{tabular}{>{$}c<{$} >{\tt}c *{7}{>{$}c<{$}} }
+& & p p \rightarrow t \bar{t}& p p \rightarrow t \bar{t} b \bar{b}& p p \rightarrow t \bar{t} t \bar{t}& 
+p p \rightarrow t \bar{t} e^+ \nu_e& p p \rightarrow t \bar{t} e^+ e^-& p p \rightarrow t \bar{t} \gamma& p p \rightarrow t \bar{t} h\\\hline
+
+\rm SM     & SMlimit  &  519. pb & 1.84 pb & 0.0097 pb & 0.0199 pb & 0.0158 pb & 1.42 pb & 0.404 pb \\
+ \hline                       
+c_{QQ}^{1} & cQQ1     &  -0.251 & -1.9 & -102.50 &  & -1.636 & -0.678 & -0.746 \\
+c_{QQ}^{8} & cQQ8     &  -0.161 & -3.2 & -34.11 &  & -0.90 & -0.503 & -0.288 \\
+c_{Qt}^{1} & cQt1     &  -0.1491 & -5.70 & 107. &  & -0.746 & -0.195 & -0.578 \\
+c_{Qt}^{8} & cQt8     &  -0.0514 & -1.81 & -41.8 &  & -0.183 & -0.095 & -0.1620 \\
+c_{Qb}^{1} & cQb1     &  -0.00562 & 0.77 & -0.0499 &  & -0.0143 & -0.0072 & -0.0270 \\
+c_{Qb}^{8} & cQb8     &  0.138 & 3.91 & 0.121 &  & 0.36 & 0.169 & 0.56 \\
+c_{tt}^{1} & ctt1     &   &  & -163. &  &  &  &  \\
+c_{tb}^{1} & ctb1     &  -0.00970 & 0.49 & -0.0594 &  & -0.0199 & -0.029 & -0.0385 \\
+c_{tb}^{8} & ctb8     &  0.136 & 3.5 & 0.112 &  & 0.252 & 0.34 & 0.55 \\
+c_{QtQb}^{1}& cQtQb1& \\
+c_{QtQb}^{8}& cQtQb8& \\
+c_{QtQb}^{1I}& cQtQb1I& \\
+c_{QtQb}^{8I}& cQtQb8I& \\
+\hline                        
+c_{Qq}^{3,8} & cQq83    &  5.3 & -0.1 & 9.8 & -182. & -40. & 19. & 35. \\
+c_{Qq}^{1,8} & cQq81    &  24.7 & 14.7 & 49. & 526. & 144. & 71. & 146. \\
+c_{tq}^{8} & ctq8	   &  12.2 & 8.6 & 27.2 & 265. & 62. & 49. & 74. \\
+c_{Qu}^{8} & cQu8	   &  7.6 & 4.6 & 17.7 &  & 21.4 & 44. & 45. \\
+c_{tu}^{8} & ctu8	   &  14.9 & 6.0 & 31.3 &  & 27.4 & 47. & 89. \\
+c_{Qd}^{8} & cQd8	   &  5.0 & 3.07 & 10.9 &  & 16.8 & 7.0 & 28.9 \\
+c_{td}^{8} & ctd8	   &  5.0 & 2.14 & 10.1 &  & 11.8 & 12.7 & 28.4 \\
+c_{Qq}^{3,1} & cQq13    &  6.6 & 5.9 & 10.0 & 222. & 44. & 22.2 & 37. \\
+c_{Qq}^{1,1} & cQq11    &  1.9 & -2.6 & -16.7 & -15. & -8.1 & 5.0 & 11.6 \\
+c_{tq}^{1} & ctq1	   &  0.66 & 2.5 & -7.8 & 9.2 & 0.8 & 3.8 & 4.8 \\
+c_{Qu}^{1} & cQu1	   &  0.58 & 1.67 & -5.1 &  & 1.55 & 2.8 & 4.21 \\
+c_{tu}^{1} & ctu1	   &  2.25 & -0.6 & -8.8 &  & 4.6 & 7.1 & 13.1 \\
+c_{Qd}^{1} & cQd1	   &  -0.196 & 0.61 & -4.1 &  & -0.639 & -0.271 & -1.34 \\
+c_{td}^{1} & ctd1	   &  -0.372 & -1.20 & -5.10 &  & -0.95 & -1.17 & -2.09 \\
+ \hline                       
+c_{t\varphi } & ctp	   &   & -0.00037 & -9.1 & -0.03408 & -0.00942 &  & -123.000 \\
+c_{\varphi Q}^- & cpQM	   &  -0.0610 & 0.98 & -41.3 & -0.7878 & -100.9 & -0.139 & -0.314 \\
+c_{\varphi Q}^3 & cpQ3	   &  0.68 & 22.1 & 0.069 & 0.48 & 3.84 & 1.58 & 1.84 \\
+c_{\varphi t} & cpt	   &  -0.0254 & 2.84 & 44. & -0.3536 & 67. & -0.057 & -0.164 \\
+c_{\varphi tb}& cptb \\
+c_{tW}	 & ctW	   &  -0.958 & -1.0 & 33. & -13.78 & -1.1 & -65. & -9.20 \\
+c_{tZ}	 & ctZ	   &  0.52 & 0.1 & -27.7 & 0.02 & 4. & 56. & 4.3 \\
+c_{bW}& cbW \\
+c_{tG}	 & ctG	   &  -267.67 & -253.3 & -375.3 & -249.9 & -302.1 & -239.5 & -854.2 \\
+c_{t\varphi }^{I}& ctpI    &   & 2.45\times 10^{-6} & & -0.0015 & 0.0003 &  & -0.03 \\
+c_{\varphi tbI}& cptbI \\
+c_{tW}^{I} & ctWI	   &  -1.62\times 10^{-6} & -0.1 & 1.0 &  & -0.3 & 0.7 & -0.01 \\
+c_{tZ}^{I} & ctZI	   &  2.33\times 10^{-6} & 0.1 & -0.6 &  &  & -0.4 & -0.01 \\
+c_{bWI}& cbWI \\
+c_{tG}^{I} & ctGI	   &  -0.003 & & -1. & -0.1 & -1.3 & 0.11 & 3. \\
+\hline                        
+c_{Ql}^{3(1)} & cQl31    &  &  &  & 0.011 & 0.055 &  &  \\
+c_{Ql}^{-(1)} & cQlM1    &  &  &  & -0.0051 & -9.0 &  &  \\
+c_{Qe}^{(1)}    & cQe1     &  &  &  &  & -1.49 &  &  \\
+c_{tl}^{(1)} & ctl1	   &  &  &  & -0.0021 & -3.2 &  &  \\
+c_{te}^{(1)} & cte1	   &  &  &  &  & -6.65 &  &  \\
+c_{tl}^{S(1)}& ctlS1 \\
+c_{tl}^{T(1)}& ctlT1 \\
+c_{bl}^{S(1)}& cblS1 \\
+c_{tl}^{SI(1)}& ctlS1I \\
+c_{tl}^{TI(1)}& ctlT1I \\
+c_{bl}^{SI(1)}& cblS1I \\
+\hline
+c_{tQqu}^{1}& ctQqu1 \\
+c_{tQqu}^{8}& ctQqu8 \\
+c_{bQqd}^{1}& cbQqd1 \\
+c_{bQqd}^{1}& cbQqd8 \\
+c_{Qtqd}^{1}& cQtqd1 \\
+c_{Qtqd}^{1}& cQtqd8 \\
+c_{Qbqu}^{1}& cQbqu1 \\
+c_{Qbqu}^{1}& cQbqu8 \\
+c_{btud}^{1}& cbtud1 \\
+c_{btud}^{1}& cbtud8 \\
+c_{tQqu}^{1I}& ctQqu1I \\
+c_{tQqu}^{8I}& ctQqu8I \\
+c_{bQqd}^{1I}& cbQqd1I \\
+c_{bQqd}^{1I}& cbQqd8I \\
+c_{Qtqd}^{1I}& cQtqd1I \\
+c_{Qtqd}^{1I}& cQtqd8I \\
+c_{Qbqu}^{1I}& cQbqu1I \\
+c_{Qbqu}^{1I}& cQbqu8I \\
+c_{btud}^{1I}& cbtud1I \\
+c_{btud}^{1I}& cbtud8I \\
+\hline
+\end{tabular}}    
+\caption{Same as table~\red{[add ref to tab 7]}, using \texttt{SMEFTsim} instead of {\tt dim6top}. The values are approximated to the first significant digit of the uncertainty reported by {\tt MadGraph}. Results compatible with zero have been omitted. See \autoref{sec:smeftsim} for further details. PRELIMINARY}\label{table:SMEFTsim_interferences_1}
+\end{table}
+
+
+
+
+\begin{table}[h]\centering\footnotesize
+\vspace*{-2cm}
+\scalebox{.8}{\begin{tabular}{>{$}c<{$}>{\tt}c*{5}{>{$}c<{$}}}
+& & p p \rightarrow t j& p p \rightarrow t e^- \bar{\nu}_e& p p \rightarrow t j e^+ e^-& p p \rightarrow t j \gamma& p p \rightarrow t j h\\\hline
+\rm SM     & SMlimit   &    54.8 pb & 2.45 pb & 5.42\times 10^{-3} pb & 0.392 pb & 0.0158 pb \\
+ \hline                          
+c_{QQ}^{1} & cQQ1      &    &  &  &  &  \\
+c_{QQ}^{8} & cQQ8      &    &  &  &  &  \\
+c_{Qt}^{1} & cQt1      &    &  &  &  &  \\
+c_{Qt}^{8} & cQt8      &    &  &  &  &  \\
+c_{Qb}^{1} & cQb1      &    &  &  &  &  \\
+c_{Qb}^{8} & cQb8      &    &  &  &  &  \\
+c_{tt}^{1} & ctt1      &    &  &  &  &  \\
+c_{tb}^{1} & ctb1      &    &  &  &  &  \\
+c_{tb}^{8} & ctb8      &    &  &  &  &  \\
+c_{QtQb}^{1}& cQtQb1& \\
+c_{QtQb}^{8}& cQtQb8& \\
+c_{QtQb}^{1I}& cQtQb1I& \\
+c_{QtQb}^{8I}& cQtQb8I& \\
+\hline                           
+c_{Qq}^{3,8} & cQq83     &   2.5\times 10^{-5} &  & 5.2\times 10^{-5} & 4.0\times 10^{-5} & 3.3\times 10^{-5} \\
+c_{Qq}^{1,8} & cQq81     &    &  &  &  &  \\
+c_{tq}^{8} & ctq8	    &    &  &  &  &  \\
+c_{Qu}^{8} & cQu8	    &    &  &  &  &  \\
+c_{tu}^{8} & ctu8	    &    &  &  &  &  \\
+c_{Qd}^{8} & cQd8	    &    &  &  &  &  \\
+c_{td}^{8} & ctd8	    &    &  &  &  &  \\
+c_{Qq}^{3,1} & cQq13     &   -7.5\times 10^{2} &  & -1.55\times 10^{3} & -1.21\times 10^{3} & -9.95\times 10^{2} \\
+c_{Qq}^{1,1} & cQq11     &    &  &  &  &  \\
+c_{tq}^{1} & ctq1	    &    &  &  &  &  \\
+c_{Qu}^{1} & cQu1	    &    &  &  &  &  \\
+c_{tu}^{1} & ctu1	    &    &  &  &  &  \\
+c_{Qd}^{1} & cQd1	    &    &  &  &  &  \\
+c_{td}^{1} & ctd1	    &    &  &  &  &  \\
+ \hline                          
+c_{t\varphi } & ctp	    &    &  &  &  & -67.2 \\
+c_{\varphi Q}^- & cpQM	    &    &  & 21.8 &  &  \\
+c_{\varphi Q}^3 & cpQ3	    &   121. & 121. & 213. & 121. & 140. \\
+c_{\varphi t} & cpt	    &    &  & 5.5 &  &  \\
+c_{\varphi tb}& cptb \\
+c_{tW}	 & ctW	    &   -87.97 & 77. & -42. & -49.8 & -904. \\
+c_{tZ}	 & ctZ	    &    &  & 10.1 & 5.1 &  \\
+c_{bW}& cbW \\
+c_{tG}	 & ctG	    &    & -57.9 &  &  &  \\
+c_{t\varphi }^{I}& ctpI	    &    &  &  &  & -0.4 \\
+c_{\varphi tbI}& cptbI \\
+c_{tW}^{I} & ctWI	    &   -2.87\times 10^{-3} & -0.1 & -2. & 0.6 & 6. \\
+c_{tZ}^{I} & ctZI	    &    &  & 0.1 & 0.1 &  \\
+c_{bWI}& cbWI \\
+c_{tG}^{I} & ctGI	    &    &  &  &  &  \\
+\hline                           
+c_{Ql}^{3(1)} & cQl31     &    & 4.9 & 6.0 &  &  \\
+c_{Ql}^{-(1)} & cQlM1     &    &  & 2.1 &  &  \\
+c_{Qe}^{(1)}    & cQe1      &    &  & -0.28 &  &  \\
+c_{tl}^{(1)} & ctl1	    &    &  & 0.04 &  &  \\
+c_{te}^{(1)} & cte1	    &    &  & 0.07 &  &  \\
+c_{tl}^{S(1)}& ctlS1 \\
+c_{tl}^{T(1)}& ctlT1 \\
+c_{bl}^{S(1)}& cblS1 \\
+c_{tl}^{SI(1)}& ctlS1I \\
+c_{tl}^{TI(1)}& ctlT1I \\
+c_{bl}^{SI(1)}& cblS1I \\
+\hline
+c_{tQqu}^{1}& ctQqu1 \\
+c_{tQqu}^{8}& ctQqu8 \\
+c_{bQqd}^{1}& cbQqd1 \\
+c_{bQqd}^{1}& cbQqd8 \\
+c_{Qtqd}^{1}& cQtqd1 \\
+c_{Qtqd}^{1}& cQtqd8 \\
+c_{Qbqu}^{1}& cQbqu1 \\
+c_{Qbqu}^{1}& cQbqu8 \\
+c_{btud}^{1}& cbtud1 \\
+c_{btud}^{1}& cbtud8 \\
+c_{tQqu}^{1I}& ctQqu1I \\
+c_{tQqu}^{8I}& ctQqu8I \\
+c_{bQqd}^{1I}& cbQqd1I \\
+c_{bQqd}^{1I}& cbQqd8I \\
+c_{Qtqd}^{1I}& cQtqd1I \\
+c_{Qtqd}^{1I}& cQtqd8I \\
+c_{Qbqu}^{1I}& cQbqu1I \\
+c_{Qbqu}^{1I}& cQbqu8I \\
+c_{btud}^{1I}& cbtud1I \\
+c_{btud}^{1I}& cbtud8I \\
+\hline
+\end{tabular}}   
+\caption{Same as~\autoref{table:SMEFTsim_interferences_1}, for single top production processes. PRELIMINARY}\label{table:SMEFTsim_interferences_2}
+\end{table}
+}
+%\end{document}
