@@ -1,8 +1,23 @@
+# Run everything with:
+# 
+# for thr in 0 0.1 1 10 100; do for proc in tt tta ttee ttev tth; do python3 plot_dim6top_tables.py dim6top_tables/arxiv/squared_${proc}.tex $thr; done; done
+#
+# ------------------ 
+
 import re
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import sys
+
+def parse_latex_scientific(s):
+    if isinstance(s, str):
+        # Match patterns like $-3.6 \times 10^{2}$ or $1.6 \times 10^{-2}$
+        match = re.match(r"\$?(-?[\d\.]+)\s*\\times\s*10\^\{(-?\d+)\}\$?", s)
+        if match:
+            base = float(match.group(1))
+            exponent = int(match.group(2))
+            return base * 10**exponent
 
 # --- Parse LaTeX into DataFrame ---
 def parse_latex_table(filename):
@@ -37,10 +52,13 @@ def parse_latex_table(filename):
 
     # Convert numeric entries
     for col in df.columns[1:]:
+        df[col] = df[col].apply(parse_latex_scientific)
+
         df[col] = pd.to_numeric(
-            df[col].str.replace(r'[^\d\.\-eE+]', '', regex=True),
+            df[col].astype(str).str.replace(r'[^\d\.\-eE+]', '', regex=True),
             errors="coerce"
-        )
+        ) 
+
     return df
 
 # --- Filtering ---
@@ -49,8 +67,8 @@ def filter_df(df, param):
     numeric_block = df.iloc[:, 1:].astype(float)
     
     # Masks
-    mask_rows = (numeric_block > param).any(axis=1)   # rows with any entry > param
-    mask_cols = (numeric_block > param).any(axis=0)   # columns with any entry > param
+    mask_rows = (abs(numeric_block) > param).any(axis=1)   # rows with any entry > param
+    mask_cols = (abs(numeric_block) > param).any(axis=0)   # columns with any entry > param
     
     # Apply masks
     filtered_rows = df.loc[mask_rows]                        # keep full rows (label + data)
@@ -110,7 +128,7 @@ def plot_with_groups(df, proc, title):
 proc = sys.argv[1]
 thr = float(sys.argv[2])
 
-df = parse_latex_table( f"squared_{proc}.tex" )
+df = parse_latex_table( f"dim6top_tables/arxiv/squared_{proc}.tex" )
 
 # Apply a cutoff if desired
 df_cut = filter_df(df, param=thr)
