@@ -71,15 +71,30 @@ def add_parsing_options():
     return parser.parse_args()
 
 
-def get_histograms( inputFile ):
+def get_histograms( inputFile, plot_only ):
     """ Grab histograms from the plot file """
     rfile = r.TFile.Open( inputFile )
     histograms = []
     for key in rfile.GetListOfKeys():
         if "total" in key.GetName() or "stack" in key.GetName() or "canvas" in key.GetName():
             continue
+
+        
+        index = key.GetName().split("_")[0]
+        try: 
+            float(index)
+            if float(index) not in plot_only: 
+                continue
+        except:
+            pass
+
+        
         h = deepcopy(rfile.Get( key.GetName()) )
-        histograms.append( h )
+        
+        if "SM" in key.GetName():
+            histograms.insert( 0, h )
+        else:
+            histograms.append( h )
         
     return histograms
 
@@ -96,27 +111,35 @@ def decorate_histogram( histogram, color ):
 
 
 def get_cool_name( name ):
-    # Matches things like: ctGminus1p0, ctW0p0, ctX12p34, etc.
-    pattern = re.compile(r"c([A-Za-z]+)(minus)?(\d+)p(\d+)")
-    
-    results = []
-    for match in pattern.finditer( name ):
-        subindex, minus, int_part, frac_part = match.groups()
+
+
+    if "SM" in name:
+        return "SM"
+    elif "central" in name:
+        return name.replace("_central", "")
+    else:
         
-        # Build the numeric value
-        num_str = f"{'-' if minus else ''}{int_part}.{frac_part}"
-        num = float(num_str)
+        # Matches things like: ctGminus1p0, ctW0p0, ctX12p34, etc.
+        pattern = re.compile(r"c([A-Za-z]+)(minus)?(\d+)p(\d+)")
         
-        # Skip if exactly zero
-        if num == 0.0:
-            continue
+        results = []
+        for match in pattern.finditer( name ):
+            subindex, minus, int_part, frac_part = match.groups()
+            
+            # Build the numeric value
+            num_str = f"{'-' if minus else ''}{int_part}.{frac_part}"
+            num = float(num_str)
+            
+            # Skip if exactly zero
+            if num == 0.0:
+                continue
+            
+            if "minus" in subindex:
+                subindex = subindex.replace("minus", "")
+                num = f"-{num}"
+            results.append(f"C_{{{subindex}}} = {num}")
         
-        if "minus" in subindex:
-            subindex = subindex.replace("minus", "")
-            num = f"-{num}"
-        results.append(f"C_{{{subindex}}} = {num}")
-    
-    return ", ".join(results)
+        return ", ".join(results)
 
 def get_ratio( num, den ):
     """ Computes the ratio between two histograms """
@@ -135,8 +158,6 @@ def get_ratio( num, den ):
     num.SetMarkerSize( 0 )
     return num
     
-
-
 if __name__ == "__main__":
     opts = add_parsing_options()
 
@@ -148,7 +169,7 @@ if __name__ == "__main__":
     # kinds of things
     defs = importlib.import_module( metadata['analysis']['definitions'] )
 
-    path_to_plots = metadata['analysis']['outpath']
+    path_to_plots = os.path.join( metadata['analysis']['outpath'], metadata['analysis_name'], "outplots" )
     logger.debug( f"Remaking plots from: {path_to_plots}" )
 
     for plot in defs.plots:
@@ -158,7 +179,7 @@ if __name__ == "__main__":
         plotfile = f"{path_to_plots}/{plot.name}.root"
 
         # Get the histograms
-        histograms = get_histograms( plotfile )
+        histograms = get_histograms( plotfile, metadata['operators']['plot_only'] )
         upper_axis = cv.get_upper_axis( plot, histograms )
         lower_axis = cv.get_lower_axis( plot, histograms )
 
@@ -200,6 +221,8 @@ if __name__ == "__main__":
             text = text.replace( "__ANALYSISLABEL__", metadata['analysis_name'] )
             cv.doSpam( text, metaspam["x0"], metaspam["y0"], metaspam["x1"], metaspam["y1"], textSize = metaspam["textsize"])
 
-        c.SaveAs( f"{path_to_plots}/{plot.name}_reworked.png" )
-        c.SaveAs( f"{path_to_plots}/{plot.name}_reworked.pdf" )
 
+        os.makedirs( f"{path_to_plots}/", exist_ok = True )
+        os.system(f"cp templates/index.php {path_to_plots}")
+        c.SaveAs( f"{path_to_plots}/{plot.name}.png" )
+        c.SaveAs( f"{path_to_plots}/{plot.name}.pdf" )

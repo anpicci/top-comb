@@ -81,7 +81,11 @@ def get_rwgt_points(algo, all_operators):
     return rwgt_points 
 
 def get_rwgt_name( rwgt_point ):
+
     rwgt_name = "_".join( 
         "{0}{1}".format( opname, opval.replace(".", "p").replace("-","minus") ) for opname, opval in rwgt_point
     )
+
+    if not any( np.array(rwgt_point[:, 1], dtype = float) ):
+        return "SM"
     return rwgt_name

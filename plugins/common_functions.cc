@@ -34,3 +34,31 @@ ROOT::RVec<int> cleanByDR_bestMatch(
     return mask;
 }
 
+
+ROOT::RVec<int> get_genealogic_tree (
+    int idx,
+    const ROOT::RVec<int>& gen_part_pdgId,
+    const ROOT::RVec<int>& gen_part_idx_mother
+) {
+	// This function takes as an input a particle's index within the GenPart collection.
+	// Then recursively tracks its history by iterating over the parents.
+	
+	ROOT::RVec<int> genealogic_tree; // Not nice since it's size is undeclared...
+ 
+    while (idx >= 0) { // -1 = no mother
+		
+		// Get the mother
+        int mother_idx = gen_part_idx_mother[ idx ];
+
+        if (mother_idx < 0) break; // This particle initiated the chain of decays 
+
+
+		// If not, there is a mother: save it for tracking the history.
+        int mother_pdg = std::abs( gen_part_pdgId[mother_idx] );
+		genealogic_tree.push_back( mother_pdg );
+
+        // Move one step up the ancestry chain
+        idx = mother_idx;
+    }
+    return genealogic_tree;
+}

@@ -1,0 +1,26 @@
+{
+    "mode": "nanogen",
+    "processes": {
+        "TTGamma-1Jets-TTto2L2Nu": "file:/afs/cern.ch/work/c/cvicovil/private/top-comb/inputs/TTG_TOP-23-002/TTGamma-1Jets-TTto2L2Nu/fragment.py"
+    },
+    "nevents": {
+        "TTGamma-1Jets-TTto2L2Nu": 1000000.0
+    },
+    "memory": {
+        "TTGamma-1Jets-TTto2L2Nu": 32000
+    },
+    "njobs": {
+        "TTGamma-1Jets-TTto2L2Nu": 1000
+    },
+    "xsec": {
+        "TTGamma-1Jets-TTto2L2Nu": 1
+    },
+    "isGS": {
+        "TTGamma-1Jets-TTto2L2Nu": 0
+    },
+    "campaign": "RunIISummer20UL18",
+    "outpath": "/eos/cms/store/group/phys_top/cvicovil/top-comb/nanogen/",
+    "submit_dir": "submit_nanogen_TTGamma-1Jets-TTto2L2Nu",
+    "tag": "TTGamma-1Jets-TTto2L2Nu",
+    "routines": []
+}

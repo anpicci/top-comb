@@ -48,7 +48,6 @@ def write_text(outfile, text):
 def write_proc_card(outdir, meta):
     """Write the process card from the metadata."""
     procname = meta['procname']
-
     full_card = [
         f"import model {meta['model']}",
         "",
@@ -56,18 +55,26 @@ def write_proc_card(outdir, meta):
         "",
         f"output {procname} -nojpeg"
     ]
-
     write_text(os.path.join(outdir, f"{procname}_proc_card.dat"), "\n".join(full_card))
 
+def write_extramodels(outdir, meta):
+    """Write the extramodels card as default."""
+    modelname = meta['load_extramodels'] 
+    write_text(os.path.join(outdir, f"{procname}_extramodels.dat"), modelname)
 
 def write_run_card(outdir, meta):
     """Write the run card from the metadata (pass-through from template)."""
     procname = meta['procname']
     template_name = meta['template_run_card']['name']
-
     text = open_template(template_name)
     write_text(os.path.join(outdir, f"{procname}_run_card.dat"), text)
 
+def write_restrict_card(outdir, meta, operators):
+    """Write the customizecards file from the metadata."""
+    procname = meta['procname']
+    template = meta['template_restrict_card']['name']
+    text = open_template(template)
+    write_text(os.path.join(outdir, f"{procname}_{outname}.dat"), "\n".join(newtext))
 
 def write_customizecards(outdir, meta, operators):
     """Write the customizecards file from the metadata."""
@@ -80,7 +87,7 @@ def write_customizecards(outdir, meta, operators):
     # EFT operators
     text += "\n\n# EFT operators\n"
     for op, ref in np.array(operators)[:, 0:2]:
-        text += f"set param_card {op} {ref}\n"
+        text += f"set param_card DIM6 {op} {ref}\n"
 
     # Extra user settings
     text += "\n\n# User settings"
@@ -112,6 +119,34 @@ def write_reweightcards(outdir, procname, operators, algorithm):
         text += "\n"
 
     write_text(os.path.join(outdir, f"{procname}_reweight_card.dat"), text)
+
+    # Also write a markdown table with the coupling mappings
+
+    mdtext = f"# Configuration card created on {datetime.now().strftime('%A %d. %B %Y')}\n"
+    mdtext += "Below there is a mapping showing the reweighting points that can be found in the NanoAOD. " 
+    mdtext += "Note that we only add to the first columns the couplings that are not set to 0!" 
+
+    operator_names = [ op[0] for op in operators ]  
+    mdtext += f"The full list of couplings considered for this version is: {operator_names}.\n" 
+
+    mdtext += "| Coupling values | Index in LHEReweightWeight |\n" 
+    mdtext += "| :-------- | :-------- |\n" 
+    for irwgt, rwgt_point in enumerate(rwgt_points):
+        values = []
+        for param, value in  rwgt_point:
+            if float(value) != 0.0:
+                values.append( f"{param}={value}" )
+        
+        if values == []:
+            # this is the sm
+            line = "SM"
+        else:
+            line = ",".join( values )
+
+        mdtext += f"| {line} | {irwgt} |\n"
+
+    mddir = outdir.replace("mgcards", "")
+    write_text(os.path.join( mddir, f"{procname}_reweighting_maps.md"), mdtext)
 
 
 def write_fragment(outdir, meta):
@@ -158,7 +193,6 @@ def write_submission_nanogen_file(outdir, meta):
         "tag": procname,
         "routines": []
     }
-
     with open(os.path.join(outdir, "nanogen_config.json"), "w") as outfile:
         json.dump(data, outfile, indent=4)
 
@@ -187,7 +221,9 @@ if __name__ == "__main__":
     
             # Matrix element configuration
             write_proc_card(mgcards_dir, sample_meta)
+            write_extramodels(mgcards_dir, sample_meta)
             write_run_card(mgcards_dir, sample_meta)
+            write_restrict_card(mgcards_dir, sample_meta, operators)
             write_customizecards(mgcards_dir, sample_meta, operators)
             write_reweightcards(mgcards_dir, procname, operators, algorithm)
     

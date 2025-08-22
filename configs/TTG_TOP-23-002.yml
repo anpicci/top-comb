@@ -2,9 +2,10 @@ analysis_name:
   TTG_TOP-23-002
 
 samples:
-  - procname: TTG_GammaFromProd_1Jets_SMEFT_dim6top_LO
+  - procname: TTGamma-1Jets-TTto2L2Nu
     # ------ Configurations regarding the Matrix Element
-    model: 'dim6top_LO_UFO'
+    load_extramodels: dim6top_LO_UFO.tar.gz 
+    model: 'dim6top_LO_UFO-ckm_no_b_mass'
     process: [
         'define p = g u c d s u~ c~ d~ s~ b b~',
         'define j = p',
@@ -22,10 +23,14 @@ samples:
     template_customizecards: 
       name: templates/template_customizecards.dat
       extraopts: [
+        "set param_card DECAY 6 1.491500e+00", # This is to mimic what was done in the central sample
         "set run_card ptj 20",
         "set run_card xqcut 20",
         "set run_card maxjetflavor 5"
       ] 
+
+    template_restrict_card: 
+      name: templates/restrict_ckm_no_b_mass.dat
 
     # ------ Configurations regarding the Parton shower
     fragment:
@@ -38,26 +43,11 @@ samples:
         "'TimeShower:mMaxGamma = 4.0'"
       ]
 
-analysis:
-  samples: 
-    TTG_from_prod: 
-      path: /eos/cms/store/group/phys_top/cvicovil/top-comb/nanogen/TTG_GammaFromProd_1Jets_SMEFT_dim6top_LO
-      files: batch_12_08_2025_1743/genfiles/*root
-      xsec: 1.0 # change
-  plugins: [
-    cmgrdf-prototype/src/functions.cc,
-    plugins/common_functions.cc,
-    plugins/TTG_TOP-23-002.cc
-  ]
-  definitions: definitions.TTG_TOP-23-002
-  plots: definitions.TTG_TOP-23-002
-  outpath: outplots/TTG_TOP-23-002
-
 # The syntax is:
 # [operator_name, reference_point, minBound, maxBound ]
 operators:
   scans:
-      - [ctG, 1.0, -1.0, 1.0]
+      - [ctG, 0.1, -1.0, 1.0]
       - [ctGI, 1.0, -1.0, 1.0]
       - [ctp,  1.0, -1.0, 1.0]
       - [ctpI, 1.0, -1.0, 1.0]
@@ -66,5 +56,29 @@ operators:
       - [ctZ, 1.0, -1.0, 1.0]
       - [ctZI, 1.0, -1.0, 1.0]
   algo: one_by_one-two_by_two
+  plot_only: [
+    128
+  ]
+
+analysis:
+  samples: 
+    #TTG_from_prod: 
+    #  path: /eos/cms/store/group/phys_top/cvicovil/top-comb/nanogen/TTG-1Jets-Bin-0J_dim6top/ 
+    #  files: batch_20_08_2025_1603/genfiles/*root
+    #  isEFT: True
+    #  xsec: 1.0 # change
+    TTG_central: 
+      path: /eos/cms/store/group/phys_top/cvicovil/ 
+      files: ttg_file.root
+      isEFT: False 
+      xsec: 1.0 # change
+  plugins: [
+    cmgrdf-prototype/src/functions.cc,
+    plugins/common_functions.cc,
+    plugins/TTG_TOP-23-002.cc
+  ]
+  definitions: definitions.TTG_TOP-23-002
+  plots: definitions.TTG_TOP-23-002
+  outpath: /eos/user/c/cvicovil/www/top-comb/
 
 

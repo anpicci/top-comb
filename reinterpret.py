@@ -3,7 +3,7 @@ This script handles the reinterpretation of differential measurements centrally.
 """
 
 # PYTHON LIBRARIES
-import sys
+import os, sys
 import argparse
 import ROOT 
 import yaml
@@ -48,13 +48,13 @@ if __name__ == "__main__":
 
     # Load the configurations
     metadata = aux.load_config( opts.config )
-
+    
+    full_outpath = os.path.join( metadata['analysis']['outpath'], metadata['analysis_name'], "outplots" )
     # Load all samples
     samples = cmgdataset.get_cmgrdf_processes( metadata )
 
     # Load functions 
     for funcfile in metadata['analysis']['plugins']:
-        print(funcfile)
         ROOT.gInterpreter.Declare( open( funcfile ).read() )
 
     # Now load the definitions
@@ -77,13 +77,17 @@ if __name__ == "__main__":
         eras = [ "all" ],
         withUncertainties = False
     )
+
     results=maker.runPlots()
 
     PlotSetPrinter(
         topRightText="%(lumi).1f fb^{-1} (13.0 TeV)",
         showErrors = False
-    ).printSet(results, metadata['analysis']['outpath'],
+    ).printSet(results, full_outpath,
         maxRatioRange=(0.5, 1.5),
         showRatio=True
     )
 
+
+    # Now remake the plots
+    os.system( f"python3 plotter-tools/remake_plots_cmgrdf.py --config {opts.config}" )  

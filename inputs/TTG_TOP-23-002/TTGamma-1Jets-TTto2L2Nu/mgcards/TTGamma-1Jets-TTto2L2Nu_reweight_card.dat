@@ -1,4 +1,4 @@
-# Reweight card created on Wednesday 20. August 2025
+# Reweight card created on Friday 22. August 2025
 change rwgt_dir rwgt
 launch --rwgt_name=dummy # Name of first argument seems to be rwgt_1. Add dummy to fix it.
 
@@ -1282,7 +1282,7 @@ set ctZI 1.0000
 set ctp 0.0000
 set ctpI 0.0000
 
-launch --rwgt_name=ctG0p0_ctGI0p0_ctW0p0_ctWI0p0_ctZ0p0_ctZI0p0_ctp0p0_ctpI0p0
+launch --rwgt_name=SM
 set ctG 0.0000
 set ctGI 0.0000
 set ctW 0.0000
