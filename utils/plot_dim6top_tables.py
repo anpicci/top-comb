@@ -119,8 +119,6 @@ def plot_with_groups(df, proc, thr, title):
     plt.savefig(f"dim6top_tables/{proc}/quad_dependence_thr{thr}.png")
     plt.savefig(f"dim6top_tables/{proc}/quad_dependence_thr{thr}.pdf")
 
-    plt.savefig("cosa.png")
-
 # ===============================
 # Example usage
 # ===============================
