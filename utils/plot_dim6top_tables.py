@@ -1,6 +1,6 @@
 # Run everything with:
 # 
-# for thr in 0 0.1 1 10 100; do for proc in tt tta ttee ttev tth; do python3 plot_dim6top_tables.py dim6top_tables/arxiv/squared_${proc}.tex $thr; done; done
+# for thr in 0 0.1 1 10 100; do for proc in tt tta ttee ttev tth; do python3 plot_dim6top_tables.py ${proc} $thr; done; done
 #
 # ------------------ 
 
@@ -59,28 +59,26 @@ def parse_latex_table(filename):
             errors="coerce"
         ) 
 
+    df = df.fillna( 0.0 )
     return df
 
-# --- Filtering ---
 def filter_df(df, param):
-    # Work only on numeric block
-    numeric_block = df.iloc[:, 1:].astype(float)
-    
-    # Masks
-    mask_rows = (abs(numeric_block) > param).any(axis=1)   # rows with any entry > param
-    mask_cols = (abs(numeric_block) > param).any(axis=0)   # columns with any entry > param
-    
-    # Apply masks
-    filtered_rows = df.loc[mask_rows]                        # keep full rows (label + data)
-    filtered_df = pd.concat(
-        [filtered_rows.iloc[:, 0],                           # keep operator labels
-         filtered_rows.iloc[:, 1:].loc[:, mask_cols]],       # filter numeric block
-        axis=1
-    )
 
+    name_block = df.iloc[:, 0]
+    numeric_block = df.iloc[:, 1:]
+    mask = numeric_block.abs() > param
+    
+    # keep only rows with at least one True
+    rows = mask.any(axis=1)
+    
+    # keep only columns with at least one True
+    cols = mask.any(axis=0)
+    filtered_df = pd.concat( [ name_block[rows], numeric_block.loc[rows, cols] ], axis = 1 )
+    
     return filtered_df
 
-def plot_with_groups(df, proc, title):
+
+def plot_with_groups(df, proc, thr, title):
     """
     df: DataFrame with first col = operator labels, rest = numeric data
     threshold: cutoff for filtering numeric values
@@ -96,7 +94,7 @@ def plot_with_groups(df, proc, title):
 
     fig, ax = plt.subplots(figsize=(12, 8))
     im = ax.imshow(numeric, cmap="viridis", aspect='auto')
-    plt.colorbar(im, ax=ax, label="value", drawedges = True)
+    plt.colorbar(im, ax=ax, label="value", drawedges = True, norm = 'log')
 
     ax.set_xticks(np.arange(len(labels_x)))
     ax.set_xticklabels(labels_x, rotation=90)
@@ -134,5 +132,6 @@ df = parse_latex_table( f"dim6top_tables/arxiv/squared_{proc}.tex" )
 df_cut = filter_df(df, param=thr)
 
 # Plot
-plot_with_groups(df_cut, proc, title=f"Quadratic dependence for {proc} from arXiv.1802.07237. Threshold: {thr}")
+plot_with_groups(df, proc, thr = "None", title=f"Quadratic dependence for {proc} from arXiv.1802.07237. No cut on table.")
+plot_with_groups(df_cut, proc, thr = thr, title=f"Quadratic dependence for {proc} from arXiv.1802.07237. Threshold: {thr} (absolute value)")
 
