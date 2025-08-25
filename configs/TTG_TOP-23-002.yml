@@ -5,7 +5,7 @@ samples:
   - procname: TTGamma-1Jets-TTto2L2Nu
     # ------ Configurations regarding the Matrix Element
     load_extramodels: dim6top_LO_UFO.tar.gz 
-    model: 'dim6top_LO_UFO-ckm_no_b_mass'
+    model: 'dim6top_LO_UFO-restrict_ttg'
     process: [
         'define p = g u c d s u~ c~ d~ s~ b b~',
         'define j = p',
@@ -30,7 +30,8 @@ samples:
       ] 
 
     template_restrict_card: 
-      name: templates/restrict_ckm_no_b_mass.dat
+      name: templates/template_restrict_ckm_no_b_mass.dat 
+      restrict_name: restrict_ttg
 
     # ------ Configurations regarding the Parton shower
     fragment:
@@ -47,15 +48,60 @@ samples:
 # [operator_name, reference_point, minBound, maxBound ]
 operators:
   scans:
-      - [ctG, 0.1, -1.0, 1.0]
-      - [ctGI, 1.0, -1.0, 1.0]
-      - [ctp,  1.0, -1.0, 1.0]
-      - [ctpI, 1.0, -1.0, 1.0]
-      - [ctW, 1.0, -1.0, 1.0]
-      - [ctWI, 1.0, -1.0, 1.0]
-      - [ctZ, 1.0, -1.0, 1.0]
-      - [ctZI, 1.0, -1.0, 1.0]
-  algo: one_by_one-two_by_two
+      - [ctG,  -1.0, 1.0]
+      - [ctGI, -1.0, 1.0]
+      - [ctp,  -1.0, 1.0]
+      - [ctpI, -1.0, 1.0]
+      - [ctW,  -1.0, 1.0]
+      - [ctWI, -1.0, 1.0]
+      - [ctZ,  -1.0, 1.0]
+      - [ctZI, -1.0, 1.0]
+      - [ctd1,  -1.0, 1.0]
+      - [cQd1,  -1.0, 1.0]
+      - [ctu1,  -1.0, 1.0]
+      - [cQu1,  -1.0, 1.0]
+      - [ctq1,  -1.0, 1.0]
+      - [cQq11, -1.0, 1.0]
+      - [cQq13, -1.0, 1.0]
+      - [cQu8, -1.0, 1.0]
+      - [ctq8, -1.0, 1.0]
+      - [cQq81, -1.0, 1.0]
+      - [cQq83, -1.0, 1.0]
+      - [ctQqu1, -1.0, 1.0]
+      - [ctQqu1I, -1.0, 1.0]
+      - [ctQqu8, -1.0, 1.0]
+      - [ctQqu8I, -1.0, 1.0]
+      - [cQtqd8, -1.0, 1.0]
+      - [cQtqd8I, -1.0, 1.0]
+      - [cbW, -1.0, 1.0] # sensitivity to gamma
+      - [cbWI, -1.0, 1.0] # sensitivity to gamma
+      - [cpQM, -1.0, 1.0] # TOP-22-006
+      - [cpQ3, -1.0, 1.0] # TOP-22-006
+      - [cptb, -1.0, 1.0] # TOP-22-006
+      - [cptbI, -1.0, 1.0] # TOP-22-006
+      - [cQlM1, -1.0, 1.0] # TOP-22-006
+      - [cQlM2, -1.0, 1.0] # TOP-22-006
+      - [cQlM3, -1.0, 1.0] # TOP-22-006
+      - [cQe1, -1.0, 1.0] # TOP-22-006
+      - [cQe2, -1.0, 1.0] # TOP-22-006
+      - [cQe3, -1.0, 1.0] # TOP-22-006
+      - [ctl1, -1.0, 1.0] # TOP-22-006
+      - [ctl2, -1.0, 1.0] # TOP-22-006
+      - [ctl3, -1.0, 1.0] # TOP-22-006
+      - [cte1, -1.0, 1.0] # TOP-22-006
+      - [cte2, -1.0, 1.0] # TOP-22-006
+      - [cte3, -1.0, 1.0] # TOP-22-006
+      - [ctlS1, -1.0, 1.0] # TOP-22-006
+      - [ctlS2, -1.0, 1.0] # TOP-22-006
+      - [ctlS3, -1.0, 1.0] # TOP-22-006
+      - [ctlT1, -1.0, 1.0] # TOP-22-006
+      - [ctlT2, -1.0, 1.0] # TOP-22-006
+      - [ctlT3, -1.0, 1.0] # TOP-22-006
+      - [cQQ1, -1.0, 1.0] # TOP-22-006
+      - [cQt1, -1.0, 1.0] # TOP-22-006
+      - [cQt8, -1.0, 1.0] # TOP-22-006
+      - [ctt1, -1.0, 1.0] # TOP-22-006
+  algo: one_by_one
   plot_only: [
     128
   ]
@@ -68,8 +114,8 @@ analysis:
     #  isEFT: True
     #  xsec: 1.0 # change
     TTG_central: 
-      path: /eos/cms/store/group/phys_top/cvicovil/ 
-      files: ttg_file.root
+      path: /eos/user/c/cvicovil/ 
+      files: file_ttg.root
       isEFT: False 
       xsec: 1.0 # change
   plugins: [

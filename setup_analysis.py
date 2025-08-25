@@ -11,6 +11,8 @@ from datetime import datetime
 import utils.auxiliars as aux
 from copy import deepcopy
 
+import random
+
 # Create the logger instance
 from utils.logger import get_logger
 logger = get_logger( __name__ )
@@ -74,7 +76,18 @@ def write_restrict_card(outdir, meta, operators):
     procname = meta['procname']
     template = meta['template_restrict_card']['name']
     text = open_template(template)
-    write_text(os.path.join(outdir, f"{procname}_{outname}.dat"), "\n".join(newtext))
+
+
+    val = 0.1
+    for op in np.array(operators)[:, 0]:
+        line = re.search( f"(.*{op}.*)", text).group(0)
+
+        text = text.replace( line, line.replace("0.000000e+00", f"{val:3.6f}e-01" ) )
+        val += 0.1
+        if val == 1.0: # Madgraph fixes parameters set to 1.0 and they cannot be changed anymore
+            val += 0.1 
+
+    write_text(os.path.join(outdir, f"{procname}_restrict_{meta['template_restrict_card']['restrict_name']}.dat"), text)
 
 def write_customizecards(outdir, meta, operators):
     """Write the customizecards file from the metadata."""
@@ -86,8 +99,14 @@ def write_customizecards(outdir, meta, operators):
 
     # EFT operators
     text += "\n\n# EFT operators\n"
-    for op, ref in np.array(operators)[:, 0:2]:
-        text += f"set param_card DIM6 {op} {ref}\n"
+    for op in np.array(operators)[:, 0]:
+
+        # Get a random number between 0 and 1, but not 0 or 1!!!!!
+        val = random.uniform( -0.999999, 0.99999 )
+        if val == 0.0: # stupid check but one is never too careful
+            val = random.uniform( -0.999999, 0.99999 )
+
+        text += f"set param_card {op} {val}\n"
 
     # Extra user settings
     text += "\n\n# User settings"

@@ -8,6 +8,7 @@ import ROOT
 # CMGRDF libraries
 from CMGRDF import MCSample, DataSample, Data, Process, AddWeight
 from CMGRDF.modifiers import Append
+from CMGRDF import localOrEOS
 
 import utils.auxiliars as aux
 # Create the logger instance
@@ -40,10 +41,10 @@ def get_cmgrdf_processes( meta ):
 
     for sample_name, sample_metadata in samples.items():
 
-        files = sample_metadata["files"]
         norm  = sample_metadata["xsec"]
         mcpath = sample_metadata["path"]
-        sourcepath = f"{mcpath}/{files}"
+        files = sample_metadata["files"]
+        sourcepath = f"{mcpath}/{files}" 
 
         logger.info( f"Preparing process {sample_name}" )
         logger.info( f"Including MC sample: xsec = {norm}, fileIn = {sourcepath})" )

@@ -42,7 +42,7 @@ def get_rwgt_points(algo, all_operators):
     # point value and using only bound 
 
     unroll_operators = [ 
-        (op[0], opbound) for op in all_operators  for opbound in op[2:] 
+        (op[0], opbound) for op in all_operators  for opbound in op[1:] 
     ]
 
     # Now make all combinations, replacing N operators by 0
