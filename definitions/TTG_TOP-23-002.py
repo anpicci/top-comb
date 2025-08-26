@@ -9,34 +9,7 @@ sequence = [
     # Basic fiducial lepton definition
 
     # * ------- PARTON LEVEL ------- * #
-    # ---- Photons
-    Define(
-        "is_fiducial_photon_parton_level",
-        evaluate_function(
-            "isFiducialPhoton_PartonLevel",
-            [
-                "GenPart_pdgId",
-                "GenPart_status",
-                "GenPart_pt",
-                "GenPart_eta",
-                "GenPart_phi",
-                "GenPart_genPartIdxMother"
-            ],
-        ),
-        eras=[],
-    ),
-    DefineSkimmedCollection(
-        "FiducialPhoton_partonLevel",
-        "GenPart",
-        mask="is_fiducial_photon_parton_level",
-        members=(
-            "pt",
-            "eta",
-            "phi",
-            "mass"
-        ),
-        optMembers=[],
-    ),
+    # ---- Photons: defined as a hook. See hooks.TTG_TOP-23-002_photonFromProd.py and TTG_TOP-002_photonFromProd.py
 
     # ---- Leptons
     Define(
@@ -60,7 +33,74 @@ sequence = [
             "pt",
             "eta",
             "phi",
-            "mass"
+            "mass",
+            "genPartIdxMother",
+            #"iso",
+            "pdgId",
+            "status",
+            "statusFlags"
+        ),
+        optMembers=[],
+    ),
+
+    # ---- TOPs 
+    Define(
+        "is_top",
+        evaluate_function(
+            "isTop",
+            [
+                "GenPart_statusFlags",
+                "GenPart_pdgId",
+                "GenPart_genPartIdxMother"
+            ],
+        ),
+        eras=[],
+    ),
+    DefineSkimmedCollection(
+        "genTop",
+        "GenPart",
+        mask="is_top",
+        members=(
+            "pt",
+            "eta",
+            "phi",
+            "mass",
+            "genPartIdxMother",
+            #"iso",
+            "pdgId",
+            "status",
+            "statusFlags"
+        ),
+        optMembers=[],
+    ),
+
+    # ---- Extrajet  
+    Define(
+        "is_genextrajet",
+        evaluate_function(
+            "isGenExtraJet",
+            [
+                "GenPart_statusFlags",
+                "GenPart_pdgId",
+                "GenPart_genPartIdxMother"
+            ],
+        ),
+        eras=[],
+    ),
+    DefineSkimmedCollection(
+        "genExtraJet",
+        "GenPart",
+        mask="is_genextrajet",
+        members=(
+            "pt",
+            "eta",
+            "phi",
+            "mass",
+            "genPartIdxMother",
+            #"iso",
+            "pdgId",
+            "status",
+            "statusFlags"
         ),
         optMembers=[],
     ),
@@ -70,19 +110,6 @@ sequence = [
     # ---- Isolated Photons
     # This function returns True if there are no matches
     # i.e.the photon is clean.
-    Define( 
-        "gen_isolatedPhoton_lep_dR",
-        evaluate_function(
-            "cleanByDR_bestMatch",
-            [
-                "GenIsolatedPhoton_eta",
-                "GenIsolatedPhoton_phi",
-                "GenDressedLepton_eta",
-                "GenDressedLepton_phi",
-                "0.4"
-            ]
-        )
-    ),
     Define(
         "is_fiducial_photon_particle_level",
         evaluate_function(
@@ -90,7 +117,9 @@ sequence = [
             [
                 "GenIsolatedPhoton_pt",
                 "abs(GenIsolatedPhoton_eta)",
-                "gen_isolatedPhoton_lep_dR"
+                "GenIsolatedPhoton_phi",
+                "GenDressedLepton_eta",
+                "GenDressedLepton_phi"
             ],
         ),
         eras=[],
@@ -128,13 +157,75 @@ sequence = [
             "pt",
             "eta",
             "phi",
-            "mass"
+            "mass",
+            "hasTauAnc",
+            "pdgId",
+        ),
+        optMembers=[],
+    ),
+
+    # ---- Jets
+    Define(
+        "is_fiducial_jet_particle_level",
+        evaluate_function(
+            "isFiducialJet_ParticleLevel",
+            [
+                "GenJet_pt",
+                "GenJet_eta",
+                "GenJet_phi",
+                "FiducialLepton_particleLevel_eta",
+                "FiducialLepton_particleLevel_phi",
+                "FiducialPhoton_particleLevel_eta",
+                "FiducialPhoton_particleLevel_phi"
+            ],
+        ),
+        eras=[],
+    ),
+    DefineSkimmedCollection(
+        "FiducialJet_particleLevel",
+        "GenJet",
+        mask="is_fiducial_jet_particle_level",
+        members=(
+            "pt",
+            "eta",
+            "phi",
+            "mass",
+            "hadronFlavour",
+            #"nBHadrons",
+            #"nCHadrons",
+            "partonFlavour",
+        ),
+        optMembers=[],
+    ),
+
+    # ---- B Jets (Based on fiducial jets!)
+    Define(
+        "is_fiducial_bjet_particle_level",
+        evaluate_function(
+            "isFiducialBJet_ParticleLevel",
+            [
+                "FiducialJet_particleLevel_hadronFlavour",
+            ],
+        ),
+        eras=[],
+    ),
+    DefineSkimmedCollection(
+        "FiducialBJet_particleLevel",
+        "FiducialJet_particleLevel",
+        mask="is_fiducial_bjet_particle_level",
+        members=(
+            "pt",
+            "eta",
+            "phi",
+            "mass",
+            "hadronFlavour",
+            #"nBHadrons",
+            #"nCHadrons",
+            "partonFlavour",
         ),
         optMembers=[],
     ),
 ]
-
-
 
 plots = [
 
@@ -172,6 +263,45 @@ plots = [
         xTitle = "Leading dressed lepton #it{p}_{T}",
         legend = "TR",
         unit = "GeV"
+    ),
+    Plot(
+        "genjet_pt_particleLevel",
+        f"FiducialJet_particleLevel_pt[ 0 ]",
+        (20, 25, 200),
+        xTitle = "Leading jet #it{p}_{T}",
+        legend = "TR",
+        unit = "GeV"
+    ),
+    Plot(
+        "genbjet_pt_particleLevel",
+        f"FiducialBJet_particleLevel_pt[ 0 ]",
+        (20, 25, 200),
+        xTitle = "Leading B jet #it{p}_{T}",
+        legend = "TR",
+        unit = "GeV"
+    ),
+    Plot(
+        "gentop_pt",
+        f"genTop_pt[ 0 ]",
+        (20, 25, 200),
+        xTitle = "Leading top #it{p}_{T}",
+        legend = "TR",
+        unit = "GeV"
+    ),
+    Plot(
+        "genextrajet_pt",
+        f"genExtraJet_pt[ 0 ]",
+        (20, 25, 200),
+        xTitle = "Leading extrajet #it{p}_{T}",
+        legend = "TR",
+        unit = "GeV"
+    ),
+    Plot(
+        "genphoton_cat",
+        f"genphoton_category",
+        (3, 0, 2),
+        xTitle = "Photon category",
+        legend = "TR",
+        unit = "GeV"
     )
-
 ]

@@ -8,7 +8,7 @@ import ROOT
 # CMGRDF libraries
 from CMGRDF import MCSample, DataSample, Data, Process, AddWeight
 from CMGRDF.modifiers import Append
-from CMGRDF import localOrEOS
+import importlib
 
 import utils.auxiliars as aux
 # Create the logger instance
@@ -44,6 +44,9 @@ def get_cmgrdf_processes( meta ):
         norm  = sample_metadata["xsec"]
         mcpath = sample_metadata["path"]
         files = sample_metadata["files"]
+
+        hooks = importlib.import_module( sample_metadata["hooks"] )
+
         sourcepath = f"{mcpath}/{files}" 
 
         logger.info( f"Preparing process {sample_name}" )
@@ -63,7 +66,7 @@ def get_cmgrdf_processes( meta ):
                     xsec = norm,
                     eras = [ "all" ],
                     hooks = [ 
-                        Append( AddWeight("point", f"LHEReweightingWeight[{irwgt}]") ) 
+                        Append( AddWeight("point", f"LHEReweightingWeight[{irwgt}]") ) + hooks.hooks 
                     ],
                     genSumWeightName = "genEventSumw * LHEReweightingSumw[ 0 ]", # this has to be changed to the SM
                 )
@@ -84,7 +87,7 @@ def get_cmgrdf_processes( meta ):
                     source = sourcepath,
                     xsec = norm,
                     eras = [ "all" ],
-                    hooks = [],
+                    hooks = hooks.hooks,
                     genSumWeightName = "genEventSumw", # this has to be changed to the SM
                 )
                 

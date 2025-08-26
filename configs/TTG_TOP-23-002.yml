@@ -103,7 +103,7 @@ operators:
       - [ctt1, -1.0, 1.0] # TOP-22-006
   algo: one_by_one
   plot_only: [
-    128
+    106
   ]
 
 analysis:
@@ -113,11 +113,18 @@ analysis:
     #  files: batch_20_08_2025_1603/genfiles/*root
     #  isEFT: True
     #  xsec: 1.0 # change
-    TTG_central: 
+    TTG_fromProd_central: 
       path: /eos/user/c/cvicovil/ 
       files: file_ttg.root
       isEFT: False 
-      xsec: 1.0 # change
+      xsec: 0.428 # change
+      hooks : hooks.TTG_TOP-23-002_photonFromProd
+    TTG_fromDecay_central: 
+      path: /eos/user/c/cvicovil/ 
+      files: file_ttg.root
+      isEFT: False 
+      xsec: 0.428 # change
+      hooks : hooks.TTG_TOP-23-002_photonFromDec
   plugins: [
     cmgrdf-prototype/src/functions.cc,
     plugins/common_functions.cc,

@@ -49,16 +49,18 @@ if __name__ == "__main__":
     # Load the configurations
     metadata = aux.load_config( opts.config )
     
-    full_outpath = os.path.join( metadata['analysis']['outpath'], metadata['analysis_name'], "outplots" )
-    # Load all samples
-    samples = cmgdataset.get_cmgrdf_processes( metadata )
-
     # Load functions 
     for funcfile in metadata['analysis']['plugins']:
         ROOT.gInterpreter.Declare( open( funcfile ).read() )
 
-    # Now load the definitions
     defs = importlib.import_module( metadata['analysis']['definitions'] )
+
+    full_outpath = os.path.join( metadata['analysis']['outpath'], metadata['analysis_name'], "outplots" )
+
+    # Load all samples
+    samples = cmgdataset.get_cmgrdf_processes( metadata )
+
+
 
 
     # Now create the flow
