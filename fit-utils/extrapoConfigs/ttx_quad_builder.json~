@@ -1,0 +1,9 @@
+{
+ "channels":[
+    {"channelRegexps":["ttx_.*"],
+     "module":"AnomalousCouplingEFTNegative",
+     "mode":"quad",
+     "processOperatorMap":"../extrapoConfigs/topProcessesAndOperators.json"
+    }
+ ]
+}

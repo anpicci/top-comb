@@ -1,0 +1,1 @@
+text2workspace.py comb_hybrid_lumiscale.dat -o /data/sesanche/comb_linear_nosystscaling_v2.root -P HiggsAnalysis.CombinedLimit.EFTComposite:eft --PO pois=../extrapoConfigs/full_pois.json --PO ../extrapoConfigs/ttx_linear_builder.json
