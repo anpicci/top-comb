@@ -1,11 +1,12 @@
 # Configuration makefile to make execution a bit easier
 
 clean:
-	# Make sure you don't remove cache files from other projects
-	$(shell mkdir -p toremove)
-	$(shell find definitions/ -name "*cache*" -exec mv {} toremove/cache_{} \;)  
-	$(shell find utils/ -name "*cache*" -exec mv {} toremove/cache_{} \;)  
-	$(shell find plotter-tools/ -name "*cache*" -exec mv {} toremove/cache_{} \;)  
+	$(shell find plugins/ -name "*\.pcm" -exec rm {} \;)  
+	$(shell find plugins/ -name "*\.d" -exec rm {}  \;)  
+	$(shell find plugins/ -name "*\.so" -exec rm {} \;)
+	$(shell find definitions/ -name "*cache*" -exec rm -rf {}  \;)  
+	$(shell find utils/ -name "*cache*" -exec rm -rf {}  \;)  
+	$(shell find plotter-tools/ -name "*cache*" -exec rm -rf {}  \;)  
 setup:
 	./scripts/setup.sh
 

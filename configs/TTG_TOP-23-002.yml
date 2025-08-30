@@ -45,7 +45,7 @@ samples:
       ]
 
 # The syntax is:
-# [operator_name, reference_point, minBound, maxBound ]
+# [operator_name, minBound, maxBound ]
 operators:
   scans:
       - [ctG,  -1.0, 1.0]
@@ -109,24 +109,40 @@ operators:
 analysis:
   samples: 
     #TTG_from_prod: 
-    #  path: /eos/cms/store/group/phys_top/cvicovil/top-comb/nanogen/TTG-1Jets-Bin-0J_dim6top/ 
-    #  files: batch_20_08_2025_1603/genfiles/*root
+    #  path: /eos/cms/store/group/phys_top/cvicovil/top-comb/nanogen/TTGamma-1Jets-TTto2L2Nu/ 
+    #  files: batch_28_08_2025_1157/genfiles/*root
     #  isEFT: True
-    #  xsec: 1.0 # change
-    TTG_fromProd_central: 
-      path: /eos/user/c/cvicovil/ 
-      files: file_ttg.root
+    #  xsec: 0.428 
+    #  hooks : hooks.TTG_TOP-23-002_photonFromProd
+    
+    # These are the central nanoAOD samples for GammaFromDecay
+    TTG_fromDecay_decayContrib_central: 
+      path: root://cmsxrootd.fnal.gov//store/mc/RunIISummer20UL18NanoAODv9/
+      files: TTGamma_Dilept_TuneCP5_13TeV-madgraph-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v1/2430000/2380B328-78DC-6C47-81C6-BF2A9CB02219.root 
       isEFT: False 
-      xsec: 0.428 # change
+      xsec: 2.22037
+      hooks : hooks.TTG_TOP-23-002_photonFromDec
+    TTG_fromDecay_prodContrib_central: 
+      path: root://cmsxrootd.fnal.gov//store/mc/RunIISummer20UL18NanoAODv9/
+      files: TTGamma_Dilept_TuneCP5_13TeV-madgraph-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v1/2430000/2380B328-78DC-6C47-81C6-BF2A9CB02219.root 
+      isEFT: False 
+      xsec: 2.22037
       hooks : hooks.TTG_TOP-23-002_photonFromProd
-    TTG_fromDecay_central: 
-      path: /eos/user/c/cvicovil/ 
-      files: file_ttg.root
+
+    # These are the central nanoAOD samples for GammaFromProduction
+    TTG_fromProd_prodContrib_central: 
+      path: root://cmsxrootd.fnal.gov//store/mc/RunIISummer20UL18NanoAODv9/
+      files: TTGJets_Dilepton_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/2810000/301E86F1-8C59-2445-B6B3-5B6F7F4E050F.root 
       isEFT: False 
-      xsec: 0.428 # change
+      xsec: 0.428 
+      hooks : hooks.TTG_TOP-23-002_photonFromProd
+    TTG_fromProd_decayContrib_central: 
+      path: root://cmsxrootd.fnal.gov//store/mc/RunIISummer20UL18NanoAODv9/
+      files: TTGJets_Dilepton_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/2810000/301E86F1-8C59-2445-B6B3-5B6F7F4E050F.root 
+      isEFT: False 
+      xsec: 0.428 
       hooks : hooks.TTG_TOP-23-002_photonFromDec
   plugins: [
-    cmgrdf-prototype/src/functions.cc,
     plugins/common_functions.cc,
     plugins/TTG_TOP-23-002.cc
   ]

@@ -1,4 +1,4 @@
-# Configuration card created on Friday 22. August 2025
+# Configuration card created on Saturday 30. August 2025
 Below there is a mapping showing the reweighting points that can be found in the NanoAOD. Note that we only add to the first columns the couplings that are not set to 0!The full list of couplings considered for this version is: ['ctG', 'ctGI', 'ctp', 'ctpI', 'ctW', 'ctWI', 'ctZ', 'ctZI', 'ctd1', 'cQd1', 'ctu1', 'cQu1', 'ctq1', 'cQq11', 'cQq13', 'cQu8', 'ctq8', 'cQq81', 'cQq83', 'ctQqu1', 'ctQqu1I', 'ctQqu8', 'ctQqu8I', 'cQtqd8', 'cQtqd8I', 'cbW', 'cbWI', 'cpQM', 'cpQ3', 'cptb', 'cptbI', 'cQlM1', 'cQlM2', 'cQlM3', 'cQe1', 'cQe2', 'cQe3', 'ctl1', 'ctl2', 'ctl3', 'cte1', 'cte2', 'cte3', 'ctlS1', 'ctlS2', 'ctlS3', 'ctlT1', 'ctlT2', 'ctlT3', 'cQQ1', 'cQt1', 'cQt8', 'ctt1'].
 | Coupling values | Index in LHEReweightWeight |
 | :-------- | :-------- |

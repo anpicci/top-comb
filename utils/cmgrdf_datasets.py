@@ -66,8 +66,8 @@ def get_cmgrdf_processes( meta ):
                     xsec = norm,
                     eras = [ "all" ],
                     hooks = [ 
-                        Append( AddWeight("point", f"LHEReweightingWeight[{irwgt}]") ) + hooks.hooks 
-                    ],
+                        Append( AddWeight("point", f"LHEReweightingWeight[{irwgt}]") ) 
+                    ] + hooks.hooks,
                     genSumWeightName = "genEventSumw * LHEReweightingSumw[ 0 ]", # this has to be changed to the SM
                 )
                 

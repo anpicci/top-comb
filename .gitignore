@@ -2,3 +2,6 @@ genproductions_scripts/*
 submit*
 *cache*
 *vim*
+*.pcm
+*.so
+*.d

@@ -38,6 +38,13 @@ def add_parsing_options():
         type = int,
         help = "Number of cores to run with."
     )
+    parser.add_argument(
+        '--debug', 
+        dest = "debug", 
+        action = "store_true",
+        default = False,
+        help = "Activate debug compiler flags for custom modules"
+    )
     return parser.parse_args()
 
 # ----- Code actually starts here ----- # 
@@ -51,7 +58,19 @@ if __name__ == "__main__":
     
     # Load functions 
     for funcfile in metadata['analysis']['plugins']:
-        ROOT.gInterpreter.Declare( open( funcfile ).read() )
+
+        # Control debugging (Todo: check if cmgrdf has its own debug features")
+        
+        if opts.debug:
+            ROOT.gSystem.AddIncludePath("-D_DEBUGCOMB")
+            flag = "g"
+            libName = funcfile.replace(".", "_") + ".dbg.so"
+            ROOT.EnableImplicitMT( 1 ) # It does not make much sense to debug in multicore
+        else:
+            flag = "O"
+            libName = funcfile.replace(".", "_") + ".so"
+
+        ROOT.gSystem.CompileMacro( funcfile, flag )
 
     defs = importlib.import_module( metadata['analysis']['definitions'] )
 

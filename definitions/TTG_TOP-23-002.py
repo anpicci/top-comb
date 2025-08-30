@@ -1,7 +1,8 @@
 """ Definitions to be used in the TOP-23-002 input """
 from CMGRDF import Define
-from CMGRDF.collectionUtils import DefineSkimmedCollection
+from CMGRDF.collectionUtils import DefineSkimmedCollection, DefineP4
 from CMGRDF.plots import Plot
+from CMGRDF.flow import Cut
 
 evaluate_function = lambda func, args: f"{func}({','.join(args)})"
 
@@ -73,6 +74,8 @@ sequence = [
         ),
         optMembers=[],
     ),
+
+    DefineP4("genTop"),
 
     # ---- Extrajet  
     Define(
@@ -225,6 +228,20 @@ sequence = [
         ),
         optMembers=[],
     ),
+
+    ## Define variables
+    Define(
+        "genll_deltaphi",
+        evaluate_function(
+            "genllDeltaPhi",
+            ["FiducialLepton_particleLevel_phi"]
+        )
+    ),
+
+    ## Define fiducial selection cuts
+    Cut( "atleast2genlep", "nFiducialLepton_partonLevel >= 2"),
+
+    
 ]
 
 plots = [
@@ -301,6 +318,14 @@ plots = [
         f"genphoton_category",
         (3, 0, 2),
         xTitle = "Photon category",
+        legend = "TR",
+        unit = "GeV"
+    ),
+    Plot(
+        "genll_deltaphi",
+        "genll_deltaphi",
+        (10, -3.14, 3.14),
+        xTitle = "Lepton #Delta #phi",
         legend = "TR",
         unit = "GeV"
     )

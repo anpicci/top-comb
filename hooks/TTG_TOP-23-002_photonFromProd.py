@@ -51,10 +51,9 @@ hooks = [
                 [
                     "GenPart_pdgId",
                     "GenPart_genPartIdxMother",
-                    "FiducialPhoton_partonLevel_pdgId",
-                    "FiducialPhoton_partonLevel_statusFlags",
-                    "FiducialPhoton_partonLevel_genPartIdxMother"
-            ],
+                    "GenPart_status",
+                    "is_fiducial_photon_parton_level"
+                ],
             ),
         eras=[],
         )

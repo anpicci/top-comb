@@ -1,7 +1,7 @@
 import FWCore.ParameterSet.Config as cms
 
 externalLHEProducer = cms.EDProducer('ExternalLHEProducer',
-    args = cms.vstring('/eos/cms/store/group/phys_top/cvicovil/top-comb/TTGamma-1Jets-TTto2L2Nu/gridpack/TTGamma-1Jets-TTto2L2Nu.tar.xz'),
+    args = cms.vstring('/eos/user/c/cvicovil/top-comb/top-comb/TTGamma-1Jets-TTto2L2Nu/gridpack/TTGamma-1Jets-TTto2L2Nu.tar.xz'),
     nEvents = cms.untracked.uint32(5000),
     numberOfParameters = cms.uint32(1),
     outputFile = cms.string('cmsgrid_final.lhe'),
