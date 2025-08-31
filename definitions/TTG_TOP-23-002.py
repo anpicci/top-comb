@@ -7,10 +7,8 @@ from CMGRDF.flow import Cut
 evaluate_function = lambda func, args: f"{func}({','.join(args)})"
 
 sequence = [
-    # Basic fiducial lepton definition
-
     # * ------- PARTON LEVEL ------- * #
-    # ---- Photons: defined as a hook. See hooks.TTG_TOP-23-002_photonFromProd.py and TTG_TOP-002_photonFromProd.py
+    # ---- Photons: defined as a hook. See hooks/TTG_TOP-23-002_photonFromProd.py and hooks/TTG_TOP-002_photonFromDec.py
 
     # ---- Leptons
     Define(
@@ -43,6 +41,7 @@ sequence = [
         ),
         optMembers=[],
     ),
+    DefineP4("FiducialLepton_partonLevel"),
 
     # ---- TOPs 
     Define(
@@ -240,7 +239,7 @@ sequence = [
 
     ## Define fiducial selection cuts
     Cut( "atleast2genlep", "nFiducialLepton_partonLevel >= 2"),
-
+    Cut( "mll", "(FiducialLepton_partonLevel_p4[0] + FiducialLepton_partonLevel_p4[1]).M() > 30"),
     
 ]
 

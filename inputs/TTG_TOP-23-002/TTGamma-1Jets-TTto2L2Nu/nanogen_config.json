@@ -10,7 +10,7 @@
         "TTGamma-1Jets-TTto2L2Nu": 32000
     },
     "njobs": {
-        "TTGamma-1Jets-TTto2L2Nu": 1000
+        "TTGamma-1Jets-TTto2L2Nu": 5000
     },
     "xsec": {
         "TTGamma-1Jets-TTto2L2Nu": 1
