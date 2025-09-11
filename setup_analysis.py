@@ -165,17 +165,17 @@ def write_reweightcards(outdir, procname, operators, algorithm):
         mdtext += f"| {line} | {irwgt} |\n"
 
     mddir = outdir.replace("mgcards", "")
-    write_text(os.path.join( mddir, f"{procname}_reweighting_maps.md"), mdtext)
+    write_text(os.path.join( mddir, f"README.md"), mdtext)
 
 
-def write_fragment(outdir, meta):
+def write_fragment(outdir, analysis_name, meta):
     """Modify a PS template and save it to the analysis folder."""
     procname = meta['procname']
     fragment_meta = meta['fragment']
 
     text = open_template(fragment_meta['name'])
 
-    topcomb_gridpacks = os.path.join(os.environ['TOPCOMB_OUTPATH'], f"top-comb/{procname}")
+    topcomb_gridpacks = os.path.join(os.environ['TOPCOMB_OUTPATH'], f"{analysis_name}/{procname}/")
     gridpack_path = f"{topcomb_gridpacks}/gridpack/{procname}.tar.xz"
 
     process_params = ['# Process specific settings'] + fragment_meta['process_parameters']
@@ -228,27 +228,65 @@ if __name__ == "__main__":
     outdir = os.path.join(os.environ["TOPCOMB_INPUTS"], analysis_name)
     os.makedirs(outdir, exist_ok=True)
     
-    operators = metadata['operators']['scans']
+    # Load info from operators
     algorithm = metadata['operators']['algo']
+    operators = aux.get_operators( metadata['operators'] )
     
-    if metadata['samples']:
-        for sample_meta in metadata['samples']:
-            procname = sample_meta['procname']
-            proc_dir = os.path.join(outdir, procname)
-            mgcards_dir = os.path.join(proc_dir, "mgcards")
-            os.makedirs(mgcards_dir, exist_ok=True)
+    for sample_file in metadata['samples']['files']:
+
+        # Load info from samples
+        sample_meta = aux.load_config( sample_file )
+
+        procname = sample_meta['procname']
+        proc_dir = os.path.join( outdir, procname )
+        mgcards_dir = os.path.join( proc_dir, "mgcards" )
+        os.makedirs( mgcards_dir, exist_ok=True )
     
-            # Matrix element configuration
-            write_proc_card(mgcards_dir, sample_meta)
-            write_extramodels(mgcards_dir, sample_meta)
-            write_run_card(mgcards_dir, sample_meta)
-            write_restrict_card(mgcards_dir, sample_meta, operators)
-            write_customizecards(mgcards_dir, sample_meta, operators)
-            write_reweightcards(mgcards_dir, procname, operators, algorithm)
+        # Matrix element configuration
+        write_proc_card( 
+            outdir = mgcards_dir, 
+            meta = sample_meta 
+        )
+
+        write_extramodels( 
+            outdir = mgcards_dir, 
+            meta = sample_meta 
+        )
+
+        write_run_card( 
+            outdir = mgcards_dir, 
+            meta = sample_meta 
+        )
+
+        write_restrict_card( 
+            outdir = mgcards_dir, 
+            meta = sample_meta, 
+            operators = operators 
+        )
+
+        write_customizecards( 
+            outdir = mgcards_dir, 
+            meta = sample_meta, 
+            operators = operators 
+        )
+
+        write_reweightcards( 
+            outdir = mgcards_dir, 
+            procname = procname, 
+            operators = operators, 
+            algorithm = algorithm 
+        )
     
-            # Parton shower configuration
-            write_fragment(proc_dir, sample_meta)
+        # Parton shower configuration
+        write_fragment(
+            outdir = proc_dir,
+            analysis_name = analysis_name, 
+            meta = sample_meta
+        )
     
-            # Nanogen submission configuration
-            write_submission_nanogen_file(proc_dir, sample_meta)
+        # Nanogen submission configuration
+        write_submission_nanogen_file(
+            outdir = proc_dir, 
+            meta = sample_meta
+        )
     

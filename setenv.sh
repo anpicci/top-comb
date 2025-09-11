@@ -1,8 +1,7 @@
 #!/bin/bash
 
 # CHANGE THIS!
-#export TOPCOMB_OUTPATH=/eos/cms/store/group/phys_top/cvicovil/
-export TOPCOMB_OUTPATH=/eos/user/c/cvicovil/top-comb/
+export TOPCOMB_OUTPATH=/eos/user/c/cvicovil/www/top-comb/
 
 
 # Other

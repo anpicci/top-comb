@@ -57,7 +57,7 @@ sequence = [
         eras=[],
     ),
     DefineSkimmedCollection(
-        "genTop",
+        "FiducialTop_partonLevel",
         "GenPart",
         mask="is_top",
         members=(
@@ -74,7 +74,7 @@ sequence = [
         optMembers=[],
     ),
 
-    DefineP4("genTop"),
+    DefineP4("FiducialTop_partonLevel"),
 
     # ---- Extrajet  
     Define(
@@ -237,95 +237,40 @@ sequence = [
         )
     ),
 
+    Define(
+        "deltaR_pho_closestTop",
+        evaluate_function(
+            "genDR_photon_closestTop",
+            [
+                "FiducialPhoton_partonLevel_phi",
+                "FiducialPhoton_partonLevel_eta",
+                "FiducialTop_partonLevel_phi",
+                "FiducialTop_partonLevel_eta"
+            ]
+        )
+    ),
+
     ## Define fiducial selection cuts
     Cut( "atleast2genlep", "nFiducialLepton_partonLevel >= 2"),
     Cut( "mll", "(FiducialLepton_partonLevel_p4[0] + FiducialLepton_partonLevel_p4[1]).M() > 30"),
     
 ]
 
-plots = [
 
-    Plot(
-        "genphoton_pt_particleLevel",
-        f"FiducialPhoton_particleLevel_pt[ 0 ]",
-        (20, 25, 200),
-        xTitle = "Leading ISO #gamma #it{p}_{T}",
-        legend = "TR",
-        unit = "GeV"
-    ),
+# Custom spams for the plot below
+cat_spams = {
+    "spam1": { "text": "Bits", "x0": 0.65, "y0": 0.64, "x1": 0.975, "y1": 0.67, "textsize": 22 },
+    "spam2": { "text": "1st: from lepton", "x0": 0.65, "y0": 0.58, "x1": 0.975, "y1": 0.61, "textsize": 22 },
+    "spam3": { "text": "2nd: from w or b", "x0": 0.65, "y0": 0.49, "x1": 0.975, "y1": 0.52, "textsize": 22 },
+    "spam4": { "text": "3rd: from top decay", "x0": 0.65, "y0": 0.43, "x1": 0.975, "y1": 0.46, "textsize": 22 },
+    "spam5": { "text": "4rd: from ISR", "x0": 0.65, "y0": 0.37, "x1": 0.975, "y1": 0.40, "textsize": 22 },
+    "spam6": { "text": "5th: from top prod", "x0": 0.65, "y0": 0.31, "x1": 0.975, "y1": 0.34, "textsize": 22 },
+}
+bin_bitlabels = ["00000","00001","00010","00011","00100","00101","00110","00111","01000","01001","01010","01011","01100","01101","01110","01111","10000","10001","10010","10011","10100","10101","10110","10111","11000","11001","11010","11011","11100","11101","11110","11111"]
 
-    Plot(
-        "genphoton_pt_partonLevel",
-        f"FiducialPhoton_partonLevel_pt[ 0 ]",
-        (20, 25, 200),
-        xTitle = "Leading #gamma #it{p}_{T}",
-        legend = "TR",
-        unit = "GeV"
-    ),
-
-    Plot(
-        "genlepton_pt_partonLevel",
-        f"FiducialLepton_partonLevel_pt[ 0 ]",
-        (20, 25, 200),
-        xTitle = "Leading lepton #it{p}_{T}",
-        legend = "TR",
-        unit = "GeV"
-    ),
-
-    Plot(
-        "genlepton_pt_particleLevel",
-        f"FiducialLepton_particleLevel_pt[ 0 ]",
-        (20, 25, 200),
-        xTitle = "Leading dressed lepton #it{p}_{T}",
-        legend = "TR",
-        unit = "GeV"
-    ),
-    Plot(
-        "genjet_pt_particleLevel",
-        f"FiducialJet_particleLevel_pt[ 0 ]",
-        (20, 25, 200),
-        xTitle = "Leading jet #it{p}_{T}",
-        legend = "TR",
-        unit = "GeV"
-    ),
-    Plot(
-        "genbjet_pt_particleLevel",
-        f"FiducialBJet_particleLevel_pt[ 0 ]",
-        (20, 25, 200),
-        xTitle = "Leading B jet #it{p}_{T}",
-        legend = "TR",
-        unit = "GeV"
-    ),
-    Plot(
-        "gentop_pt",
-        f"genTop_pt[ 0 ]",
-        (20, 25, 200),
-        xTitle = "Leading top #it{p}_{T}",
-        legend = "TR",
-        unit = "GeV"
-    ),
-    Plot(
-        "genextrajet_pt",
-        f"genExtraJet_pt[ 0 ]",
-        (20, 25, 200),
-        xTitle = "Leading extrajet #it{p}_{T}",
-        legend = "TR",
-        unit = "GeV"
-    ),
-    Plot(
-        "genphoton_cat",
-        f"genphoton_category",
-        (3, 0, 2),
-        xTitle = "Photon category",
-        legend = "TR",
-        unit = "GeV"
-    ),
-    Plot(
-        "genll_deltaphi",
-        "genll_deltaphi",
-        (10, -3.14, 3.14),
-        xTitle = "Lepton #Delta #phi",
-        legend = "TR",
-        unit = "GeV"
-    )
-]
+plots = {
+    # This variable takes 2**5 possibilities
+    "genphoton_categories" : Plot( "genphoton_categories", f"genphoton_category", (32, 0, 32), xTitle = "Generator level photon categories (parton level)", legend = "TR", unit = "", xBinLabels = bin_bitlabels, do_superwide = True, verticalLabels = True, logy = False, custom_spams = cat_spams ),
+    "leading_genphoton_pt" : Plot( "leading_genphoton_pt", f"FiducialPhoton_partonLevel_pt[0]", (10, 20, 140), xTitle = r"Generator level #it{p}_{T} (#gamma)", legend = "TR", unit = "GeV" ),
+    "deltaR_pho_closestTop" : Plot( "deltaR_pho_closestTop", f"deltaR_pho_closestTop", (14, 0, 5), xTitle = r"Generator level #Delta R (#gamma, closest top)", legend = "TR", unit = "" ),
+}

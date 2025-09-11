@@ -1,7 +1,7 @@
 import FWCore.ParameterSet.Config as cms
 
 externalLHEProducer = cms.EDProducer('ExternalLHEProducer',
-    args = cms.vstring('/eos/user/c/cvicovil/top-comb/top-comb/TTGamma-1Jets-TTto2L2Nu/gridpack/TTGamma-1Jets-TTto2L2Nu.tar.xz'),
+    args = cms.vstring('{GRIDPACK}'),
     nEvents = cms.untracked.uint32(5000),
     numberOfParameters = cms.uint32(1),
     outputFile = cms.string('cmsgrid_final.lhe'),
@@ -19,20 +19,7 @@ generator = cms.EDFilter("Pythia8ConcurrentHadronizerFilter",
         pythia8CP5SettingsBlock,
         pythia8PSweightsSettingsBlock,
         processParameters = cms.vstring(
-            'JetMatching:setMad = off',
-            'JetMatching:scheme = 1',
-            'JetMatching:merge = on',
-            'JetMatching:jetAlgorithm = 2',
-            'JetMatching:etaJetMax = 5.',
-            'JetMatching:coneRadius = 1.',
-            'JetMatching:slowJetPower = 1',
-            'JetMatching:doShowerKt = off', 
-            # Process specific settings,
-            'JetMatching:qCut = 42.',
-            'JetMatching:qCutME = 20.',
-            'JetMatching:nQmatch = 5',
-            'JetMatching:nJetMax = 1',
-            'TimeShower:mMaxGamma = 4.0'
+            {PROCESS_PARAMETERS}
         ),
         parameterSets = cms.vstring(
             'pythia8CommonSettings',

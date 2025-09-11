@@ -15,15 +15,13 @@ import utils.auxiliars as aux
 from utils.logger import get_logger
 logger = get_logger( __name__ )
 
-def get_cmgrdf_processes( meta ):
+def get_cmgrdf_processes( meta, operators, algorithm ):
     """
     This function is used to read a list of input metadata that contains information
     """
 
     # First get the reweighting points
-    samples = meta['analysis']['samples'] 
-    operators = meta['operators']['scans']
-    algorithm = meta['operators']['algo']
+    samples = meta['samples'] 
     algos = algorithm.split("-")
 
 
@@ -45,12 +43,17 @@ def get_cmgrdf_processes( meta ):
         mcpath = sample_metadata["path"]
         files = sample_metadata["files"]
 
-        hooks = importlib.import_module( sample_metadata["hooks"] )
+        hooks_module = importlib.import_module( sample_metadata["hookfile"] )
+        custom_hooks = []
+        for custom_hook in sample_metadata["hooks"]:
+            custom_hooks.extend( getattr(hooks_module, custom_hook) )
 
         sourcepath = f"{mcpath}/{files}" 
 
         logger.info( f"Preparing process {sample_name}" )
         logger.info( f"Including MC sample: xsec = {norm}, fileIn = {sourcepath})" )
+
+
 
         if sample_metadata['isEFT']:
             # The sample has EFT weights
@@ -67,7 +70,7 @@ def get_cmgrdf_processes( meta ):
                     eras = [ "all" ],
                     hooks = [ 
                         Append( AddWeight("point", f"LHEReweightingWeight[{irwgt}]") ) 
-                    ] + hooks.hooks,
+                    ] + custom_hooks,
                     genSumWeightName = "genEventSumw * LHEReweightingSumw[ 0 ]", # this has to be changed to the SM
                 )
                 
@@ -87,7 +90,7 @@ def get_cmgrdf_processes( meta ):
                     source = sourcepath,
                     xsec = norm,
                     eras = [ "all" ],
-                    hooks = hooks.hooks,
+                    hooks = custom_hooks,
                     genSumWeightName = "genEventSumw", # this has to be changed to the SM
                 )
                 

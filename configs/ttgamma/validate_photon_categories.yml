@@ -1,0 +1,47 @@
+# -------------------------------------------------------------------------------------------------- #
+# Implemented by: Carlos Vico (carlos.vico.villalba@cern.ch)
+#
+# This analysis configuration is used to validate the photon categorization that is used
+# in the TOP-23-002 analysis, and reimplemented for the top combination.
+#
+# The idea is to get the contributions from each candidate signal sample "fromProduction" and "fromDecay", and
+# see how they are categorized by the plugins used in this combination. The end result must be that:
+#  - Most of the events fetched from the `fromProduction` sample must be categorized in `fromISR` or `from top prod`
+#  - Most of the events fetched from the `fromDecay` sample must be categorized in the `fromDecay` channels, which are three:
+#     - from top decay
+#     - from w or b decay in top branching
+#     - from lepton decay in top branching
+#  - A remnant of events are categorized in `no photon` category, which are often populated with out-of-acceptance photons.
+#  - Some overlap is expected from these two samples, as pythia adds additional QED radiation that can particularly include
+#  `production`-like photons in the `decay` sample.
+#  - Similarly, `decay` like photons can be included in the `production` sample.
+#
+# -------------------------------------------------------------------------------------------------- #
+
+samples: 
+  # These are the central nanoAOD samples for GammaFromDecay
+  TTG_fromDecay_central: 
+    path: root://cmsxrootd.fnal.gov//store/mc/RunIISummer20UL18NanoAODv9/
+    files: TTGamma_Dilept_TuneCP5_13TeV-madgraph-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v1/2430000/2380B328-78DC-6C47-81C6-BF2A9CB02219.root 
+    isEFT: False 
+    xsec: 2.22037
+    hookfile : hooks.TTG_TOP-23-002
+    hooks: [ main_hooks ]
+    label: '#gamma from decay'
+
+  # These are the central nanoAOD samples for GammaFromProduction
+  TTG_fromProd_central: 
+    path: root://cmsxrootd.fnal.gov//store/mc/RunIISummer20UL18NanoAODv9/
+    files: TTGJets_Dilepton_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/2810000/301E86F1-8C59-2445-B6B3-5B6F7F4E050F.root 
+    isEFT: False 
+    xsec: 0.428 
+    hookfile : hooks.TTG_TOP-23-002
+    hooks: [ main_hooks ]
+    label: '#gamma from production'
+
+plugins: [
+  plugins/common_functions.cc,
+  plugins/TTG_TOP-23-002.cc
+]
+
+

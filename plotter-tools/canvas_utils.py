@@ -2,14 +2,20 @@
 import ROOT as r
 from copy import deepcopy
 
-def new_1d_canvas( name ):
+def new_1d_canvas( name, plot ):
     """ Creates a template canvas """
+
+    x_size = 600
+    y_size = 600
+    if getattr( plot, "do_superwide", False ):
+        x_size = 1200
+
     # --------------- Prepare the basic canvas
-    c = r.TCanvas(name, "",  600, 600)
+    c = r.TCanvas(name, "",  x_size, y_size)
     topSpamSize     = 1.1
     c.SetTopMargin(c.GetTopMargin() * topSpamSize)
     c.Divide(1,2)
-
+    
     # --- First pad
     p1 = c.GetPad(1)
     p1.SetPad(0, 0.25, 1, 1)
@@ -25,9 +31,17 @@ def new_1d_canvas( name ):
     p2.SetBottomMargin(0.42)
     p2.SetLeftMargin(0.16)
     p2.SetRightMargin(0.03)
+
+    if getattr( plot, "verticalLabels", False ):
+        # Better to make some space in the bottom panel
+        p1.SetTopMargin(0.065)
+        p1.SetPad(0, 0.35, 1, 1)
+        p2.SetPad(0, 0.0, 1, 0.35)
+        p2.SetBottomMargin(0.62)
+
     return c, p1, p2
 
-def get_upper_axis( plot, refhistos ):
+def get_upper_axis( plot, refhistos, norm ):
     """ Get a histogram for plotting a reasonable upper pad axis """
     haxis = deepcopy( refhistos[0].Clone(f"upperaxis_{plot.name}") )
     haxis.SetTitle("")
@@ -54,11 +68,14 @@ def get_upper_axis( plot, refhistos ):
     xmax = haxis.GetBinCenter( haxis.GetNbinsX() + 1)
     units_per_bin = abs(xmax - xmin)/haxis.GetNbinsX()
     haxis.GetYaxis().SetTitle( "Events / {0:3.1f} {1}".format( units_per_bin, plot.unit) )
+    if norm == "integral":
+        haxis.GetYaxis().SetTitle( "Events normalized to unity" )
+
     haxis.GetYaxis().SetMaxDigits(4)
 
     return haxis
 
-def get_lower_axis( plot, refhistos ):
+def get_lower_axis( plot, refhistos, norm ):
     """ Get a histogram for plotting a reasonable upper pad axis """
     haxis = deepcopy( refhistos[0].Clone(f"upperaxis_{plot.name}") )
     haxis.SetTitle("")
@@ -75,23 +92,29 @@ def get_lower_axis( plot, refhistos ):
         for ibin in range(1, 1 + haxis.GetNbinsX() ):
             haxis.GetXaxis().SetBinLabel( ibin, plot.xBinLabels[ibin-1] )
     
+
     haxis.GetYaxis().SetTitleFont(43)
     haxis.GetXaxis().SetTitleFont(43)
     haxis.GetXaxis().SetLabelFont(43)
     haxis.GetYaxis().SetLabelFont(43)
-    
     haxis.GetXaxis().SetLabelSize(24)
     haxis.GetYaxis().SetLabelSize(24)   
     haxis.GetXaxis().SetTitleSize(24)
     haxis.GetYaxis().SetTitleSize(22)
-
     haxis.GetYaxis().SetTitleOffset(1.8)
     haxis.GetXaxis().SetTitleOffset(1.1)
     haxis.GetXaxis().SetLabelOffset(0.01)
     haxis.GetYaxis().SetTitle("EFT/SM.")
-    print( plot.xTitle )
     haxis.GetXaxis().SetTitle( plot.xTitle )
-     
+
+    if getattr(plot, "verticalLabels", False):
+        haxis.GetXaxis().LabelsOption( "v" )
+        haxis.GetXaxis().SetLabelSize(18)
+        #haxis.GetXaxis().SetTitleSize(0)
+        haxis.GetXaxis().SetLabelOffset(0.06)
+        haxis.GetXaxis().SetTitleOffset(1.8)
+        
+
     haxis.GetYaxis().SetNdivisions(503)
     haxis.GetXaxis().SetNdivisions(410)
     haxis.GetYaxis().CenterTitle(True)

@@ -10,6 +10,15 @@ Last updated: 27-08-2025
 #include "functions.h"
 #include "common_functions.h"
 
+
+enum Category {
+    FromLeptonDecay        = 1 << 0,  // 00001
+    FromWBDecay            = 1 << 1,  // 00010
+    FromTopDecay           = 1 << 2,  // 00100
+    FromISRProduction      = 1 << 3,  // 01000
+    FromOffshellTProduction= 1 << 4   // 10000
+};
+
 /* PARTON LEVEL FUNCTIONS */
 ROOT::RVec<bool> isFiducialPhoton_PartonLevel(
     const ROOT::RVec<int>& pdgId,
@@ -305,20 +314,12 @@ int get_genphoton_category(
         1 
     );
 
-    auto mother_is_lepton = ( 
-        ( abs(mothers_pdgId) == 11 ) | 
-        ( abs(mothers_pdgId) == 13 ) | 
-        ( abs(mothers_pdgId) == 15 ) 
-    );
-    
-    auto mother_is_w_or_b = ( 
-        ( abs(mothers_pdgId) == 24 ) | 
-        ( abs(mothers_pdgId) == 5 ) 
-    );
-    
-    auto mother_is_top = ( 
-        abs(mothers_pdgId) == 6 
-    ); 
+
+
+    auto mother_is_lepton = ( ( abs(mothers_pdgId) == 11 ) | ( abs(mothers_pdgId) == 13 ) | ( abs(mothers_pdgId) == 15 ) );
+    auto mother_is_w_or_b = ( ( abs(mothers_pdgId) == 24 ) | ( abs(mothers_pdgId) == 5 ) );
+    auto mother_is_top    = ( abs(mothers_pdgId) == 6 ); 
+    auto mother_is_offshel_t = ( abs(mothers_pdgId) == 21 ); 
 
     // The photon is not considered as coming from the top if it does not
     // have a top in the chain.
@@ -332,16 +333,18 @@ int get_genphoton_category(
         not_from_top[ipho] = !( Any( abs( ancestors_pdgIds ) == 6 ) );
     }
 
-    auto is_top_decay = ( // Targets photon emitted from top leg
-        (mother_is_top) &  
-        ( grandmothers_pdgId == mothers_pdgId ) 
-    ); 
-    
-    auto is_from_decay = ( // Targets photon attached to lepton, b, or to a top chain 
-        ( mother_is_lepton ) | 
-        ( (!not_from_top) & (mother_is_w_or_b) ) | 
-        ( is_top_decay ) 
-    );
+    // Use cases
+    // From decay categories:
+    auto is_top_decay = ( (mother_is_top) & ( grandmothers_pdgId == mothers_pdgId ) ); 
+   
+ 
+    auto is_from_lepton_decay = ( mother_is_lepton );
+    auto is_from_wb_decay = ( (!not_from_top) & (mother_is_w_or_b) );
+    auto is_from_top_decay = ( is_top_decay );
+    auto is_from_decay = ( is_from_lepton_decay | is_from_wb_decay | is_from_top_decay );
+
+    auto is_from_isr_production        = ( ( (!mother_is_top) & (!is_from_decay) ) & (!mother_is_offshel_t) );
+    auto is_from_offshell_t_production = ( ( ( mother_is_top) & (!is_from_decay) ) | mother_is_offshel_t );
 
     #ifdef _DEBUGCOMB
     auto wbfromtop = ( (!not_from_top) & (mother_is_w_or_b) );
@@ -352,8 +355,18 @@ int get_genphoton_category(
     std::cout  << "----------------------" << is_from_decay[0] << std::endl;
     #endif
 
+    int category = 0;
+
+    category |= is_from_lepton_decay[0] << 0; // Bit for lepton decay 
+    category |= is_from_wb_decay[0] << 1; // Bit for W or b decay
+    category |= is_from_top_decay[0] << 2; // Bit for top decay
+    category |= is_from_decay[0] << 2; // Bit for ANY decay
+    category |= is_from_isr_production[0] << 3; // Bit for ISR production
+    category |= is_from_offshell_t_production[0] << 4; // Bit for OFFSHELL top production
+
     // Now define categories based on the origin of the **leading** photon.
-    return ( is_from_decay[0] ) ? 1 : 2; // 1 = from decay, 2 = not from decay
+    //return ( is_from_decay[0] ) ? 1 : 2; // 1 = from decay, 2 = not from decay
+    return category;
 }
 
 // Specific ttG variables
@@ -367,6 +380,20 @@ float genllDeltaPhi(
     return genll_deltaphi;
 }
 
+float genDR_photon_closestTop(
+    const ROOT::RVec<float>& photon_phi, 
+    const ROOT::RVec<float>& photon_eta, 
+    const ROOT::RVec<float>& top_phi, 
+    const ROOT::RVec<float>& top_eta 
+) {
+    // Compute the deltaR between the leading photon and the top closest to it.
+    float deltaR_photon_TOP1 = deltaR2( top_eta[0], top_phi[0], photon_eta[0], photon_phi[0] );
+    float deltaR_photon_TOP2 = deltaR2( top_eta[1], top_phi[1], photon_eta[0], photon_phi[0] );
+    
+    float minDeltaR2 = std::min( deltaR_photon_TOP1, deltaR_photon_TOP2 );
+    float minDeltaR = std::sqrt( minDeltaR2 );
+    return minDeltaR;  
+}
 
 
 /* PARTICLE LEVEL FUNCTIONS */

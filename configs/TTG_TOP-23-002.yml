@@ -1,153 +1,36 @@
 analysis_name: 
   TTG_TOP-23-002
 
-samples:
-  - procname: TTGamma-1Jets-TTto2L2Nu
-    # ------ Configurations regarding the Matrix Element
-    load_extramodels: dim6top_LO_UFO.tar.gz 
-    model: 'dim6top_LO_UFO-restrict_ttg'
-    process: [
-        'define p = g u c d s u~ c~ d~ s~ b b~',
-        'define j = p',
-        'define l+ = e+ mu+ ta+',
-        'define l- = e- mu- ta-',
-        'define vl = ve vm vt',
-        'define vl~ = ve~ vm~ vt~',
-        'generate p p > t t~ a FCNC=0 DIM6=1, (t > l+ vl b FCNC=0 DIM6=0), (t~ > l- vl~ b~ FCNC=0 DIM6=0) @0 ', 
-        'add process p p > t t~ a j FCNC=0 DIM6=1, (t > l+ vl b FCNC=0 DIM6=0), (t~ > l- vl~ b~ FCNC=0 DIM6=0) @0 ', 
-      ]
+samples: 
+  files: [ 
+    configs/ttgamma/TTGamma-1Jets-TTto2L2Nu_xqcut20_qCut42.yml, # From production 
+    configs/ttgamma/TT-1Jets-TTto2L2NuGamma_xqcut20_qCut42.yml # From decay
+  ]
 
-    template_run_card: 
-      name: templates/template_run_card_LO.dat 
-
-    template_customizecards: 
-      name: templates/template_customizecards.dat
-      extraopts: [
-        "set param_card DECAY 6 1.491500e+00", # This is to mimic what was done in the central sample
-        "set run_card ptj 20",
-        "set run_card xqcut 20",
-        "set run_card maxjetflavor 5"
-      ] 
-
-    template_restrict_card: 
-      name: templates/template_restrict_ckm_no_b_mass.dat 
-      restrict_name: restrict_ttg
-
-    # ------ Configurations regarding the Parton shower
-    fragment:
-      name: templates/template_partonshower_madgraphMLM.dat
-      process_parameters: [
-        "'JetMatching:qCut = 42.'",
-        "'JetMatching:qCutME = 20.'",
-        "'JetMatching:nQmatch = 5'",
-        "'JetMatching:nJetMax = 1'",
-        "'TimeShower:mMaxGamma = 4.0'"
-      ]
-
-# The syntax is:
-# [operator_name, minBound, maxBound ]
-operators:
-  scans:
-      - [ctG,  -1.0, 1.0]
-      - [ctGI, -1.0, 1.0]
-      - [ctp,  -1.0, 1.0]
-      - [ctpI, -1.0, 1.0]
-      - [ctW,  -1.0, 1.0]
-      - [ctWI, -1.0, 1.0]
-      - [ctZ,  -1.0, 1.0]
-      - [ctZI, -1.0, 1.0]
-      - [ctd1,  -1.0, 1.0]
-      - [cQd1,  -1.0, 1.0]
-      - [ctu1,  -1.0, 1.0]
-      - [cQu1,  -1.0, 1.0]
-      - [ctq1,  -1.0, 1.0]
-      - [cQq11, -1.0, 1.0]
-      - [cQq13, -1.0, 1.0]
-      - [cQu8, -1.0, 1.0]
-      - [ctq8, -1.0, 1.0]
-      - [cQq81, -1.0, 1.0]
-      - [cQq83, -1.0, 1.0]
-      - [ctQqu1, -1.0, 1.0]
-      - [ctQqu1I, -1.0, 1.0]
-      - [ctQqu8, -1.0, 1.0]
-      - [ctQqu8I, -1.0, 1.0]
-      - [cQtqd8, -1.0, 1.0]
-      - [cQtqd8I, -1.0, 1.0]
-      - [cbW, -1.0, 1.0] # sensitivity to gamma
-      - [cbWI, -1.0, 1.0] # sensitivity to gamma
-      - [cpQM, -1.0, 1.0] # TOP-22-006
-      - [cpQ3, -1.0, 1.0] # TOP-22-006
-      - [cptb, -1.0, 1.0] # TOP-22-006
-      - [cptbI, -1.0, 1.0] # TOP-22-006
-      - [cQlM1, -1.0, 1.0] # TOP-22-006
-      - [cQlM2, -1.0, 1.0] # TOP-22-006
-      - [cQlM3, -1.0, 1.0] # TOP-22-006
-      - [cQe1, -1.0, 1.0] # TOP-22-006
-      - [cQe2, -1.0, 1.0] # TOP-22-006
-      - [cQe3, -1.0, 1.0] # TOP-22-006
-      - [ctl1, -1.0, 1.0] # TOP-22-006
-      - [ctl2, -1.0, 1.0] # TOP-22-006
-      - [ctl3, -1.0, 1.0] # TOP-22-006
-      - [cte1, -1.0, 1.0] # TOP-22-006
-      - [cte2, -1.0, 1.0] # TOP-22-006
-      - [cte3, -1.0, 1.0] # TOP-22-006
-      - [ctlS1, -1.0, 1.0] # TOP-22-006
-      - [ctlS2, -1.0, 1.0] # TOP-22-006
-      - [ctlS3, -1.0, 1.0] # TOP-22-006
-      - [ctlT1, -1.0, 1.0] # TOP-22-006
-      - [ctlT2, -1.0, 1.0] # TOP-22-006
-      - [ctlT3, -1.0, 1.0] # TOP-22-006
-      - [cQQ1, -1.0, 1.0] # TOP-22-006
-      - [cQt1, -1.0, 1.0] # TOP-22-006
-      - [cQt8, -1.0, 1.0] # TOP-22-006
-      - [ctt1, -1.0, 1.0] # TOP-22-006
+operators: 
+  files: [ configs/list_operators.yml ]
+  groups: [
+    4hq,
+    #2hq2lq,
+    #2hqV,  
+    #2hq2l # --- Sensitivity to these comes mainly from single top scattering with b quarks or ttW
+  ]
+  mask: []
   algo: one_by_one
-  plot_only: [
-    106
-  ]
 
-analysis:
-  samples: 
-    #TTG_from_prod: 
-    #  path: /eos/cms/store/group/phys_top/cvicovil/top-comb/nanogen/TTGamma-1Jets-TTto2L2Nu/ 
-    #  files: batch_28_08_2025_1157/genfiles/*root
-    #  isEFT: True
-    #  xsec: 0.428 
-    #  hooks : hooks.TTG_TOP-23-002_photonFromProd
-    
-    # These are the central nanoAOD samples for GammaFromDecay
-    TTG_fromDecay_decayContrib_central: 
-      path: root://cmsxrootd.fnal.gov//store/mc/RunIISummer20UL18NanoAODv9/
-      files: TTGamma_Dilept_TuneCP5_13TeV-madgraph-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v1/2430000/2380B328-78DC-6C47-81C6-BF2A9CB02219.root 
-      isEFT: False 
-      xsec: 2.22037
-      hooks : hooks.TTG_TOP-23-002_photonFromDec
-    TTG_fromDecay_prodContrib_central: 
-      path: root://cmsxrootd.fnal.gov//store/mc/RunIISummer20UL18NanoAODv9/
-      files: TTGamma_Dilept_TuneCP5_13TeV-madgraph-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v1/2430000/2380B328-78DC-6C47-81C6-BF2A9CB02219.root 
-      isEFT: False 
-      xsec: 2.22037
-      hooks : hooks.TTG_TOP-23-002_photonFromProd
-
-    # These are the central nanoAOD samples for GammaFromProduction
-    TTG_fromProd_prodContrib_central: 
-      path: root://cmsxrootd.fnal.gov//store/mc/RunIISummer20UL18NanoAODv9/
-      files: TTGJets_Dilepton_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/2810000/301E86F1-8C59-2445-B6B3-5B6F7F4E050F.root 
-      isEFT: False 
-      xsec: 0.428 
-      hooks : hooks.TTG_TOP-23-002_photonFromProd
-    TTG_fromProd_decayContrib_central: 
-      path: root://cmsxrootd.fnal.gov//store/mc/RunIISummer20UL18NanoAODv9/
-      files: TTGJets_Dilepton_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/2810000/301E86F1-8C59-2445-B6B3-5B6F7F4E050F.root 
-      isEFT: False 
-      xsec: 0.428 
-      hooks : hooks.TTG_TOP-23-002_photonFromDec
-  plugins: [
-    plugins/common_functions.cc,
-    plugins/TTG_TOP-23-002.cc
-  ]
+analyses:
   definitions: definitions.TTG_TOP-23-002
   plots: definitions.TTG_TOP-23-002
-  outpath: /eos/user/c/cvicovil/www/top-comb/
+  PhotonCategorization:
+    config: configs/ttgamma/validate_photon_categories.yml 
+    norm: ~ 
+    draw: stack
+    sel-plots: [ genphoton_categories ]
+    plot-only: [] 
 
-
+  FiducialSelectionValidation:
+    config: configs/ttgamma/fiducial_selection_validation.yml 
+    norm: integral 
+    draw: ~ # This defaults to overline
+    sel-plots: [ leading_genphoton_pt ]
+    plot-only: [] 

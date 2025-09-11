@@ -20,29 +20,65 @@ function check_cards_before_gridpack() {
 
 }
 
-function run_gridpack() {
-	custom_msg INFO "Running gridpack. Please select a process from the available list"
+
+function prepare_genproductions() {
+	custom_msg INFO "Running MG. Please select a process from the available list"
+    tag=$1
 	
 	# Get the list of analyses
 	list_processes
 
-	analysisDir=$(find ${TOPCOMB_INPUTS}/ -name $process -type d)
+	processDir=$(find ${TOPCOMB_INPUTS}/ -name $process -type d)
+    analysisDir=$( echo $(dirname $processDir) | awk -F'/' '{print $NF}' )
 	
-	custom_msg INFO "Generating gridpack for process ${process}"
+	custom_msg INFO "Generating madgraph feynman diagrams for process ${process}"
 	# Prepare the submission folder
-	SUBMISSION_DIR=submit_gridpack_${process}
+	SUBMISSION_DIR=submit_${tag}_${process}
 	rm -rf $SUBMISSION_DIR; mkdir -p $SUBMISSION_DIR
 
 	# Prepare the cards and scripts from genproductions
 	tempdir=temp_cards_${process}
 
 	pushd $SUBMISSION_DIR
-	cp -r $analysisDir/mgcards $tempdir
+	cp -r $processDir/mgcards $tempdir
+	cp -r $TOPCOMB_MAINPATH/templates/index.php . 
 	tar -zcvf cards.tgz $tempdir
 
+}
 
+function run_diagrams() {
+    prepare_genproductions diagrams
+
+	cp $TOPCOMB_MAINPATH/templates/generate_diagrams.sh .
+ 	sed -i "s|__PROCNAME__|$process|g" generate_diagrams.sh
+ 	sed -i "s|__ANALYSIS_NAME__|$analysisDir|g" generate_diagrams.sh
+ 	sed -i "s|__CARDSDIR__|$tempdir|g" generate_diagrams.sh
+ 	sed -i "s|__OUTPATH__|$TOPCOMB_OUTPATH|g" generate_diagrams.sh
+ 	sed -i "s|__SINGULARITY_IMAGE__|$SINGULARITY_IMAGE_GRIDPACK|g" generate_diagrams.sh
+ 	sed -i "s|__GENPRODUCTIONS_GRIDPACK__|$GENPRODUCTIONS_GRIDPACK|g" generate_diagrams.sh
+ 	sed -i "s|__BRANCH_GRIDPACK__|$BRANCH_GRIDPACK|g" generate_diagrams.sh
+	chmod +x generate_diagrams.sh
+
+	# Now copy the jds
+	cp $TOPCOMB_MAINPATH/templates/template_submit.jds generate_diagrams.jds
+ 	sed -i "s|__SCRIPTNAME__|generate_diagrams.sh|g" generate_diagrams.jds
+ 	sed -i "s|__PROCNAME__|${process}_genFD|g" generate_diagrams.jds
+ 	sed -i "s|__NCORES__|1|g" generate_diagrams.jds
+	popd
+
+	# Prompt the command to submit the job
+	custom_msg WARN ">> Use the following command to submit the job"
+	custom_msg NC "cd $SUBMISSION_DIR/ ; condor_submit generate_diagrams.jds; cd -"
+	custom_msg WARN "-------------------------------------------- "
+
+}
+
+function run_gridpack() {
+    prepare_genproductions gridpack
+	
 	cp $TOPCOMB_MAINPATH/templates/run_gridpack_batch.sh .
  	sed -i "s|__PROCNAME__|$process|g" run_gridpack_batch.sh
+ 	sed -i "s|__ANALYSIS_NAME__|$analysisDir|g" run_gridpack_batch.sh
  	sed -i "s|__CARDSDIR__|$tempdir|g" run_gridpack_batch.sh
  	sed -i "s|__OUTPATH__|$TOPCOMB_OUTPATH|g" run_gridpack_batch.sh
  	sed -i "s|__SINGULARITY_IMAGE__|$SINGULARITY_IMAGE_GRIDPACK|g" run_gridpack_batch.sh
@@ -51,8 +87,10 @@ function run_gridpack() {
 	chmod +x run_gridpack_batch.sh
 
 	# Now copy the jds
-	cp $TOPCOMB_MAINPATH/templates/run_gridpack_batch.jds .
- 	sed -i "s|__PROCNAME__|$process|g" run_gridpack_batch.jds
+	cp $TOPCOMB_MAINPATH/templates/template_submit.jds run_gridpack_batch.jds
+ 	sed -i "s|__SCRIPTNAME__|run_gridpack_batch.sh|g" run_gridpack_batch.jds
+ 	sed -i "s|__PROCNAME__|${process}_runGridpack|g" run_gridpack_batch.jds
+ 	sed -i "s|__NCORES__|8|g" run_gridpack_batch.jds
 
 	popd
 	# Prompt the command to submit the job
@@ -67,7 +105,7 @@ function run_nanogen() {
 	
 	# Get the list of analyses
 	list_processes
-
+    #if [[ $process == "*Quit*" ]]; then quit_setup; fi
 	analysisDir=$(find ${TOPCOMB_INPUTS}/ -name $process -type d)
 	
 	custom_msg INFO "Generating nanogen for process ${process}"
@@ -84,8 +122,12 @@ function run_nanogen() {
 custom_msg GOOD "Running the workflow for the EFT combination"
 custom_msg NC "Please select which step of the setup you would like to run: "
 
-select mode in  Gridpack Nanogen Quit; do
+select mode in  Diagrams Gridpack Nanogen Quit; do
 	case $mode in
+		Diagrams)
+			run_diagrams
+			break
+			;;
 		Gridpack)
 			run_gridpack
 			break

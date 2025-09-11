@@ -14,6 +14,20 @@ def load_config( config_path ) -> dict:
     with open(config_path, "r") as f:
         return yaml.safe_load(f)
 
+def get_operators( config ) -> dict:
+    """ Load info from metadata and return the list of operators """
+
+    list_of_files = config["files"]
+    groups = config["groups"]
+    mask = config["mask"]
+    operators = []
+    for _file in list_of_files:
+        opmeta = load_config( _file )
+        for group in groups:
+            operators.extend( [ op for op in opmeta[ group ] if op[0] not in mask ] )
+    return operators
+         
+
 def get_rwgt_points(algo, all_operators):
     """ Function to get reweighting points """
     logger.info( f"Making groups of {algo}" )

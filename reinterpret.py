@@ -53,62 +53,74 @@ if __name__ == "__main__":
     opts = add_parsing_options()
     ROOT.EnableImplicitMT( opts.ncores )
 
-    # Load the configurations
-    metadata = aux.load_config( opts.config )
-    
-    # Load functions 
-    for funcfile in metadata['analysis']['plugins']:
 
-        # Control debugging (Todo: check if cmgrdf has its own debug features")
-        
-        if opts.debug:
-            ROOT.gSystem.AddIncludePath("-D_DEBUGCOMB")
-            flag = "g"
-            libName = funcfile.replace(".", "_") + ".dbg.so"
-            ROOT.EnableImplicitMT( 1 ) # It does not make much sense to debug in multicore
-        else:
-            flag = "O"
-            libName = funcfile.replace(".", "_") + ".so"
+    # Create an instance of the CMGRDF processor
 
-        ROOT.gSystem.CompileMacro( funcfile, flag )
-
-    defs = importlib.import_module( metadata['analysis']['definitions'] )
-
-    full_outpath = os.path.join( metadata['analysis']['outpath'], metadata['analysis_name'], "outplots" )
-
-    # Load all samples
-    samples = cmgdataset.get_cmgrdf_processes( metadata )
-
-
-
-
-    # Now create the flow
-    flow = Flow(
-            metadata['analysis_name'], 
-            defs.sequence
-    )
-
-    # Book the plotter to generate histograms
     maker = Processor()
-    maker.book(
-        samples,
-        { "all" : 138.0 },
-        flow,
-        defs.plots,
-        eras = [ "all" ],
-        withUncertainties = False
-    )
 
+    # Load the configurations
+    config_meta = aux.load_config( opts.config )
+    operators = aux.get_operators( config_meta['operators'] )
+    defs = importlib.import_module( config_meta['definitions'] )
+
+    for analysis_name, analysis_meta in config_meta['analyses'].items():
+        
+        metadata = aux.load_config( analysis_meta['config'] )
+        
+        # Load functions 
+        for funcfile in metadata['plugins']:
+        
+            # Control debugging (Todo: check if cmgrdf has its own debug features")
+            if opts.debug:
+                ROOT.gSystem.AddIncludePath("-D_DEBUGCOMB")
+                flag = "g"
+                libName = funcfile.replace(".", "_") + ".dbg.so"
+                ROOT.EnableImplicitMT( 1 ) # It does not make much sense to debug in multicore
+            else:
+                flag = "O"
+                libName = funcfile.replace(".", "_") + ".so"
+        
+            ROOT.gSystem.CompileMacro( funcfile, flag )
+        
+        
+        # Load all samples
+        samples = cmgdataset.get_cmgrdf_processes( metadata, operators, config_meta['operators']['algo']  )
+        
+        # Now create the flow
+        flow = Flow(
+                analysis_name, 
+                defs.sequence
+        )
+
+        if analysis_meta['sel-plots'] != []:
+            plots = [ defs.plots[plot] for plot in analysis_meta['sel-plots'] ]
+        else:
+            plots = [ defs.plots[plot] for plot in defs.plots.keys() ]
+        
+        # Book the plotter to generate histograms
+        maker.book(
+            samples,
+            { "all" : 138.0 },
+            flow,
+            plots,
+            eras = [ "all" ],
+            withUncertainties = False
+        )
+        
     results=maker.runPlots()
-
+        
+    outpath = os.path.join( os.environ['TOPCOMB_OUTPATH'], config_meta['analysis_name'] )
+    
     PlotSetPrinter(
         topRightText="%(lumi).1f fb^{-1} (13.0 TeV)",
         showErrors = False
-    ).printSet(results, full_outpath,
+    ).printSet(
+        results, 
+        outpath + "/{flow}",
         maxRatioRange=(0.5, 1.5),
         showRatio=True
     )
-
-
+    
     # Now remake the plots
-    os.system( f"python3 plotter-tools/remake_plots_cmgrdf.py --config {opts.config}" )  
+    #os.system( f"python3 plotter-tools/remake_plots_cmgrdf.py --config {opts.config}" )  
+    #os.system( "find %s -type d -exec cp -n templates/index.php {} \;"%outpath )  
