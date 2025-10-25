@@ -1,0 +1,194 @@
+# Datasets for 2022
+
+era: ~
+lumi: 138.0
+
+# Define here your MC samples
+mcsamples:
+
+  - group_name: TTG_fromDecay
+    procs: 
+      - name: TTG_fromDecay
+        files: [
+          #root://cmsxrootd.fnal.gov//store/mc/RunIISummer20UL18NanoAODv9/TTGamma_Dilept_TuneCP5_13TeV-madgraph-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v1/2430000/2380B328-78DC-6C47-81C6-BF2A9CB02219.root
+          root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/TTGamma_Dilept_TuneCP5_13TeV-madgraph-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v1/2430000/4535973F-B5E2-D844-8035-A9BD4574825B.root,
+          root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/TTGamma_Dilept_TuneCP5_13TeV-madgraph-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v1/2430000/9601B27C-7CFC-424C-9014-B7AC549F0453.root,
+          root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/TTGamma_Dilept_TuneCP5_13TeV-madgraph-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v1/2430000/47C3B9AF-65A3-E54E-893A-ACA790B0B8F2.root,
+          root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/TTGamma_Dilept_TuneCP5_13TeV-madgraph-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v1/2430000/8199B584-86B9-9D4C-A293-C5ABFD2A5FEF.root,
+          root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/TTGamma_Dilept_TuneCP5_13TeV-madgraph-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v1/2430000/FB920D54-A059-F643-BCD9-5452CA562657.root,
+          root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/TTGamma_Dilept_TuneCP5_13TeV-madgraph-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v1/2430000/1E9EAE85-0C85-844B-BF82-3FB6D325BC9B.root,
+          root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/TTGamma_Dilept_TuneCP5_13TeV-madgraph-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v1/2430000/FDBB4CBA-FDE9-2B41-AE91-608E99EC4C86.root,
+          root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/TTGamma_Dilept_TuneCP5_13TeV-madgraph-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v1/2430000/822C2A31-19C9-644D-9FAB-174BBC014B75.root,
+          root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/TTGamma_Dilept_TuneCP5_13TeV-madgraph-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v1/2430000/2380B328-78DC-6C47-81C6-BF2A9CB02219.root,
+          root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/TTGamma_Dilept_TuneCP5_13TeV-madgraph-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v1/2430000/EC85EE8F-DE79-1B4D-85E8-E79CEB425317.root,
+          root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/TTGamma_Dilept_TuneCP5_13TeV-madgraph-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v1/2430000/BA6F4055-7332-9040-8491-6A3BE9433B93.root,
+          root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/TTGamma_Dilept_TuneCP5_13TeV-madgraph-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v1/2430000/F3BBD145-38C2-704B-9144-477B5C632DE5.root,
+          root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/TTGamma_Dilept_TuneCP5_13TeV-madgraph-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v1/2430000/471C5713-25A8-7040-8373-54DC93F106C4.root,
+          root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/TTGamma_Dilept_TuneCP5_13TeV-madgraph-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v1/2430000/4DE16054-C735-3742-98F2-51E7C25410F2.root,
+          root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/TTGamma_Dilept_TuneCP5_13TeV-madgraph-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v1/2430000/C8EAE6CD-37E1-104A-B41C-0DF08F81AAD8.root
+        ]
+        xsec: 2.22037 
+        genSum: genEventSumw
+        hooks : from_decay
+
+  - group_name: TTG_fromProd
+    procs: 
+      - name: TTG_fromProd
+        files: [
+         root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/TTGJets_Dilepton_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/2810000/7A751C74-0426-E24A-9AB9-CBC59D321B00.root,
+         root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/TTGJets_Dilepton_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/2810000/D6BB2A38-D61E-CE42-876F-5C320F1BFB13.root,
+         root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/TTGJets_Dilepton_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/2810000/C97F4682-1464-0546-BEDA-4519E8B69567.root,
+         root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/TTGJets_Dilepton_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/2810000/E99C237C-48A7-354B-90EA-6588DF2C0D01.root,
+         root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/TTGJets_Dilepton_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/2810000/F8CA644C-9E6B-ED47-A7A3-1DA154A3994D.root,
+         root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/TTGJets_Dilepton_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/2810000/D7F27C36-FECF-0E4C-A66E-3830E34A12D7.root,
+         root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/TTGJets_Dilepton_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/2810000/44337F5B-DC16-9E4F-92D9-65BF2EDF0E36.root,
+         root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/TTGJets_Dilepton_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/2810000/C660D1C1-F5CC-5948-8BE2-28FFC10CD113.root,
+         root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/TTGJets_Dilepton_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/2810000/CF1107C9-46A7-FE40-A713-FE6D9D1BD170.root,
+         root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/TTGJets_Dilepton_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/2810000/08372D96-ECE0-C747-A2A1-03893AA7FD3B.root,
+         root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/TTGJets_Dilepton_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/2810000/45C2AE3B-F820-B147-ABCC-1CDA17035916.root,
+         root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/TTGJets_Dilepton_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/2810000/BCCB9BE1-4ED2-2D4F-8B7E-758AC139CB8B.root,
+         root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/TTGJets_Dilepton_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/2820000/FCD0B930-2C0E-BD49-9D6F-63A9E1846E2D.root,
+         root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/TTGJets_Dilepton_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/2820000/135792D3-9980-3F4E-BF6F-BE95C0A86ADC.root,
+         root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/TTGJets_Dilepton_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/2820000/AE0D4050-C193-C144-8090-2B7D7D4EF7BA.root,
+         root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/TTGJets_Dilepton_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/2820000/6C9B0B4C-32B7-9347-A3FE-DEE53054CB1D.root,
+         root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/TTGJets_Dilepton_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/2820000/B3A1F803-AFC7-9646-8A6E-47022A69315E.root,
+         root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/TTGJets_Dilepton_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/2820000/2B521CDB-5CBF-0443-BF8A-F4C60524ACB0.root,
+         root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/TTGJets_Dilepton_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/2820000/4507698A-E36F-9B47-87CD-CC69D897A877.root,
+         root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/TTGJets_Dilepton_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/2820000/E92B4195-86F6-3D41-8AB1-55D2492F8654.root,
+         root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/TTGJets_Dilepton_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/2820000/D31C8F87-395E-F74C-9A79-1B48428A212E.root,
+         root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/TTGJets_Dilepton_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/2820000/9620453B-3826-B447-B0D9-4DBF39043D73.root,
+         root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/TTGJets_Dilepton_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/2820000/88BFA642-5491-6D47-BB98-0C2E9341C27F.root,
+         root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/TTGJets_Dilepton_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/2820000/BA693AD8-AB88-754C-9AAD-31D129EB92CD.root,
+         root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/TTGJets_Dilepton_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/2820000/492CFC13-B1A8-F045-A573-19E68B52D79C.root,
+         root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/TTGJets_Dilepton_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/2820000/2BE161F4-1AAD-EB43-8C63-8C0E213317FA.root,
+         root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/TTGJets_Dilepton_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/2820000/BE5DEE20-4EE7-DE4D-800F-97636BBDF202.root,
+         root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/TTGJets_Dilepton_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/2820000/8DCE5D69-4A9C-A14F-A2E0-7AC14AC3A198.root,
+         root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/TTGJets_Dilepton_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/2820000/CD3CF891-D5C2-EB49-9B8C-34EB02F0E24B.root,
+         root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/TTGJets_Dilepton_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/2820000/5CFD941A-7AB8-8248-B61D-9720FF399927.root,
+         root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/TTGJets_Dilepton_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/2820000/2BE9E91C-6180-E340-819E-FA04AA957B57.root,
+         root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/TTGJets_Dilepton_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/2820000/92376AA0-A880-C84D-8542-248621E8BE2E.root,
+         root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/TTGJets_Dilepton_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/2820000/9588E59C-2E0A-D74C-96F4-52D87EFCF39B.root,
+         root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/TTGJets_Dilepton_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/2820000/353B109C-883F-704B-8C5A-379F49D704A9.root,
+         root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/TTGJets_Dilepton_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/2820000/B91D2993-6607-4A4E-9E1D-1B38CC815E47.root,
+         root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/TTGJets_Dilepton_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/2820000/42E6A673-ACA1-954D-B3AD-C658BC3E5E7A.root,
+         root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/TTGJets_Dilepton_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/2820000/9C4B10EF-1D0C-A84B-B485-F79DCC5F4356.root,
+         root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/TTGJets_Dilepton_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/2820000/D20B6C46-7E25-B347-8F32-E9DA08D4ED8C.root,
+         #root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/TTGJets_Dilepton_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/2820000/ECA4AFC4-5811-FA4D-B3AD-8E89E83A6D64.root,
+         #root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/TTGJets_Dilepton_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/2820000/63198F20-1F3B-864E-9CF5-719DFE8659C7.root,
+         #root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/TTGJets_Dilepton_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/2820000/AB9A724E-CD57-2749-B947-7B2EAD9AF00B.root,
+         #root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/TTGJets_Dilepton_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/2820000/EE5B09E2-E3A9-2644-87C9-6804ED8791A6.root,
+         #root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/TTGJets_Dilepton_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/2820000/525FF407-6C26-8D43-B322-E3908C7D44A8.root,
+         #root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/TTGJets_Dilepton_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/2820000/7B91A4EC-F2A7-DF48-811B-25300718BBCA.root,
+         #root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/TTGJets_Dilepton_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/2820000/325C9CE3-8847-D34A-8774-917E65BCD978.root,
+         #root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/TTGJets_Dilepton_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/2820000/E9D06A17-64B2-4D4A-BC1C-475B6FA038A5.root,
+         #root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/TTGJets_Dilepton_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/2820000/74BA8D3D-9F99-7D41-AE91-9F78C7048BD6.root,
+         #root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/TTGJets_Dilepton_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/2820000/3DFC9D88-9854-9E49-A031-04581602D1CB.root,
+         #root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/TTGJets_Dilepton_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/2820000/3574157A-DBFC-8E48-B166-FD10A2A0A6CB.root,
+         #root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/TTGJets_Dilepton_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/2820000/AE1333E6-9536-BD4E-AAE5-276B8B6C695D.root,
+         #root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/TTGJets_Dilepton_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/2820000/9855F79F-E0DD-0D4B-872C-2390A1D4CA3A.root,
+         #root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/TTGJets_Dilepton_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/2820000/5487EE0B-DDFC-1644-A776-7B1AB01970F0.root,
+         #root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/TTGJets_Dilepton_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/2820000/21278F7E-560A-C94A-85E1-B683286AF7E1.root,
+         #root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/TTGJets_Dilepton_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/2820000/CB98A9B8-85F7-4C48-B839-665FFD460C6F.root,
+         #root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/TTGJets_Dilepton_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/2820000/A30409BF-2EA1-C34B-BA8E-DD89B78FF68A.root,
+         #root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/TTGJets_Dilepton_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/2820000/893DC88B-34AF-674B-BDC8-93A4A3CB573C.root,
+         #root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/TTGJets_Dilepton_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/2820000/37EFCC16-B7C6-3944-A480-C264478212DE.root,
+         #root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/TTGJets_Dilepton_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/2820000/E51D706F-A58C-E144-91E9-82BD05393BBF.root,
+         #root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/TTGJets_Dilepton_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/2820000/31546A7D-70B6-D845-A92E-78DA6E84357C.root,
+         #root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/TTGJets_Dilepton_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/2820000/488BFCE9-2C75-E348-93E9-5658D3C8DDAE.root,
+         #root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/TTGJets_Dilepton_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/2820000/4B834F06-2A01-B14D-A5A5-6BCB5990FE47.root,
+         #root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/TTGJets_Dilepton_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/2820000/181CF4F2-79B7-C142-99AF-378CAEE6DDB5.root,
+         #root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/TTGJets_Dilepton_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/2810000/7B0AFCA8-BD11-3944-85AE-D6065370233D.root,
+         #root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/TTGJets_Dilepton_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/2810000/4F67CC6D-85D6-5B44-8E8B-4FF1E587B110.root,
+         #root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/TTGJets_Dilepton_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/2810000/6C0B9220-998B-1447-837D-80FB44E22C43.root,
+         #root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/TTGJets_Dilepton_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/2810000/4F1D1DF8-3B65-5C45-8B4E-C20D4FD7764E.root,
+         #root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/TTGJets_Dilepton_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/2810000/9707BE67-6DC5-D24E-9C88-8F67C076EA7F.root,
+         #root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/TTGJets_Dilepton_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/2810000/301E86F1-8C59-2445-B6B3-5B6F7F4E050F.root,
+         #root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/TTGJets_Dilepton_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/2810000/2920B43C-6333-714D-9139-EE0A7545A2F0.root,
+         #root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/TTGJets_Dilepton_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/2810000/FD5068D0-966B-D144-80A3-911FD8EF59AC.root,
+         #root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/TTGJets_Dilepton_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/2810000/C5544ACD-655C-9345-9009-BE277D747843.root,
+         #root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/TTGJets_Dilepton_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/2830000/99376293-BB21-6C4D-865B-7A5D890DD12B.root,
+         #root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/TTGJets_Dilepton_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/2830000/CC7A82A9-C2EF-0B4B-9899-7B0A21A1DC7D.root,
+         #root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/TTGJets_Dilepton_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/2830000/339B09B7-F4F9-3C4A-945B-2056A42DAF8D.root,
+         #root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/TTGJets_Dilepton_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/2830000/E20B45A8-4024-7942-904E-BCBDBAD72B61.root,
+         #root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/TTGJets_Dilepton_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/2830000/9E568B39-2250-D142-AAEA-D6A3183C6860.root,
+         #root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/TTGJets_Dilepton_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/2830000/A729D281-12AB-1B42-80D6-9FBB28DC4FC5.root,
+         #root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/TTGJets_Dilepton_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/2830000/ABD479B7-E214-2441-8124-AB484BEDDFFB.root,
+         #root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/TTGJets_Dilepton_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/2830000/C3B719C7-F618-CD48-849C-F923E2627248.root,
+         #root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/TTGJets_Dilepton_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/2830000/F629300D-E3F9-9541-A716-3B88F7744B5B.root,
+         #root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/TTGJets_Dilepton_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/2830000/DDD0EC67-234A-9E45-B136-60B76937F64F.root,
+         #root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/TTGJets_Dilepton_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/2830000/0B522B8F-A5D7-6B44-95BB-43C818BD11B8.root,
+         #root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/TTGJets_Dilepton_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/2830000/7451F8FA-CB0C-9149-ADEB-E448F71F5099.root,
+         #root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/TTGJets_Dilepton_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/2830000/65AE9374-9A63-8B40-A897-553A6F021E77.root,
+         #root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/TTGJets_Dilepton_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/2830000/729EC15C-6CD2-744A-960B-BCBE207C2C26.root,
+         #root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/TTGJets_Dilepton_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/2830000/6604F478-949B-F541-9F02-1D7F7F62C118.root,
+         #root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/TTGJets_Dilepton_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/2830000/44F52334-1D0A-E647-9463-5EF326308407.root,
+         #root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/TTGJets_Dilepton_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/2830000/1932143D-7776-604B-9CA9-D45DC5F5A124.root,
+         #root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/TTGJets_Dilepton_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/2830000/05B2A8D5-2453-1A41-8891-521BAF85AFD9.root,
+         #root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/TTGJets_Dilepton_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/2830000/2F072030-B3DE-2249-B30D-89F17B503044.root,
+         #root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/TTGJets_Dilepton_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/2830000/78E95377-3E9A-6048-8A6D-1097183346DD.root,
+         #root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/TTGJets_Dilepton_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/2830000/A81C60FE-3733-C94F-85A1-0F43522BF2B4.root,
+         #root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/TTGJets_Dilepton_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/2830000/B0F44D39-2017-444A-AC38-AAF87592AABB.root,
+         #root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/TTGJets_Dilepton_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/2830000/09FF5D10-CBCB-E745-A8A9-0C80213E4D2F.root,
+         #root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/TTGJets_Dilepton_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/2830000/5E057CBB-26F0-5F4E-9A6D-3A87B8F10E07.root,
+         #root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/TTGJets_Dilepton_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/2830000/82D9CAAA-AD60-9D4F-B8F2-F605CDB7F138.root,
+         #root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/TTGJets_Dilepton_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/2830000/6C44A359-CE5C-E04E-A863-4F5EE2BE9969.root,
+         #root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/TTGJets_Dilepton_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/2830000/F50FD448-7E1A-8243-B41D-67BD2368D915.root,
+         #root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/TTGJets_Dilepton_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/2830000/8154C7CE-8F36-6042-A9D7-28B4C8548247.root,
+         #root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/TTGJets_Dilepton_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/2830000/8928172B-4AC8-E04E-A1C6-4E932AE7709E.root,
+         #root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/TTGJets_Dilepton_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/2830000/75DF9E51-6881-6C42-A9A5-C549B7D1BF4E.root,
+         #root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/TTGJets_Dilepton_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/2830000/493E41B8-28EC-7D4F-9725-9323C1986928.root,
+         #root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/TTGJets_Dilepton_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/2830000/A6ED20A6-ABA7-2A49-9BE0-416762FB6F54.root,
+         #root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/TTGJets_Dilepton_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/2830000/CB35A3C8-E709-9343-9946-9228DB3D4DF0.root,
+         #root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/TTGJets_Dilepton_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/2830000/2189D7C7-3D02-D248-9325-15AE9060E9DF.root,
+         #root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/TTGJets_Dilepton_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/2830000/7AFF878F-A34C-1C43-AE09-A84937B69A8E.root,
+         #root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/TTGJets_Dilepton_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/2830000/DA04816D-22ED-E041-A80B-E8B679BFC244.root,
+         #root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/TTGJets_Dilepton_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/2830000/50C727B4-A089-244A-8F40-31A4475B15D8.root,
+         #root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/TTGJets_Dilepton_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/2830000/90FD4E84-A741-2548-9AC3-CE093C72532A.root,
+         #root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/TTGJets_Dilepton_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/2830000/971396A5-57CF-3B44-935F-92A31954C61E.root,
+         #root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/TTGJets_Dilepton_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/2830000/ED0DDF14-F6A3-4140-A842-2ECF3FE9601E.root,
+         #root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/TTGJets_Dilepton_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/2830000/C059CF37-0851-B041-AE2C-600FDF22A110.root,
+         #root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/TTGJets_Dilepton_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/2830000/B21084C1-95C6-8C41-8280-CD578182CB80.root,
+         #root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/TTGJets_Dilepton_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/2830000/BE2E1E83-BA82-EC48-83C4-B566633238B0.root,
+         #root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/TTGJets_Dilepton_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/2830000/BF70A656-3DB1-9B47-8A54-346F9DC7C08E.root,
+         #root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/TTGJets_Dilepton_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/2830000/E17C71DD-91CA-644E-AA16-2DD6C50AAE4A.root,
+         #root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/TTGJets_Dilepton_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/2830000/F758C83F-CCB8-E84C-938B-6B725B0B8F82.root,
+         #root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/TTGJets_Dilepton_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/2830000/62A9D9FA-986E-D644-BAB4-D7C676618BC1.root,
+         #root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/TTGJets_Dilepton_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/2810000/F362F1AD-17BA-E847-B083-C0D443D9FFCC.root,
+         #root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/TTGJets_Dilepton_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/1320000/48A4F90B-FCDC-3946-9EF3-5C5D211DE337.root,
+        ]
+        xsec: 0.428 
+        genSum: genEventSumw
+        hooks : from_prod
+
+  - group_name: TTG_fromDec_eft
+    procs: 
+      - name: TTG_fromDec_eft
+        files: [
+          root://eosuser.cern.ch//eos/user/c/cvicovil/www/top-comb/top-comb/nanogen/TT-1Jets-TTto2L2NuGamma/batch_06_10_2025_0950/genfiles/genfiles_0.root,
+          root://eosuser.cern.ch//eos/user/c/cvicovil/www/top-comb/top-comb/nanogen/TT-1Jets-TTto2L2NuGamma/batch_06_10_2025_0950/genfiles/genfiles_1.root,
+          root://eosuser.cern.ch//eos/user/c/cvicovil/www/top-comb/top-comb/nanogen/TT-1Jets-TTto2L2NuGamma/batch_06_10_2025_0950/genfiles/genfiles_2.root,
+          root://eosuser.cern.ch//eos/user/c/cvicovil/www/top-comb/top-comb/nanogen/TT-1Jets-TTto2L2NuGamma/batch_06_10_2025_0950/genfiles/genfiles_3.root,
+          root://eosuser.cern.ch//eos/user/c/cvicovil/www/top-comb/top-comb/nanogen/TT-1Jets-TTto2L2NuGamma/batch_06_10_2025_0950/genfiles/genfiles_4.root,
+          root://eosuser.cern.ch//eos/user/c/cvicovil/www/top-comb/top-comb/nanogen/TT-1Jets-TTto2L2NuGamma/batch_06_10_2025_0950/genfiles/genfiles_5.root,
+          root://eosuser.cern.ch//eos/user/c/cvicovil/www/top-comb/top-comb/nanogen/TT-1Jets-TTto2L2NuGamma/batch_06_10_2025_0950/genfiles/genfiles_6.root,
+          root://eosuser.cern.ch//eos/user/c/cvicovil/www/top-comb/top-comb/nanogen/TT-1Jets-TTto2L2NuGamma/batch_06_10_2025_0950/genfiles/genfiles_7.root,
+          root://eosuser.cern.ch//eos/user/c/cvicovil/www/top-comb/top-comb/nanogen/TT-1Jets-TTto2L2NuGamma/batch_06_10_2025_0950/genfiles/genfiles_8.root,
+          root://eosuser.cern.ch//eos/user/c/cvicovil/www/top-comb/top-comb/nanogen/TT-1Jets-TTto2L2NuGamma/batch_06_10_2025_0950/genfiles/genfiles_9.root
+        ]
+        xsec: 2.22037
+        genSum: genEventSumw
+        hooks : ~ 
+
+  - group_name: TTG_fromProd_eft
+    procs: 
+      - name: TTG_fromProd_eft
+        files: [
+          root://eosuser.cern.ch//eos/user/c/cvicovil/www/top-comb/top-comb/nanogen/TTGamma-1Jets-TTto2L2Nu_xcut20-qcut42/batch_06_10_2025_0951/genfiles/genfiles_0.root,
+          root://eosuser.cern.ch//eos/user/c/cvicovil/www/top-comb/top-comb/nanogen/TTGamma-1Jets-TTto2L2Nu_xcut20-qcut42/batch_06_10_2025_0951/genfiles/genfiles_1.root,
+          root://eosuser.cern.ch//eos/user/c/cvicovil/www/top-comb/top-comb/nanogen/TTGamma-1Jets-TTto2L2Nu_xcut20-qcut42/batch_06_10_2025_0951/genfiles/genfiles_2.root,
+          root://eosuser.cern.ch//eos/user/c/cvicovil/www/top-comb/top-comb/nanogen/TTGamma-1Jets-TTto2L2Nu_xcut20-qcut42/batch_06_10_2025_0951/genfiles/genfiles_3.root,
+          root://eosuser.cern.ch//eos/user/c/cvicovil/www/top-comb/top-comb/nanogen/TTGamma-1Jets-TTto2L2Nu_xcut20-qcut42/batch_06_10_2025_0951/genfiles/genfiles_4.root
+        ]
+        xsec: 0.428 
+        genSum: genEventSumw
+        hooks : ~ 

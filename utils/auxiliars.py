@@ -3,16 +3,36 @@ import yaml
 import itertools
 import numpy as np
 from copy import deepcopy
+import os
+import tarfile
+import subprocess
 
 # Create the logger instance
 from utils.logger import get_logger
-logger = get_logger( __name__ )
 
+logger = get_logger( __name__ )
 
 def load_config( config_path ) -> dict:
     """ Loads a configuration file written in yml format """
     with open(config_path, "r") as f:
         return yaml.safe_load(f)
+
+def open_template( settings, template_path):
+    """Read and return the content of a template file """
+    main_path = settings.get("topcomb_mainpath")
+    with open(os.path.join(main_path, template_path)) as f:
+        return f.read()
+
+def create_dir( dirname ):
+    if not os.path.exists( dirname ):
+        logger.info( f"Creating new work directory: {dirname}" )
+        os.makedirs( dirname, exist_ok = True )
+
+def copy_file( file, dest_dir = "." ):
+    try:
+        subprocess.run( ["cp", file, dest_dir] )
+    except subprocess.CalledProcessError as e:
+        logger.error( f"Error while copying file {file}. Exception: {e}" )
 
 def get_operators( config ) -> dict:
     """ Load info from metadata and return the list of operators """
@@ -97,7 +117,7 @@ def get_rwgt_points(algo, all_operators):
 def get_rwgt_name( rwgt_point ):
 
     rwgt_name = "_".join( 
-        "{0}{1}".format( opname, opval.replace(".", "p").replace("-","minus") ) for opname, opval in rwgt_point
+        "{0}{1}".format( opname, opval.replace(".", "p").replace("-","minus") ) for opname, opval in rwgt_point if opval != "0.0"
     )
 
     if not any( np.array(rwgt_point[:, 1], dtype = float) ):

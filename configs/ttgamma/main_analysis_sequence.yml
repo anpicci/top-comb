@@ -1,0 +1,44 @@
+sequence:
+  - name: leptons_partonLevel 
+    modules: configs.ttgamma.definitions_partonLevel
+    function: define_leptons_partonLevel 
+    args: ~ 
+
+  - name: tops_partonLevel 
+    modules: configs.ttgamma.definitions_partonLevel
+    function: define_tops_partonLevel
+    args: ~ 
+
+  - name: extrajet_partonLevel 
+    modules: configs.ttgamma.definitions_partonLevel
+    function: define_extrajet_partonLevel
+    args: ~ 
+
+  - name: isolated_photons 
+    modules: configs.ttgamma.definitions_particleLevel
+    function: define_isolated_photons_particleLevel
+    args: ~ 
+
+  - name: dressed_leptons_particleLevel 
+    modules: configs.ttgamma.definitions_particleLevel
+    function: define_dressed_leptons_particleLevel
+    args: ~ 
+
+  - name: jets_particleLevel 
+    modules: configs.ttgamma.definitions_particleLevel
+    function: define_jets_particleLevel
+    args: ~
+
+  - name: bjets_particleLevel 
+    modules: configs.ttgamma.definitions_particleLevel
+    function: define_bjets_particleLevel
+    args: ~
+
+  - name: otherVariables 
+    modules: configs.ttgamma.definitions_particleLevel
+    function: define_other_variables
+    args: ~
+
+
+
+

@@ -1,4 +1,4 @@
-executable = __SCRIPTNAME__ 
+executable = __SCRIPTNAME__
 getenv = True
 when_to_transfer_output = on_exit
 +JobFlavour = "nextweek"

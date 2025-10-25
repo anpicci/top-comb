@@ -1,58 +1,16 @@
 # Define hooks for the ttG analysis
 from CMGRDF.modifiers import Append, Insert, Prepend
 from CMGRDF.flow import Cut
-from CMGRDF import Define
+from CMGRDF import Define, AddWeight
 from CMGRDF.collectionUtils import DefineSkimmedCollection
 
 evaluate_function = lambda func, args: f"{func}({','.join(args)})"
 
 main_hooks = [
     Prepend( 
-        Define(
-            "is_fiducial_photon_parton_level",
-            evaluate_function(
-                "isFiducialPhoton_PartonLevel",
-                [
-                    "GenPart_pdgId",
-                    "GenPart_status",
-                    "GenPart_pt",
-                    "GenPart_eta",
-                    "GenPart_phi",
-                    "GenPart_genPartIdxMother"
-            ],
-            ),
-        eras=[],
-        ),
-        DefineSkimmedCollection(
-            "FiducialPhoton_partonLevel",
-            "GenPart",
-            mask="is_fiducial_photon_parton_level", 
-            members=(
-                "pt",
-                "eta",
-                "phi",
-                "mass",
-                "genPartIdxMother",
-                #"iso",
-                "pdgId",
-                "status",
-                "statusFlags"
-            ),
-            optMembers=[],
-        ),
-        Define(
-            "genphoton_category",
-            evaluate_function(
-                "get_genphoton_category",
-                [
-                    "GenPart_pdgId",
-                    "GenPart_genPartIdxMother",
-                    "GenPart_status",
-                    "is_fiducial_photon_parton_level"
-                ],
-            ),
-        eras=[],
-        )
+        Define( "is_fiducial_photon_parton_level", evaluate_function( "isFiducialPhoton_PartonLevel", [ "GenPart_pdgId", "GenPart_status", "GenPart_pt", "GenPart_eta", "GenPart_phi", "GenPart_genPartIdxMother" ],), eras=[]),
+        DefineSkimmedCollection( "FiducialPhoton_partonLevel", "GenPart", mask="is_fiducial_photon_parton_level", members=( "pt", "eta", "phi", "mass", "genPartIdxMother", "pdgId", "status", "statusFlags"), optMembers=[]),
+        Define( "genphoton_category", evaluate_function( "get_genphoton_category", [ "GenPart_pdgId", "GenPart_genPartIdxMother", "GenPart_status", "is_fiducial_photon_parton_level" ],), eras=[])
     )    
 ]
 
@@ -69,5 +27,9 @@ from_decay_wb = main_hooks + [ Append( Cut( "fromDecay", "genphoton_category == 
 from_decay_lepton = main_hooks + [ Append( Cut( "fromDecay", "genphoton_category == 5" ) ) ]
 from_decay_top = main_hooks + [ Append( Cut( "fromDecay", "genphoton_category == 4" ) ) ]
 
+
+# EFT hooks
+from_prod_EFTSM = [ Append( AddWeight("point", f"LHEReweightingWeight[128]") ) ] + from_prod
+from_decay_EFTSM = [ Append( AddWeight("point", f"LHEReweightingWeight[128]") ) ] + from_decay
 
 

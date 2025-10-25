@@ -1,30 +1,103 @@
 # This analysis is used to validate the implementation of the fiducial selections
 # used in TOP-23-002.
 
-samples: 
-  # These are the central nanoAOD samples for GammaFromDecay
-  fromDecay_wb_central: 
-    path: root://cmsxrootd.fnal.gov//store/mc/RunIISummer20UL18NanoAODv9/
-    files: TTGamma_Dilept_TuneCP5_13TeV-madgraph-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v1/2430000/2380B328-78DC-6C47-81C6-BF2A9CB02219.root 
-    isEFT: False 
-    isCard: False
-    xsec: 2.22037
-    hookfile : hooks.TTG_TOP-23-002
-    hooks: [ from_decay ]
-    label: '#gamma from decay'
+shape_analysis:
+  samples:
+    - name: TTG_fromDecay 
+      type: noEFT
+      files: [
+        root://cmsxrootd.fnal.gov//store/mc/RunIISummer20UL18NanoAODv9/TTGamma_Dilept_TuneCP5_13TeV-madgraph-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v1/2430000/2380B328-78DC-6C47-81C6-BF2A9CB02219.root
+      ] 
+      xsec: 2.22037
+      hookfile: hooks.TTG_TOP-23-002
+      hooks: [ from_decay ]
+    
+    - name: TTG_fromProd 
+      type: noEFT
+      files: [
+        root://cmsxrootd.fnal.gov//store/mc/RunIISummer20UL18NanoAODv9/TTGJets_Dilepton_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/2810000/301E86F1-8C59-2445-B6B3-5B6F7F4E050F.root
+      ] 
+      xsec: 0.428
+      hookfile: hooks.TTG_TOP-23-002
+      hooks: [ from_prod ]
 
-  # These are the central nanoAOD samples for GammaFromProduction
-  fromProd_top_central: 
-    path: root://cmsxrootd.fnal.gov//store/mc/RunIISummer20UL18NanoAODv9/
-    files: TTGJets_Dilepton_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/2810000/301E86F1-8C59-2445-B6B3-5B6F7F4E050F.root 
-    isEFT: False 
-    isCard: False
-    xsec: 0.428 
-    hookfile : hooks.TTG_TOP-23-002
-    hooks: [ from_prod ]
-    label: '#gamma from prod'
+    - name: TTG_fromProd_EFT
+      type: EFT
+      files: [
+          /eos/cms/store/group/phys_top/cvicovil/top-comb/TTGamma-1Jets-TTto2L2Nu_xcut20-qcut42/batch_17_09_2025_1111/genfiles/out_6*.root
+      ]
+      xsec: 0.428
+      hookfile: hooks.TTG_TOP-23-002
+      hooks: [ from_prod ]
 
-plugins: [
-  plugins/common_functions.cc,
-  plugins/TTG_TOP-23-002.cc
-]
+    - name: TTG_fromDecay_EFT
+      type: EFT
+      files: [
+        /eos/user/c/cvicovil/www/top-comb/top-comb/nanogen/TT-1Jets-TTto2L2NuGamma/batch_17_09_2025_1119/genfiles/merged_0.root
+      ]
+      xsec: 2.22037 
+      hookfile: hooks.TTG_TOP-23-002
+      hooks: [ from_decay ]
+
+  plugins: [ 
+    plugins/common_functions.cc, 
+    plugins/TTG_TOP-23-002.cc 
+  ]
+
+  sel-plots: [ leading_genphoton_pt, deltaR_pho_closestTop ]
+
+
+replot-inputs:
+  - name: TTG_fromDecay
+    label: "#gamma from decay"
+    select-point: ~ # Only applicable for EFT samples
+    histo-decorations:
+      SetLineColor: 8
+      SetLineStyle: 1
+      SetLineWidth: 2
+  - name: TTG_fromProd 
+    label: "#gamma from production"
+    select-point: ~ # Only applicable for EFT samples
+    histo-decorations:
+      SetLineColor: 9 
+      SetLineStyle: 1
+      SetLineWidth: 2
+  - name: TTG_fromDecay_EFT_3_cQt11p0
+    label: "__auto__"
+    histo-decorations:
+      SetLineColor: 2
+      SetLineStyle: 1
+      SetLineWidth: 2
+  - name: TTG_fromProd_EFT_3_cQt11p0 
+    label: "__auto__"
+    histo-decorations:
+      SetLineColor: 4 
+      SetLineStyle: 1
+      SetLineWidth: 2
+
+replot-list:
+  - name: leading_genphoton_pt
+    input: /eos/user/c/cvicovil/www/top-comb/TTG_TOP-23-002/FiducialSelectionValidation/leading_genphoton_pt.root
+    output: /eos/user/c/cvicovil/www/top-comb/TTG_TOP-23-002/FiducialSelectionValidation/
+    stack: []
+    overline: [
+      TTG_fromDecay,
+      TTG_fromProd,
+      TTG_fromDecay_EFT_3_cQt11p0,
+      TTG_fromProd_EFT_3_cQt11p0
+    ]
+    den_for_ratio: TTG_fromDecay
+    norm: ~
+
+  - name: deltaR_pho_closestTop
+    input: /eos/user/c/cvicovil/www/top-comb/TTG_TOP-23-002/FiducialSelectionValidation/deltaR_pho_closestTop.root
+    output: /eos/user/c/cvicovil/www/top-comb/TTG_TOP-23-002/FiducialSelectionValidation/
+    stack: []
+    overline: [
+      TTG_fromDecay,
+      TTG_fromProd,
+      TTG_fromDecay_EFT_3_cQt11p0,
+      TTG_fromProd_EFT_3_cQt11p0
+    ]
+    den_for_ratio: TTG_fromDecay
+    norm: ~
