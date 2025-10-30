@@ -1,1 +1,0 @@
-text2workspace.py comb_hybrid_lumiscale.dat -o comb_linear_systscaling_v2.root -P HiggsAnalysis.CombinedLimit.EFTComposite:eft --PO pois=../extrapoConfigs/full_pois.json --PO ../extrapoConfigs/ttx_linear_builder.json --X-nuisance-group-function experimental 'expr::lumisyst("1/sqrt(@0)",lumiscale[1])' --X-nuisance-group-function theory '0.5'
