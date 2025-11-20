@@ -2,93 +2,59 @@
  * Common functions that may be useful for different analyses.
  * author: Carlos Vico (carlos.vico.villalba@cern.ch)
  */
-
+#include <stdio.h>
 #include "common_functions.h" 
 
-ROOT::RVec<int> get_parents_properties(
-    const ROOT::RVec<int>& startIdx,
-    const ROOT::RVec<int>& motherIdx,
-    const ROOT::RVec<int>& input_properties,
-    int N ) {
+ROOT::RVec<bool> get_first_copy(
+    const ROOT::RVec<int> pdgId,
+    const ROOT::RVec<int> motherIdx,
+    const ROOT::RVec<bool> filter
+    )   {
 
     /*
-    * This function climbs up the ladder tracking 
-    * the ancestors of a given particle, then returns
-    * the desired property for that particular ancestor.
+    This function returns the indices of the GenPart list that are associated with particles
+    that are first in the production chain. 
     */
 
-    ROOT::RVec<int> parents_properties(startIdx.size(), 0);
-    for (int i = 0; i < (int)startIdx.size(); i++) {
-        int idx = startIdx[i];
+    ROOT::RVec<bool> is_first_copy = ROOT::RVec<bool>( pdgId.size(), false ); 
     
-        // climb N generations up
-        for (int level = 0; level < N; level++) {
-            // Keep updating the idx until we reach the desired level of parenting
-            idx = motherIdx[idx];
+    // Iterate over all genParticles, but only analyze those that are fiducial photons.
+    for (int ipart = 0; ipart < (int)pdgId.size(); ipart++) {
+
+        if ( (!filter[ipart]) ) { continue; } 
+        log( 2, "Searching for the first copy of particle with idx: %d", ipart );
+        auto pdgId_target = pdgId[ipart]; 
+        
+        // Now we want to find the position, within the GenPart list, for
+        // the first copy of the photon. 
+        auto ancestors_motherIdx = get_all_ancestors_properties(
+            ipart, // Here the seed is the particle itself, as we want to fetch the first parent also
+            motherIdx, // Complete list of GenPart mothers
+            motherIdx // We want to return the motherIdx.
+        );
+
+        auto ancestors_pdgId = get_all_ancestors_properties(
+            motherIdx[ipart], 
+            motherIdx, // Complete list of GenPart mothers
+            pdgId // We want to return the motherIdx.
+        );
+
+        int first_copy_idx = ipart; // Assume that the particle is already the first copy
+
+        log( 3, "List of ancestors:" );
+        loglist( 4, ancestors_pdgId );
+        for ( auto& ancestor_idx : ancestors_motherIdx ) {
+            // If the ancestor has the same pdgId, then it means the previous one
+            // was not the first copy, so update.
+            if ( abs( pdgId[ ancestor_idx ] ) == pdgId_target ) {
+                log( 4, "Particle with idx: %d set to first copy", ancestor_idx );
+                first_copy_idx = ancestor_idx; 
+            }
         }
-    
-        if (idx >= 0 ) { 
-         parents_properties[i] = input_properties[idx];
-        } else {
-            parents_properties[i] = 0; // no valid ancestor
-        }
-    }
-   
-    return parents_properties;
-}
 
-ROOT::RVec<int> get_all_ancestors_properties (
-    const int seed_idx,
-    const ROOT::RVec<int>& parentIdx,
-    const ROOT::RVec<int>& input_properties
-) {
-
-    /*
-    * This function tracks the history of a given
-    * GenPart, and returns a vector with the properties
-    * as provided by the second argument.
-    *
-    * Essentially this returns a vector with the size
-    * equal to the number of ancestors. Each component
-    * of the returned vector is a given input_properties of the
-    * ancestor (e.g. pdgId, status, statusFlags, etc...)
-    *
-    * Use the overloaded method to get floating values
-    */
-
-    int idx = seed_idx;
-    ROOT::RVec<int> properties; 
-
-    while (idx >= 0) { // -1 = no parent
-     	properties.push_back( input_properties[ idx ] );
-        idx = parentIdx[idx]; // Look for the next parent
+        // By now we should have found the first copy
+        is_first_copy[ first_copy_idx ] = true; 
     }
 
-    return properties;
-}
-
-ROOT::RVec<float> get_all_ancestors_properties (
-    const int seed_idx,
-    const ROOT::RVec<int>& parentIdx,
-    const ROOT::RVec<float>& input_properties
-) {
-
-    /*
-    * This function is equal to the method
-    * overloaded with <int>, just for <floating>
-    * values.
-    *
-    * It can be used to get e.g. the pT of each
-    * ancestor of a given particle.
-    */
-
-    int idx = seed_idx;
-    ROOT::RVec<float> properties; 
-
-    while (idx >= 0) { // -1 = no parent
-     	properties.push_back( input_properties[ idx ] );
-        idx = parentIdx[idx]; // Look for the next parent
-    }
-
-    return properties;
+    return is_first_copy;
 }

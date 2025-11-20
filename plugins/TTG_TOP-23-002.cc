@@ -5,19 +5,9 @@ Author: Carlos Vico (carlos.vico.villalba@cern.ch)
     with the help of Beatriz Ribeiro Lopes
 Last updated: 27-08-2025
 */
-
 #include <ROOT/RVec.hxx>
 #include "functions.h"
 #include "common_functions.h"
-
-
-enum Category {
-    FromLeptonDecay        = 1 << 0,  // 00001
-    FromWBDecay            = 1 << 1,  // 00010
-    FromTopDecay           = 1 << 2,  // 00100
-    FromISRProduction      = 1 << 3,  // 01000
-    FromOffshellTProduction= 1 << 4   // 10000
-};
 
 /* PARTON LEVEL FUNCTIONS */
 ROOT::RVec<bool> isFiducialPhoton_PartonLevel(
@@ -35,6 +25,8 @@ ROOT::RVec<bool> isFiducialPhoton_PartonLevel(
      * implemented in a way that mimics what is done in TOP-23-002.
      */
     
+    log( 0, " -------------------- " );
+    log( 0, "Identifying fiducial level photons..." );
     // Select generator level photons with stable PYTHIA status
     auto photon_mask = ( 
         ( abs(pdgId) == 22 ) & // Photon pdgId
@@ -42,6 +34,7 @@ ROOT::RVec<bool> isFiducialPhoton_PartonLevel(
         ( (pt > 20.0) & ( abs(eta) < 2.5 ) ) // Acceptance
     );
 
+    log( 1, " Initial mask applied: status = 1, pt > 20.0, abs(eta) < 2.5. Left with %d photon candidates", (int) photon_mask[ photon_mask == 1 ].size() );
 
     // Signal photons will be required to be isolated from these leptons
     auto is_relevant_lep = ( 
@@ -69,6 +62,23 @@ ROOT::RVec<bool> isFiducialPhoton_PartonLevel(
     auto selected_parts_eta = eta[ is_relevant_part ];
     auto selected_parts_phi = phi[ is_relevant_part ]; 
 
+    auto isolated_from_lep = cleanByDR( 
+        eta,
+        phi,
+        selected_leptons_eta,
+        selected_leptons_phi,
+        0.4
+    );
+
+    auto isolated_from_part = cleanByDR( 
+        eta,
+        phi,
+        selected_parts_eta,
+        selected_parts_phi,
+        0.4
+    );
+
+    photon_mask = ( photon_mask & ( isolated_from_lep ) & ( isolated_from_part ) );
 
     // Now for each photon, check:
     //  - History: must not be originated from a hadron (not including proton)
@@ -77,26 +87,36 @@ ROOT::RVec<bool> isFiducialPhoton_PartonLevel(
         bool selected_photon = photon_mask[i];
         if (selected_photon) {
 
+            log( 2, " Checking out photon %d", i );
             // Check if the photon is isolated from other leptons
-            auto deltaR2_pho_lep = deltaR2( 
-                eta[i], // Photon eta 
-                phi[i], // Photon phi
-                selected_leptons_eta, // Lepton eta
-                selected_leptons_phi  // Lepton phi
-            );
+            // auto deltaR2_pho_lep = deltaR2( 
+            //     eta[i], // Photon eta 
+            //     phi[i], // Photon phi
+            //     selected_leptons_eta, // Lepton eta
+            //     selected_leptons_phi  // Lepton phi
+            // );
 
-            // Check if the photon is isolated from other particles
-            auto deltaR2_pho_part = deltaR2( 
-                eta[i], // Photon eta 
-                phi[i], // Photon phi
-                selected_parts_eta, // Lepton eta
-                selected_parts_phi  // Lepton phi
-            );
+            // // Check if the photon is isolated from other particles
+            // auto deltaR2_pho_part = deltaR2( 
+            //     eta[i], // Photon eta 
+            //     phi[i], // Photon phi
+            //     selected_parts_eta, // Lepton eta
+            //     selected_parts_phi  // Lepton phi
+            // );
 
-            // The photon is not isolated if there's at least one particle within 
-            // a cone of 0.1.
-            if ( Any( deltaR2_pho_lep < 0.1 ) ) photon_mask[i] = false; 
-            if ( Any( deltaR2_pho_part < 0.1 ) ) photon_mask[i] = false; 
+            // // The photon is not isolated if there's at least one particle within 
+            // // a cone of 0.1.
+            // if ( Any( deltaR2_pho_lep < 0.1*0.1 ) ) {
+            //     log( 3, " Not isolated from leptons. This photon is not selected." );
+            //     photon_mask[i] = false; 
+            //     continue;
+            // }
+
+            // if ( Any( deltaR2_pho_part < 0.1*0.1 ) ) {
+            //     log( 3, " Not isolated from other particles. This photon is not selected." );
+            //     photon_mask[i] = false; 
+            //     continue;
+            // }
 
             // Track the history of this particle and get the pdgId.
             auto genealogic_tree = get_all_ancestors_properties( 
@@ -111,12 +131,17 @@ ROOT::RVec<bool> isFiducialPhoton_PartonLevel(
                 ( abs(genealogic_tree) != 2212) 
             );
 
-            photon_mask[i] = !(has_hadron_ancestor); // True if there's no hadron ancestor 
-                                                     // that is not a proton 
+            if ( has_hadron_ancestor ) {
+                log(3, "There is a hadron (not-proton, 2212) ancestor for this photon. This photon is not selected." );
+                log(3, "List of ancestors:" );
+                loglist(4, genealogic_tree );
+                photon_mask[i] = false;
+            }
         }
     } 
 
     auto is_genphoton = ( photon_mask );
+    log(2, "Number of fiducial photons: %d.", is_genphoton[ is_genphoton == 1 ].size() );
     return is_genphoton; 
 }
 
@@ -196,14 +221,16 @@ int get_genphoton_category(
     const ROOT::RVec<int>& pdgId,
     const ROOT::RVec<int>& motherIdx,
     const ROOT::RVec<int>& status,
+    const ROOT::RVec<float>& pt,
     const ROOT::RVec<bool>& is_fiducial_photon_parton_level
     ) {
 
     /*
      * This function is used to characterize PHOTONS defined
      * at the PARTON LEVEL. It basically tags the origin based on:
-     *  - Last copy of the photon
+     *  - First copy of the photon
      *  - A photon is considered from production only if it comes from ISR 
+     *    or from an offshell top.
      */
 
 
@@ -229,76 +256,18 @@ int get_genphoton_category(
     //    return first_copy
     //
     // ---------------------------------------------------------------------------
-    
 
-    ROOT::RVec<bool> is_first_copy = ROOT::RVec<bool>( pdgId.size(), false ); 
-
-    #ifdef _DEBUGCOMB
-    std::cout << " >> Getting first copy photon... " << " Iterating over " << pdgId.size() << " particles." << std::endl;
-    #endif
-
-    // Iterate over all genParticles, but only analyze those that are fiducial photons.
-    for (int ipart = 0; ipart < (int)pdgId.size(); ipart++) {
-
-        if ( !is_fiducial_photon_parton_level[ ipart ] ) continue;
-
-        // Now we want to find the position, within the GenPart list, for
-        // the first copy of the photon. 
-        auto ancestors_motherIdx = get_all_ancestors_properties(
-            ipart, // Here the seed is the particle itself, as we want to fetch the first parent also
-            motherIdx, // Complete list of GenPart mothers
-            motherIdx // We want to return the motherIdx.
-        );
-
-        int first_copy_idx = ipart; // Assume that the particle is already the first copy
-
-        #ifdef _DEBUGCOMB
-        std::cout << "   - Particle " << first_copy_idx 
-                << " is a fiducial photon. Proof: pdgId:"  << pdgId[ipart] 
-                << " with valid mask:" << is_fiducial_photon_parton_level[ipart] << 
-        std::endl;
-        std::cout << "   - Will now check if it is the first copy" << std::endl; 
-
-        auto ancestors_pdgIds = get_all_ancestors_properties(
-            motherIdx[ ipart ], // First mother of the photon
-            motherIdx, // Complete list of GenPart mothers
-            pdgId // We want to return the motherIdx.
-        );
-        
-        std::cout << "   - Ancestors: "; 
-        for ( auto& ancestor_pdgid : ancestors_pdgIds ) { std::cout << ancestor_pdgid << ","; }
-        std::cout << "" << std::endl; 
-        #endif
-
-        for ( auto& ancestor_idx : ancestors_motherIdx ) {
-            // If the ancestor is a photon, then it means the previous one
-            // was not the first copy, so update.
-            #ifdef _DEBUGCOMB
-            std::cout << "    - Checking ancestor  " << ancestor_idx << " which has pdgId: " << pdgId[ ancestor_idx ] << std::endl;
-            #endif 
-
-            if ( abs( pdgId[ ancestor_idx ] ) == 22 ) {
-                #ifdef _DEBUGCOMB
-                std::cout << "     + There's an ancestor with pdgId 22. So the first copy is updated to " << ancestor_idx << std::endl;
-                #endif 
-                first_copy_idx = ancestor_idx; 
-            }
-            
-        }
-
-        // By now we should have found the first copy
-        #ifdef _DEBUGCOMB
-        std::cout << "     + Setting " << first_copy_idx << " particle as first copy!" << std::endl;
-        #endif 
-
-        is_first_copy[ first_copy_idx ] = true;
-      
-    }
-
-    auto photon_pdgId = pdgId[ is_first_copy ];
-    auto photon_motherIdx = motherIdx[ is_first_copy ];
-
-    if (photon_pdgId.empty()) return 0;  // no photons
+    log( 0, "Categorizing sample based on generator level photons..." );
+   
+    log( 1, "Getting first copies" );
+    ROOT::RVec<bool> is_valid_first_copy = get_first_copy(
+        pdgId, // List of all genParticle pdgIds
+        motherIdx, // List of all genParticle motherIdx
+        is_fiducial_photon_parton_level
+    );
+    log( 1, "First copy has been selected" );
+    auto photon_pdgId = pdgId[ is_valid_first_copy ];
+    auto photon_motherIdx = motherIdx[ is_valid_first_copy ];
 
     auto mothers_pdgId  = get_parents_properties( 
         photon_motherIdx, 
@@ -315,7 +284,7 @@ int get_genphoton_category(
     );
 
 
-
+    log( 1, "Checking ancestors for the first copy" );
     auto mother_is_lepton = ( ( abs(mothers_pdgId) == 11 ) | ( abs(mothers_pdgId) == 13 ) | ( abs(mothers_pdgId) == 15 ) );
     auto mother_is_w_or_b = ( ( abs(mothers_pdgId) == 24 ) | ( abs(mothers_pdgId) == 5 ) );
     auto mother_is_top    = ( abs(mothers_pdgId) == 6 ); 
@@ -345,27 +314,41 @@ int get_genphoton_category(
 
     auto is_from_isr_production        = ( ( (!mother_is_top) & (!is_from_decay) ) & (!mother_is_offshel_t) );
     auto is_from_offshell_t_production = ( ( ( mother_is_top) & (!is_from_decay) ) | mother_is_offshel_t );
-
-    #ifdef _DEBUGCOMB
-    auto wbfromtop = ( (!not_from_top) & (mother_is_w_or_b) );
-    std::cout  << "Leading photon Mother is lepton? " << mother_is_lepton[0] << std::endl;
-    std::cout  << "Leading photon Mother is W or b from top branch? " << wbfromtop[0] << std::endl;
-    std::cout  << "Leading photon Mother is top decay? " << is_top_decay[0] << std::endl;
-    std::cout  << "Conclusion: is decay? " << is_from_decay[0] << std::endl;
-    std::cout  << "----------------------" << is_from_decay[0] << std::endl;
-    #endif
-
-    int category = 0;
-
-    category |= is_from_lepton_decay[0] << 0; // Bit for lepton decay 
-    category |= is_from_wb_decay[0] << 1; // Bit for W or b decay
-    category |= is_from_top_decay[0] << 2; // Bit for top decay
-    category |= is_from_decay[0] << 2; // Bit for ANY decay
-    category |= is_from_isr_production[0] << 3; // Bit for ISR production
-    category |= is_from_offshell_t_production[0] << 4; // Bit for OFFSHELL top production
+    auto is_from_production = ( is_from_isr_production | is_from_offshell_t_production );
 
     // Now define categories based on the origin of the **leading** photon.
-    //return ( is_from_decay[0] ) ? 1 : 2; // 1 = from decay, 2 = not from decay
+
+    // Get the index of the highest pt photon
+    int lead_pho_idx = 0;
+    auto photon_pt = pt[ is_valid_first_copy ];
+    for ( int ipho = 0; ipho < (int) photon_pt.size(); ipho++ ) {
+        if ( photon_pt[ipho] > photon_pt[lead_pho_idx] ) {
+            lead_pho_idx = ipho;
+        }
+    }
+    log( 1, "Pts: ");
+    loglist( 2, photon_pt );
+    log( 2, "Leading photon index: %d ", lead_pho_idx);
+
+    int category = 0;
+    category |= is_from_decay[lead_pho_idx] << 0; // Bit for ANY decay
+    category |= is_from_isr_production[lead_pho_idx] << 1; // Bit for ISR production
+    category |= is_from_offshell_t_production[lead_pho_idx] << 2; // Bit for OFFSHELL top production
+
+    log( 1, "Are photons from lepton decay?" );
+    loglist( 2, is_from_lepton_decay );
+    log( 1, "Are photons from w/b decay?" );
+    loglist( 2, is_from_wb_decay );
+    log( 1, "Are photons from top decay?" );
+    loglist( 2, is_from_wb_decay );
+    log( 1, "Are photons from decay (overall)?" );
+    loglist( 2, is_from_decay );
+    log( 1, "Are photons from ISR?" );
+    loglist( 2, is_from_isr_production );
+    log( 1, "Are photons from top production?" );
+    loglist( 2, is_from_offshell_t_production );
+    log( 1, "Final category: %d", category );
+
     return category;
 }
 
@@ -433,13 +416,14 @@ ROOT::RVec<bool> isFiducialLepton_ParticleLevel(
     ) {
     // Routine to implement fiducial definition of isolated photons
     
-    // Basic photon requirements
+    // Basic lepton requirements
     auto mask_pt = ( gen_dressed_lepton_pt > 15.0 );
     auto mask_eta = ( abs(gen_dressed_lepton_eta) < 2.5 );
 
     auto is_fiducial = (
         mask_pt & mask_eta 
     );
+
     return is_fiducial;
 }
 
@@ -456,10 +440,10 @@ ROOT::RVec<bool> isFiducialJet_ParticleLevel(
     
     // Basic photon requirements
     auto mask_pt = ( gen_jet_pt > 30.0 );
-    auto mask_eta = ( abs(gen_jet_eta) < 2.5 );
+    auto mask_eta = ( abs(gen_jet_eta) < 2.4 );
 
     auto isolated_from_lep = cleanByDR( 
-        gen_jet_pt,
+        gen_jet_eta,
         gen_jet_phi,
         gen_dressed_lepton_eta,
         gen_dressed_lepton_phi,
@@ -467,7 +451,7 @@ ROOT::RVec<bool> isFiducialJet_ParticleLevel(
     );
 
     auto isolated_from_pho = cleanByDR( 
-        gen_jet_pt,
+        gen_jet_eta,
         gen_jet_phi,
         gen_isolated_photon_eta,
         gen_isolated_photon_phi,
