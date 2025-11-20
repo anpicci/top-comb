@@ -1,7 +1,9 @@
 # Main configuration file to drive the setup and the combination
-
-# Each of the analysis in this group will be set up for combination
-# Note: setup does not mean they will be combined in the end.
-
-setup:
-  - configs/ttgamma.yml
+analyses:
+  # TTGamma analysis 
+  ttgamma:
+    operators: []
+    generation: 
+      configs/ttgamma/generation.yml
+    reinterpretation: 
+      configs/ttgamma/reinterpretation.yml
