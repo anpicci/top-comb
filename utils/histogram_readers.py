@@ -14,13 +14,12 @@ colors_module = importlib.import_module(
 
 class HistogramReader:
     """Abstract base for histogram readers."""
-    def __init__(self, name, label, procs, decorations, stack):
+    def __init__(self, name, label, procs, decorations):
         self.name = name
         self.h_nominal = []
         self.cache = {}
         self.label = label
         self.procs = procs
-        self.stack = stack
         self.decorations = decorations or {} 
         self.valid = True
 
@@ -34,7 +33,15 @@ class HistogramReader:
         raise NotImplementedError
 
     def get_histo(self, inputFile):
-        return self.cache[inputFile]
+        """Return a detached clone of the cached histogram for external use."""
+        key = os.path.abspath(inputFile)
+        h = self.cache.get(key)
+        if h is None:
+            return None
+        # Always return a clone detached from any file
+        clone = h.Clone(f"{h.GetName()}_clone")
+        clone.SetDirectory(0)
+        return clone
 
     def get_label(self):
         return self.label
@@ -51,12 +58,17 @@ class HistogramReader:
             evalfunc( value )
 
     @staticmethod
-    def integrate( name, histograms ):
-        """ Reads a dictionary and integrates histograms together """
-        h0 = histograms[0].Clone( f"{name}_SUM" )
+    def integrate(name, histograms):
+        """Integrate (sum) a list of histograms and return a detached clone.
+
+        Returns None if histograms is empty.
+        """
+        if not histograms:
+            return None
+        h0 = histograms[0].Clone(f"{name}_SUM")
         h0.SetDirectory(0)
         for h in histograms[1:]:
-            h0.Add( h )
+            h0.Add(h)
         return h0
 
 
@@ -64,72 +76,65 @@ class PlotFileHistogramReader( HistogramReader ):
     """Reader for histograms """
     def fetch(self, inputFile ):
 
+        inputFile = os.path.abspath(inputFile)
         if inputFile in self.cache:
             return  # already loaded
 
-        self.cache[inputFile] = None 
+        self.cache[inputFile] = None
 
         with r.TFile.Open(inputFile) as rfile:
-            
             histograms = []
-
             for proc in self.procs:
-
                 nominal_h = None
                 variations = []
                 for key in rfile.GetListOfKeys():
                     hname = key.GetName()
-
-                    if any( x in hname for x in ["data", "canvas"] ): continue
-                    if not hname.startswith( proc ):
-                        continue
-
+                    if any(x in hname for x in ["data", "canvas"]): continue
+                    if not hname.startswith(proc): continue
+                    obj = rfile.Get(hname)
+                    if obj is None: continue
+                    cloned = obj.Clone()
+                    cloned.SetDirectory(0)
                     if proc == hname:
-                        nominal_h = rfile.Get( hname ).Clone()
+                        nominal_h = cloned
                     else:
-                        variations.append( rfile.Get( hname ).Clone() )
+                        variations.append(cloned)
 
                 if not nominal_h:
-                    logger.warning( f'Process {proc} not in {inputFile}!' )
+                    logger.warning(f'Process {proc} not in {inputFile}!')
                     continue
-                
-                # At this point, add the variations to the nominal histogram
-                # Note: the nominal histogram already has the MC stat uncertainties.
-                for ibin in range( 1, 1 + nominal_h.GetNbinsX() ):
-                    content = nominal_h.GetBinContent( ibin )
-
-                    err = nominal_h.GetBinError(ibin)*nominal_h.GetBinError(ibin)
+                # combine variations into nominal errors ...
+                for ibin in range(1, 1 + nominal_h.GetNbinsX()):
+                    content = nominal_h.GetBinContent(ibin)
+                    err = nominal_h.GetBinError(ibin)**2
                     for hvar in variations:
-                        content_var = hvar.GetBinContent( ibin )
-                        diff = content - content_var
-                        err += diff*diff
-                    nominal_h.SetBinError( ibin, math.sqrt( err ) )
-                        
-                # Finally save this histogram in cache
-                histograms.append( nominal_h )
+                        diff = content - hvar.GetBinContent(ibin)
+                        err += diff * diff
+                    nominal_h.SetBinError(ibin, math.sqrt(err))
+                histograms.append(nominal_h)
 
-            # Now integrate all together and cache it
-            if histograms != []:
-                self.cache[inputFile] = PlotFileHistogramReader.integrate( 
-                        self.name, 
-                        histograms 
-                ) 
+            if histograms:
+                self.cache[inputFile] = PlotFileHistogramReader.integrate(self.name, histograms)
             else:
-                logger.warning( f'Group {self.name} could not be created as there are no valid inputs.' )
+                logger.warning(f'Group {self.name} could not be created as there are no valid inputs.')
                 self.valid = False
-            
-            
+
 class PlotFileGraphReader( HistogramReader ):
     """Reader for graphs """
     def fetch(self, inputFile ):
+        inputFile = os.path.abspath(inputFile)
         if inputFile in self.cache:
-            return  # already loaded
-        self.cache[inputFile] = {}
+            return
+        self.cache[inputFile] = None
         with r.TFile.Open(inputFile) as rfile:
-            
-            grname = 'data_graph' 
-            copy_gr = rfile.Get(grname).Clone()
-            for ipoint in range( copy_gr.GetN() ):
-                copy_gr.SetPointError(ipoint, 0, 0, copy_gr.GetErrorYlow(ipoint), copy_gr.GetErrorYhigh(ipoint) )
-
+            grname = 'data_graph'
+            obj = rfile.Get(grname)
+            if obj is None:
+                logger.warning(f"Graph {grname} not found in {inputFile}")
+                self.valid = False
+                return
+            copy_gr = obj.Clone()
+            # normalize point errors format, keep clone detached
+            for ipoint in range(copy_gr.GetN()):
+                copy_gr.SetPointError(ipoint, 0, 0, copy_gr.GetErrorYlow(ipoint), copy_gr.GetErrorYhigh(ipoint))
             self.cache[inputFile] = copy_gr

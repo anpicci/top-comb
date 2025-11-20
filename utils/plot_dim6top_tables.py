@@ -123,15 +123,16 @@ def plot_with_groups(df, proc, thr, title):
 # Example usage
 # ===============================
 
-proc = sys.argv[1]
-thr = float(sys.argv[2])
+if __name__ == "__main__":
+    proc = sys.argv[1]
+    thr = float(sys.argv[2])
 
-df = parse_latex_table( f"dim6top_tables/arxiv/squared_{proc}.tex" )
+    df = parse_latex_table( f"dim6top_tables/arxiv/squared_{proc}.tex" )
 
-# Apply a cutoff if desired
-df_cut = filter_df(df, param=thr)
+    # Apply a cutoff if desired
+    df_cut = filter_df(df, param=thr)
 
-# Plot
-plot_with_groups(df, proc, thr = "None", title=f"Quadratic dependence for {proc} from arXiv.1802.07237. No cut on table.")
-plot_with_groups(df_cut, proc, thr = thr, title=f"Quadratic dependence for {proc} from arXiv.1802.07237. Threshold: {thr} (absolute value)")
+    # Plot
+    plot_with_groups(df, proc, thr = "None", title=f"Quadratic dependence for {proc} from arXiv.1802.07237. No cut on table.")
+    plot_with_groups(df_cut, proc, thr = thr, title=f"Quadratic dependence for {proc} from arXiv.1802.07237. Threshold: {thr} (absolute value)")
 

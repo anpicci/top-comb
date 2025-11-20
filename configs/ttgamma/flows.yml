@@ -1,6 +1,0 @@
-validation:
-  - name: FiducialSelectionValidation
-    selection: configs.ttgamma.fiducial_selection 
-    function: get_fiducial_partonLevel 
-    subflows: 
-      - { name: PhotonCategories,   args: {}, label: 'TOP-23-002', sublabel: '', weights: [] }

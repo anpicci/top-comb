@@ -2,7 +2,7 @@ import ROOT
 
 # Define colors from the CAT group
 # https://cms-analysis.docs.cern.ch/guidelines/plotting/colors/
-empty = 0 
+white = 0 
 black = 1 
 blue = ROOT.TColor.GetColor( "#3f90da" )
 orange = ROOT.TColor.GetColor( "#ffa90e" )

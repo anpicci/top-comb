@@ -122,7 +122,7 @@ def define_isolated_photons_particleLevel( args ):
                 "isFiducialPhoton_ParticleLevel",
                 [
                     "GenIsolatedPhoton_pt",
-                    "abs(GenIsolatedPhoton_eta)",
+                    "GenIsolatedPhoton_eta",
                     "GenIsolatedPhoton_phi",
                     "GenDressedLepton_eta",
                     "GenDressedLepton_phi"
@@ -172,6 +172,7 @@ def define_dressed_leptons_particleLevel( args ):
             ),
             optMembers=[],
         ),
+        DefineP4("FiducialLepton_particleLevel"),
     ]
     return sequence
 
