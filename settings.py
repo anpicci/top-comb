@@ -9,10 +9,9 @@ class TopCombSettings:
 
         # Other paths
         self.topcomb_mainpath = os.getcwd()
-        self.topcomb_today_tag = datetime.now().strftime('%Y-%m-%d')
         self.topcomb_workdir = f"{self.topcomb_mainpath}/workdirs/" 
-        self.topcomb_inputs = f"{self.topcomb_mainpath}/inputs"
         self.topcomb_genproductions = f"{self.topcomb_mainpath}/genproductions_scripts"
+        self.topcomb_tmgtools = f"{self.topcomb_mainpath}/tmg-tools/top-gendqm"
         self.topcomb_cmgrdf = f"{self.topcomb_mainpath}/cmgrdf-prototype"
 
         # Gridpack info
