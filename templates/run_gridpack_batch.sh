@@ -15,9 +15,6 @@ cp -r $BASE/__CARDSDIR__ .
 # Run generation
 singularity run  -B /afs -B $BASE -B /eos -B /cvmfs -B /etc/grid-security -B /etc/pki/ca-trust --home $PWD:$PWD __SINGULARITY_IMAGE__ $(echo $(pwd)/gridpack_generation.sh __PROCNAME__ __CARDSDIR__)
 
-# Copy the index.php file to the output directory recursively
-find __OUTPATH__ -type d -exec cp -n index.php {} \;
-
 # Now prepare the output path
 OUTPATH=__OUTPATH__/__ANALYSIS_NAME__/__PROCNAME__/gridpack
 mkdir -p $OUTPATH 
