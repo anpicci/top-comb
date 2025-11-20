@@ -28,13 +28,6 @@ Work directory layout (created under the configured `topcomb_workdir`):
 
 ## Commands / Examples
 
-Create a fresh tag directory:
-
-Run setup (prepare generation configs for every analysis defined in the main config):
-```bash
-python3 top-comb.py --config main.yml --tag myrun setup_gen 
-```
-
 Create gridpacks (uses prepared configs under the workdir):
 ```bash
 python3 top-comb.py --config main.yml --tag myrun run_gridpack

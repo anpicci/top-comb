@@ -5,27 +5,22 @@ Helpers to run NanoGen validation for generated samples.
 """
 import os
 import subprocess
-import utils.auxiliars as aux
-from utils.logger import get_logger
+from utils import get_logger, load_config
 
 from settings import TopCombSettings
 settings = TopCombSettings().model_dump()
 logger = get_logger(__name__)
 
 
-def run_nanogen(analysis, settings, workdir):
+def run_nanogen(analysis_name, analysis_meta, workdir, settings):
     """
     Run NanoGen validation for each configured process using tmg-tools.
     """
-
-    metadata = aux.load_config(analysis)
-    analysis_name = metadata["analysis_name"]
-    logger.warning(f"Running NanoGen for analysis {analysis_name} ({analysis})")
-    samples = metadata["generation"]["samples"]
-
-    for sample in samples:
-        proc_metadata = aux.load_config(sample)
-        procname = proc_metadata["procname"]
+    gen_metadata = load_config(analysis_meta["generation"])
+    logger.warning(f"Running NanoGen for analysis {analysis_name}")
+    samples = gen_metadata["samples"]
+    for sample_metadata in samples:
+        procname = sample_metadata["name"]
         outdir = os.path.join(workdir, procname)
 
         script = os.path.join(settings["topcomb_tmgtools"], "main.py")

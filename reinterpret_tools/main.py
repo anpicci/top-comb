@@ -36,7 +36,7 @@ ROOT.gStyle.SetPadTickY(1)
 ROOT.gROOT.SetBatch(True)
 
 
-def reinterpret(analysis, workdir, opts):
+def reinterpret(analysis_name, analysis_meta, workdir, opts):
     """
     Top-level entry to prepare and run a reinterpretation.
 
@@ -53,19 +53,18 @@ def reinterpret(analysis, workdir, opts):
     """
     create_dir(workdir)
     update_cmgrdf_submodule()
-
-    metadata = load_config(analysis)
-    analysis_name = metadata["analysis_name"]
+    
+    analysis_metadata = load_config(analysis_meta["reinterpretation"])
     analysis_workdir = os.path.join(workdir, analysis_name)
     create_dir(analysis_workdir)
 
     if opts.replot:
-        logger.info(f"Replotting only for analysis {analysis_name} ({analysis})")
+        logger.info(f"Replotting only for analysis {analysis_name}")
     else:
-        logger.warning(f"Setting analysis {analysis_name} ({analysis})")
-        reinterpret_one_analysis(opts, metadata)
+        logger.warning(f"Setting analysis {analysis_name}")
+        reinterpret_one_analysis(opts, analysis_metadata)
 
-    replot(analysis)
+    replot(analysis_metadata)
     logger.info("Analysis setup completed.")
 
 
@@ -80,14 +79,8 @@ def reinterpret_one_analysis(opts, metadata):
     3) Build booking sequences, selections and per-subflow plot targets.
     4) Book flows into a CMGRDF Processor and run snapshots/plots.
     5) Print resulting plots to disk via PlotSetPrinter.
-
-    Parameters
-    - opts: options object with attributes:
-        - ncores: number of threads to enable for ROOT parallelism.
-        - debug: boolean enabling debug compilation flags.
-        - doUnc: whether to book uncertainties.
-    - metadata: loaded analysis metadata (dictionary parsed from YAML).
     """
+
     ROOT.EnableImplicitMT(opts.ncores)
 
     analysis_name = metadata["analysis_name"]

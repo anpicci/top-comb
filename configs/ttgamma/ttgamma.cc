@@ -88,35 +88,6 @@ ROOT::RVec<bool> isFiducialPhoton_PartonLevel(
         if (selected_photon) {
 
             log( 2, " Checking out photon %d", i );
-            // Check if the photon is isolated from other leptons
-            // auto deltaR2_pho_lep = deltaR2( 
-            //     eta[i], // Photon eta 
-            //     phi[i], // Photon phi
-            //     selected_leptons_eta, // Lepton eta
-            //     selected_leptons_phi  // Lepton phi
-            // );
-
-            // // Check if the photon is isolated from other particles
-            // auto deltaR2_pho_part = deltaR2( 
-            //     eta[i], // Photon eta 
-            //     phi[i], // Photon phi
-            //     selected_parts_eta, // Lepton eta
-            //     selected_parts_phi  // Lepton phi
-            // );
-
-            // // The photon is not isolated if there's at least one particle within 
-            // // a cone of 0.1.
-            // if ( Any( deltaR2_pho_lep < 0.1*0.1 ) ) {
-            //     log( 3, " Not isolated from leptons. This photon is not selected." );
-            //     photon_mask[i] = false; 
-            //     continue;
-            // }
-
-            // if ( Any( deltaR2_pho_part < 0.1*0.1 ) ) {
-            //     log( 3, " Not isolated from other particles. This photon is not selected." );
-            //     photon_mask[i] = false; 
-            //     continue;
-            // }
 
             // Track the history of this particle and get the pdgId.
             auto genealogic_tree = get_all_ancestors_properties( 
@@ -415,7 +386,6 @@ ROOT::RVec<bool> isFiducialLepton_ParticleLevel(
     const ROOT::RVec<float>& gen_dressed_lepton_eta
     ) {
     // Routine to implement fiducial definition of isolated photons
-    
     // Basic lepton requirements
     auto mask_pt = ( gen_dressed_lepton_pt > 15.0 );
     auto mask_eta = ( abs(gen_dressed_lepton_eta) < 2.5 );
@@ -437,7 +407,6 @@ ROOT::RVec<bool> isFiducialJet_ParticleLevel(
     const ROOT::RVec<float>& gen_isolated_photon_phi
     ) {
     // Routine to implement fiducial definition of isolated photons
-    
     // Basic photon requirements
     auto mask_pt = ( gen_jet_pt > 30.0 );
     auto mask_eta = ( abs(gen_jet_eta) < 2.4 );
