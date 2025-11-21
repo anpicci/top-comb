@@ -1,5 +1,6 @@
 genproductions_scripts/*
 workdirs
+combine
 submit*
 *dict*
 *cache*
