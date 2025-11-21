@@ -21,8 +21,10 @@ samples:
       name: templates/template_customizecards.dat
       extraopts: [
         "set param_card DECAY 6 1.491500e+00", # This is to mimic what was done in the central sample
-        "set run_card ptj 20",
-        "set run_card maxjetflavor 5"
+        "set run_card maxjetflavor 5",
+        "set run_card pta 10",
+        "set run_card draj 0.1",
+        "set run_card dral 0.1"
       ] 
 
     template_restrict_card: 
@@ -31,7 +33,7 @@ samples:
 
     # ------ Configurations regarding the Parton shower
     fragment:
-      name: templates/template_partonshower_madgraph.dat
+      name: templates/template_partonshower_madgraphMLM.dat
       process_parameters: [
         "'TimeShower:mMaxGamma = 4.0'"
       ]
@@ -48,19 +50,25 @@ samples:
         'define l- = e- mu- ta-',
         'define vl = ve vm vt',
         'define vl~ = ve~ vm~ vt~',
-        'generate p p > t t~ a FCNC=0 DIM6=1, (t > l+ vl b FCNC=0 DIM6=0), (t~ > l- vl~ b~ FCNC=0 DIM6=0) @0 ', 
-        'add process p p > t t~ a j FCNC=0 DIM6=1, (t > l+ vl b FCNC=0 DIM6=0), (t~ > l- vl~ b~ FCNC=0 DIM6=0) @0 ', 
+        'generate p p > t t~ a FCNC=0 DIM6=1, (t > l+ vl b FCNC=0 DIM6=0), (t~ > l- vl~ b~ FCNC=0 DIM6=0) @0', 
+        'add process p p > t t~ a j FCNC=0 DIM6=1, (t > l+ vl b FCNC=0 DIM6=0), (t~ > l- vl~ b~ FCNC=0 DIM6=0) @0', 
       ]
     
     template_run_card: 
-      name: templates/template_run_card_LO.dat 
+      name: templates/template_run_card_LO_MLM.dat 
     
     template_customizecards: 
       name: templates/template_customizecards.dat
       extraopts: [
         "set param_card DECAY 6 1.491500e+00", # This is to mimic what was done in the central sample
         "set run_card ptj 20",
-        "set run_card xqcut 20",
+        "set run_card ptgmin 10",
+        "set run_card etagamma 2.6",
+        "set run_card etagamma R0gamma 0.05",
+        "set run_card etagamma epsgamma 1.0",
+        "set run_card etagamma xn 1.0",
+        "set run_card mll_sf 30.0",
+        "set run_card xqcut 30", # qcut in the central sample
         "set run_card maxjetflavor 5"
       ] 
     
@@ -72,8 +80,7 @@ samples:
     fragment:
       name: templates/template_partonshower_madgraphMLM.dat
       process_parameters: [
-        "'JetMatching:qCut = 42.'",
-        "'JetMatching:qCutME = 20.'",
+        "'JetMatching:qCut = 30.'",
         "'JetMatching:nQmatch = 5'",
         "'JetMatching:nJetMax = 1'",
         "'TimeShower:mMaxGamma = 4.0'"

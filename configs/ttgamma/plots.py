@@ -11,7 +11,7 @@ plots = [
     ),
     Plot( 
         "gen_weight", 
-        "genweight", 
+        "genWeight", 
         (1, 0.5, 1.5), 
         xTitle = "Nominal generator weight", 
         yTitle = "Events",

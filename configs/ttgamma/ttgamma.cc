@@ -7,7 +7,7 @@ Last updated: 27-08-2025
 */
 #include <ROOT/RVec.hxx>
 #include "functions.h"
-#include "common_functions.h"
+#include "eft_auxiliars.h"
 
 /* PARTON LEVEL FUNCTIONS */
 ROOT::RVec<bool> isFiducialPhoton_PartonLevel(

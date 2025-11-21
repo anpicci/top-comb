@@ -13,7 +13,7 @@ git clone ssh://git@gitlab.cern.ch:7999/cvicovil/top-comb.git --recursive
 To create a fresh new install, run:
 
 ```bash
-python3 top-comb.py --config main.yml setup --tag new_comb_run
+python3 top-comb.py --config main.yml --tag new_comb_run setup 
 ```
 This will create a new folder under `workdirs/new_comb_run` with all the ingredients to run the combination.
 

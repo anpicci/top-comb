@@ -6,6 +6,7 @@ def main_parser():
     parser = argparse.ArgumentParser(description="Main parser for the top-comb.py script.")
 
     parser.add_argument("--config", default="main.yml", type=str, help="Path to config file")
+    parser.add_argument("--tag", default="myrun", type=str, help="Workdir tag folder to use")
 
     subparsers = parser.add_subparsers( dest="mode" )
     add_subcommands( subparsers )
@@ -15,7 +16,6 @@ def main_parser():
 def add_subcommands(subparsers):
     """Register subcommands for setup modes."""
     setup_parser = subparsers.add_parser("setup", help="Prepare code for generating gridpacks and nanogen inputs.")
-    setup_parser.add_argument("--tag", default="myrun", type=str, help="Workdir tag folder to use")
     setup_parser.add_argument("--reset", default=False, help="Remove old directory and remake it", action="store_true")
     
     run_gridpack_parser = subparsers.add_parser("run_gridpack", help="Submit gridpacks to condor.")

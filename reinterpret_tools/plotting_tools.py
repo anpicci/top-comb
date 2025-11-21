@@ -16,13 +16,17 @@ import sys
 from pathlib import Path
 
 from copy import deepcopy
-from utils import get_logger, load_config
+from utils import get_logger
 from plotting import Plotter1D
 from .loaders import load_module_from_path
 from .readers import build_histogram_readers, load_histograms_for_readers
 
 
 logger = get_logger(__name__)
+
+from settings import TopCombSettings
+settings = TopCombSettings().model_dump()
+outpath = settings["topcomb_outpath"]
 
 
 BASE_SPAMS = [
@@ -87,15 +91,13 @@ def write_yields(readers, rfile, outdir, plotname):
 # ------------------------------------------------------------
 # Replotting
 # ------------------------------------------------------------
-def replot( config ):
+def replot( analysis_name, metadata ):
     """Regenerate all plots."""
-    metadata = load_config(config)
 
-    analysis_name = metadata["analysis_name"]
     reinterpret_meta = metadata["reinterpretation"]
 
     readers = build_histogram_readers(reinterpret_meta["samples"]["datasets"])
-    outbase = Path(metadata["outpath"])
+    outbase = Path( outpath )
 
     flowmeta = reinterpret_meta["flow"]
     flowname = flowmeta["name"]

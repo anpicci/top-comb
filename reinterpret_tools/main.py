@@ -29,12 +29,9 @@ from .plotting_tools import replot
 
 logger = get_logger(__name__)
 
-# ROOT batch & style
-ROOT.gStyle.SetOptStat(0)
-ROOT.gStyle.SetPadTickX(1)
-ROOT.gStyle.SetPadTickY(1)
-ROOT.gROOT.SetBatch(True)
-
+from settings import TopCombSettings
+settings = TopCombSettings().model_dump()
+outpath = settings["topcomb_outpath"]
 
 def reinterpret(analysis_name, analysis_meta, workdir, opts):
     """
@@ -62,13 +59,13 @@ def reinterpret(analysis_name, analysis_meta, workdir, opts):
         logger.info(f"Replotting only for analysis {analysis_name}")
     else:
         logger.warning(f"Setting analysis {analysis_name}")
-        reinterpret_one_analysis(opts, analysis_metadata)
+        reinterpret_one_analysis(analysis_name, opts, analysis_metadata)
 
-    replot(analysis_metadata)
+    replot(analysis_name, analysis_metadata)
     logger.info("Analysis setup completed.")
 
 
-def reinterpret_one_analysis(opts, metadata):
+def reinterpret_one_analysis(analysis_name, opts, metadata):
     """
     Execute the CMGRDF-based interpretation for a single analysis.
 
@@ -82,10 +79,6 @@ def reinterpret_one_analysis(opts, metadata):
     """
 
     ROOT.EnableImplicitMT(opts.ncores)
-
-    analysis_name = metadata["analysis_name"]
-    outpath = metadata["outpath"]
-
     reinterpretation_meta = metadata.get("reinterpretation")
 
     # -----------------------------
@@ -103,6 +96,12 @@ def reinterpret_one_analysis(opts, metadata):
     # -----------------------------
     for funcfile in reinterpretation_meta["plugins"]:
         flag = "g" if opts.debug else "O"
+
+        # ensure headers included by the plugin are found by the compiler:
+        plugin_dir = os.path.abspath(os.path.dirname(funcfile))
+        if plugin_dir:
+            # add the plugin directory to the compiler include path
+            ROOT.gSystem.AddIncludePath(f"-I{plugin_dir}")
 
         if opts.debug:
             ROOT.gSystem.AddIncludePath("-D_DEBUGCOMB")

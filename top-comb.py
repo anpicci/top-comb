@@ -60,16 +60,9 @@ def main():
     # Only setup needs to prepare the directory
     if mode == "setup":
         prepare_workdir(
-            workdir=workdir,
-            mode="setup",
+            workdir = workdir,
+            mode = "setup",
             reset=getattr(args, "reset", False),
-        )
-    else:
-        # other modes require pre-existing workdir
-        prepare_workdir(
-            workdir=workdir,
-            mode=mode,
-            reset=False
         )
 
     # Now run the mode pipeline

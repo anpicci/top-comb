@@ -3,7 +3,7 @@
  * author: Carlos Vico (carlos.vico.villalba@cern.ch)
  */
 #include <stdio.h>
-#include "common_functions.h" 
+#include "eft_auxiliars.h" 
 
 ROOT::RVec<bool> get_first_copy(
     const ROOT::RVec<int> pdgId,

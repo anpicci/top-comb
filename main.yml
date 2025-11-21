@@ -2,7 +2,7 @@
 analyses:
   # TTGamma analysis 
   ttgamma:
-    operators: []
+    operators: [] #[ ctW, ctZ, ctG, ctp, cpQM, cpQ3, cptb, cbW]
     generation: 
       configs/ttgamma/generation.yml
     reinterpretation: 
