@@ -29,43 +29,55 @@ from .plotting_tools import replot
 
 logger = get_logger(__name__)
 
-from settings import TopCombSettings
-settings = TopCombSettings().model_dump()
-outpath = settings["topcomb_outpath"]
+def reinterpret(
+        analysis_name, 
+        analysis_meta, 
+        just_replot,
+        workdir, 
+        ncores,
+        debug,
+        doUnc
+    ):
 
-def reinterpret(analysis_name, analysis_meta, workdir, opts):
     """
     Top-level entry to prepare and run a reinterpretation.
-
-    Parameters
-    - analysis: path to analysis config (YAML) used to configure the run.
-    - workdir: base working directory where outputs and temporary files are stored.
-    - opts: parsed CLI options (expects attributes like ncores, debug, doUnc).
-
-    Behavior
-    - Ensure workdir exists and update the CMGRDF submodule.
-    - Load analysis metadata and create an analysis-specific working folder.
-    - Execute the CMGRDF processing pipeline via reinterpret_one_analysis.
-    - Regenerate plots by calling replot() with the analysis config path.
     """
     create_dir(workdir)
     update_cmgrdf_submodule()
     
-    analysis_metadata = load_config(analysis_meta["reinterpretation"])
+    reinterpret_meta = load_config(
+        analysis_meta["reinterpretation"]
+    )
     analysis_workdir = os.path.join(workdir, analysis_name)
     create_dir(analysis_workdir)
 
-    if opts.replot:
+    if just_replot:
         logger.info(f"Replotting only for analysis {analysis_name}")
     else:
         logger.warning(f"Setting analysis {analysis_name}")
-        reinterpret_one_analysis(analysis_name, opts, analysis_metadata)
+        reinterpret_one_analysis(
+            analysis_name = analysis_name, 
+            metadata = reinterpret_meta,
+            ncores = ncores,
+            debug = debug,
+            doUnc = doUnc
+        )
 
-    replot(analysis_name, analysis_metadata)
+    replot(
+        analysis_name = analysis_name, 
+        metadata = reinterpret_meta
+    )
+
     logger.info("Analysis setup completed.")
 
 
-def reinterpret_one_analysis(analysis_name, opts, metadata):
+def reinterpret_one_analysis(
+        analysis_name, 
+        metadata,
+        ncores,
+        debug,
+        doUnc,
+    ):
     """
     Execute the CMGRDF-based interpretation for a single analysis.
 
@@ -78,7 +90,7 @@ def reinterpret_one_analysis(analysis_name, opts, metadata):
     5) Print resulting plots to disk via PlotSetPrinter.
     """
 
-    ROOT.EnableImplicitMT(opts.ncores)
+    ROOT.EnableImplicitMT( ncores )
     reinterpretation_meta = metadata.get("reinterpretation")
 
     # -----------------------------
@@ -95,7 +107,7 @@ def reinterpret_one_analysis(analysis_name, opts, metadata):
     # 2. Plugins
     # -----------------------------
     for funcfile in reinterpretation_meta["plugins"]:
-        flag = "g" if opts.debug else "O"
+        flag = "g" if debug else "O"
 
         # ensure headers included by the plugin are found by the compiler:
         plugin_dir = os.path.abspath(os.path.dirname(funcfile))
@@ -103,7 +115,7 @@ def reinterpret_one_analysis(analysis_name, opts, metadata):
             # add the plugin directory to the compiler include path
             ROOT.gSystem.AddIncludePath(f"-I{plugin_dir}")
 
-        if opts.debug:
+        if debug:
             ROOT.gSystem.AddIncludePath("-D_DEBUGCOMB")
             ROOT.EnableImplicitMT(1)
 
@@ -134,7 +146,7 @@ def reinterpret_one_analysis(analysis_name, opts, metadata):
             lumi=138.0,
             flows=flow,
             targets=flow_targets,
-            withUncertainties=opts.doUnc,
+            withUncertainties = doUnc,
         )
 
     # -----------------------------

@@ -8,57 +8,89 @@ The callable_function is the actual implementation to run for the mode,
 and inputs_dict contains keyword arguments that will be passed to it.
 """
 
-# === Environment ===
-from settings import TopCombSettings
-settings = TopCombSettings().model_dump()
 import os
+import subprocess
 
-def _setup_gen(workdir, args):
+def _setup_gen( environment ):
     """
     Builder for setting up GEN related aspects 
-    """
+    """    
     from gen_tools import setup_gen_config
     return setup_gen_config, {
-        "settings": settings,  # project settings required by the gen tool
-        "workdir": os.path.join(workdir, "generation"),  # per-mode workdir
+        "analysis_name" : environment.get("analysis_name"),
+        "analysis_meta" : environment.get("main_config"),
+        "workdir" : environment.get("workdir"),
+        "outpath" : environment.get("outpath"),
+        "campaign" : environment.get("tmgtools_campaign"),
+        "genprod_repo" : environment.get("genproductions_repo"),
+        "genprod_image" : environment.get("genproductions_image"),
+        "genprod_branch" : environment.get("genproductions_branch"),
     }
 
-def _gridpack(workdir, args):
+def _gridpack( environment ):
     """
-    Builder for  
+    Builder for gridpack mode 
     """
     from gen_tools import run_gridpack
     return run_gridpack, {
-        "settings": settings,
-        "workdir": os.path.join(workdir, "generation"),
+        "workdir": environment.get("workdir")
     }
 
-def _nanogen(workdir, args):
+def _nanogen( environment ):
     """
-    Builder for 'run_nanogen' mode.
-
-    The returned function will perform the lightweight NanoGEN generation
-    using prepared gridpacks/samples in the generation workdir.
+    Builder for run_nanogen mode.
     """
     from gen_tools import run_nanogen
     return run_nanogen, {
-        "settings": settings,
-        "workdir": os.path.join(workdir, "generation"),
+        "workdir": environment.get("workdir"),
+        "tmgtools_path" : environment.get("tmgtools")
     }
 
-def _reinterpret(workdir, args):
+def _reinterpret( environment ):
     """
     Builder for 'reinterpret' mode.
-
-    Reinterpretation runs over the analysis outputs. We pass the parsed
-    CLI args as 'opts' so the reinterpret tool can inspect additional
-    runtime flags (e.g. --just-replot).
     """
     from reinterpret_tools import reinterpret
     return reinterpret, {
-        "workdir": os.path.join(workdir, "analysis"),
-        "opts": args,
+        "just_replot": environment.get("just_replot"),
+        "workdir" : environment.get("workdir"),
+        "ncores" : environment.get("ncores"),
+        "debug" : environment.get("debug"),
+        "doUnc" : environment.get("doUnc")
     }
+
+def _setup_combine( environment ):
+    """
+    Builder for installing combine. Just executes a script inside `combine_tools`. 
+    """
+    script = f"{environment.get('mainpath')}/combine_tools/install_combine.sh"
+    options = [
+            # Singularity mounting points
+            "singularity run",
+            "-B /afs -B /eos -B /cvmfs -B /etc/grid-security -B /etc/pki/ca-trust",
+            "--home $PWD:$PWD",
+
+            # Script
+            f"{environment.get('combine_image')} {script}",
+
+            # Arguments
+            "-p", environment.get('mainpath'),
+            "-a", environment.get('combine_scram'),
+            "-r", environment.get('combine_cmsrel'),
+            "-b", environment.get('combine_comb_branch'),
+            "-c", environment.get('combine_ch_branch'),
+    ]
+
+    cmd = " ".join( options )
+    def run( cmd ):
+        subprocess.check_call( 
+            cmd,
+            shell = True, 
+            cwd = os.getcwd(), 
+        )
+        
+    return run, { "cmd": cmd }
+ 
 
 
 MODE_REGISTRY = {
@@ -80,5 +112,9 @@ MODE_REGISTRY = {
     "reinterpret": {
         "funcs": [ _reinterpret ],
         "per-analysis": True,
+    },
+    "setup_combine": {
+        "funcs": [ _setup_combine ],
+        "per-analysis": False,
     },
 }

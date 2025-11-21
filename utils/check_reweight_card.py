@@ -3,9 +3,8 @@ import sys, os, re
 import itertools
 import argparse
 
-from settings import TopCombSettings
-settings = TopCombSettings().model_dump()
-
+from environment import TopCombEnv
+settings = TopCombEnv().model_dump()
 sys.path.append( settings.get("topcomb_mainpath", ".") )
 
 # Create the logger instance

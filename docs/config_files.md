@@ -18,6 +18,5 @@ analyses:
         __FILE_SPECIFYING_REINTERPRETATION_DETAILS__ 
 ```
 
-To build your own configurations, you can take a look into the existing ttgamma example: 
- * Example of a [generation file](configs/ttgamma/generation.yml).
- * Example of a [reinterpretation file](configs/ttgamma/reinterpretation.yml).
+### Generation files
+

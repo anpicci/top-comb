@@ -18,10 +18,6 @@ from utils import (
     get_rwgt_name, get_rwgt_points
 )
 
-from settings import TopCombSettings
-settings = TopCombSettings().model_dump()
-outpath = settings["topcomb_outpath"]
-
 def write_text(path: str, text: str):
     """Write text to file (small utility to keep code concise)."""
     with open(path, "w") as f:
@@ -30,47 +26,104 @@ def write_text(path: str, text: str):
 # ------------------------------------------------------------
 # Main entry point
 # ------------------------------------------------------------
-def setup_gen_config(analysis_name, analysis_meta, workdir, settings):
+def setup_gen_config(
+        analysis_name, 
+        analysis_meta, 
+        workdir, 
+        outpath,
+        campaign,
+        genprod_image,
+        genprod_repo,
+        genprod_branch
+    ):
+
     """
     Create generation work directories and prepare MadGraph configuration.
     """
     # Load generation metadata
-    gen_metadata = load_config(analysis_meta["generation"])
-    samples = gen_metadata["samples"]
-    selected_operators = analysis_meta["operators"]
-
-    samples = gen_metadata["samples"]
+    gen_metadata = load_config(
+        analysis_meta["generation"]
+    )
+    selected_operators = analysis_meta.get("operators")
     operators = get_operators( selected_operators )
 
-    for proc_gen_metadata in samples:
-        procname = proc_gen_metadata["name"]
+    # Go over samples
+    samples = gen_metadata["samples"]
+    for proc_metadata in samples:
+        procname = proc_metadata["name"]
 
-        outdir = Path(workdir) / procname
-        mgcards_dir = outdir / "mgcards"
-        create_dir(mgcards_dir)
-
-        proc_metadata = { **settings, **proc_gen_metadata }
+        mgworkdir = Path(workdir) / procname
+        mgcards_dir = mgworkdir / "mgcards"
+        create_dir( 
+            dirname = mgcards_dir 
+        )
 
         # Write all MadGraph cards and related config fragments
-        prepare_proc_card(proc_metadata, mgcards_dir)
-        prepare_run_card(proc_metadata, proc_gen_metadata, mgcards_dir)
-        prepare_extramodels(proc_metadata, mgcards_dir)
-        prepare_customizecards(proc_metadata, mgcards_dir, operators)
-        prepare_restrict_card(proc_metadata, mgcards_dir, operators)
-        prepare_reweightcards(proc_metadata, mgcards_dir, operators)
+        prepare_proc_card(
+            metadata = proc_metadata, 
+            mgworkdir = mgcards_dir
+        )
+        
+        prepare_run_card(
+            metadata = proc_metadata, 
+            mgworkdir = mgcards_dir
+        )
+        
+        prepare_extramodels(
+            metadata = proc_metadata, 
+            mgworkdir = mgcards_dir
+        )
+        
+        prepare_customizecards(
+            metadata = proc_metadata, 
+            mgworkdir = mgcards_dir, 
+            operators = operators
+        )
+        
+        prepare_restrict_card(
+            metadata = proc_metadata, 
+            mgworkdir = mgcards_dir, 
+            operators = operators
+        )
+        
+        prepare_reweightcards(
+            metadata = proc_metadata, 
+            mgworkdir = mgcards_dir, 
+            operators = operators
+        )
 
         # Create the fragment used by the event production step
-        prepare_fragment(analysis_name, proc_gen_metadata, outdir)
+        prepare_fragment(
+            analysis_name = analysis_name, 
+            metadata = proc_metadata, 
+            mgworkdir = mgworkdir, 
+            outpath = outpath
+        )
 
         # Prepare submission and gridpack helper scripts
-        prepare_submission_nanogen_file(analysis_name, gen_metadata, procname, outdir)
-        create_gridpack_submit(analysis_name, settings, proc_gen_metadata, outdir)
+        prepare_submission_nanogen_file(
+            analysis_name = analysis_name, 
+            metadata = proc_metadata, 
+            mgworkdir = mgworkdir, 
+            outpath = outpath, 
+            campaign = campaign
+        )
+        
+        create_gridpack_submit(
+            analysis_name = analysis_name, 
+            metadata = proc_metadata, 
+            outpath = outpath, 
+            mgworkdir = mgworkdir, 
+            genprod_image = genprod_image, 
+            genprod_repo = genprod_repo, 
+            genprod_branch = genprod_branch
+        )
 
 
 # ------------------------------------------------------------
 # MadGraph cards
 # ------------------------------------------------------------
-def prepare_proc_card(metadata, outdir):
+def prepare_proc_card(metadata, mgworkdir):
     """
     Create the proc_card specifying the process and output directory.
     """
@@ -83,27 +136,27 @@ def prepare_proc_card(metadata, outdir):
         f"output {procname} -nojpeg",
     ]
 
-    write_text(outdir / f"{procname}_proc_card.dat", "\n".join(full_card))
+    write_text(mgworkdir / f"{procname}_proc_card.dat", "\n".join(full_card))
 
 
-def prepare_extramodels(metadata, outdir):
+def prepare_extramodels(metadata, mgworkdir):
     """
     Write a file that tells MG which extra models to load.
     """
     procname = metadata["name"]
-    write_text(outdir / f"{procname}_extramodels.dat", metadata["load_extramodels"])
+    write_text(mgworkdir / f"{procname}_extramodels.dat", metadata["load_extramodels"])
 
 
-def prepare_run_card(settings, metadata, outdir):
+def prepare_run_card( metadata, mgworkdir ):
     """
     Render the run_card from a template specified in settings/metadata.
     """
     procname = metadata["name"]
     tpl = open_template( metadata["template_run_card"]["name"] )
-    write_text(outdir / f"{procname}_run_card.dat", tpl)
+    write_text(mgworkdir / f"{procname}_run_card.dat", tpl)
 
 
-def prepare_restrict_card(metadata, outdir, operators):
+def prepare_restrict_card(metadata, mgworkdir, operators):
     """
     Render the restrict card.
 
@@ -131,10 +184,10 @@ def prepare_restrict_card(metadata, outdir, operators):
                 val += 0.1
 
     restrict_name = metadata["template_restrict_card"]["restrict_name"]
-    write_text(outdir / f"{procname}_restrict_{restrict_name}.dat", tpl)
+    write_text(mgworkdir / f"{procname}_restrict_{restrict_name}.dat", tpl)
 
 
-def prepare_customizecards(metadata, outdir, operators):
+def prepare_customizecards(metadata, mgworkdir, operators):
     """
     Create customizecards by appending EFT operator settings and any extra opts.
 
@@ -159,10 +212,10 @@ def prepare_customizecards(metadata, outdir, operators):
         tpl += "\n\n# User settings\n"
         tpl += "\n".join(extra_opts)
 
-    write_text(outdir / f"{procname}_customizecards.dat", tpl)
+    write_text(mgworkdir / f"{procname}_customizecards.dat", tpl)
 
 
-def prepare_reweightcards(metadata, outdir, operators):
+def prepare_reweightcards(metadata, mgworkdir, operators):
     """
     Build a reweight_card that contains all reweighting points used for
     systematic/envelope studies. It also produces README.md in the parent 
@@ -197,7 +250,7 @@ def prepare_reweightcards(metadata, outdir, operators):
             text += f"set {param} {float(val):3.4f}\n"
         text += "\n"
 
-    write_text(outdir / f"{procname}_reweight_card.dat", text)
+    write_text(mgworkdir / f"{procname}_reweight_card.dat", text)
 
     # Markdown summary for quick reference
     operator_names = [op[0] for op in operators]
@@ -216,13 +269,13 @@ def prepare_reweightcards(metadata, outdir, operators):
         label = "SM" if not nonzero else ", ".join(nonzero)
         md_lines.append(f"| {label} | {i} |")
 
-    write_text(outdir.parent / "README.md", "\n".join(md_lines))
+    write_text(mgworkdir.parent / "README.md", "\n".join(md_lines))
 
 
 # ------------------------------------------------------------
 # Fragment / submission
 # ------------------------------------------------------------
-def prepare_fragment(analysis_name, metadata, outdir):
+def prepare_fragment(analysis_name, metadata, mgworkdir, outpath):
     """
     Render the fragment.py used by the event production step.
     """
@@ -241,28 +294,34 @@ def prepare_fragment(analysis_name, metadata, outdir):
     param_text = (",\n" + indent).join(params)
 
     tpl = tpl.format(GRIDPACK=gridpack_path, PROCESS_PARAMETERS=param_text)
-    write_text(outdir / "fragment.py", tpl)
+    write_text(mgworkdir / "fragment.py", tpl)
 
 
-def prepare_submission_nanogen_file(analysis_name, metadata, procname, outdir):
+def prepare_submission_nanogen_file(
+        analysis_name, 
+        metadata, 
+        mgworkdir, 
+        outpath, 
+        campaign
+    ):
     """
     Create a small JSON config used to submit nanogen validation jobs.
     """
 
-
+    procname = metadata["name"]
     data = {
         "producer" : {
             "mode": "nanogen",
-            "tag": f"submit_nanogen_{procname}"
+            "tag": f"{mgworkdir}/submit_nanogen"
         },
         "settings": {
             "outpath": f"{outpath}/{analysis_name}/{procname}/nanogen",
-            "campaign": "RunIISummer20UL18",
+            "campaign": campaign 
         },
         "samples": [
             {
             "name" : procname,
-            "fragment": f"file:{outdir}/fragment.py",
+            "fragment": f"file:{mgworkdir}/fragment.py",
             "nevents":  1e6,
             "memory": 32000,
             "njobs": 5000,
@@ -272,10 +331,18 @@ def prepare_submission_nanogen_file(analysis_name, metadata, procname, outdir):
         ]
     }
 
-    write_text(outdir / "nanogen_config.json", json.dumps(data, indent=4))
+    write_text(mgworkdir / "nanogen_config.json", json.dumps(data, indent=4))
 
 
-def create_gridpack_submit(analysis_name, settings, metadata, outdir):
+def create_gridpack_submit(
+        analysis_name, 
+        metadata, 
+        outpath, 
+        mgworkdir,
+        genprod_image,
+        genprod_repo,
+        genprod_branch
+    ):
     """
     Create helper scripts to run the gridpack creation and submission.
     """
@@ -291,15 +358,15 @@ def create_gridpack_submit(analysis_name, settings, metadata, outdir):
         "__ANALYSIS_NAME__": analysis_name,
         "__CARDSDIR__": "mgcards",
         "__OUTPATH__": outpath,
-        "__SINGULARITY_IMAGE__": settings["singularity_image_gridpack"],
-        "__GENPRODUCTIONS_GRIDPACK__": settings["genproductions_gridpack"],
-        "__BRANCH_GRIDPACK__": settings["branch_gridpack"],
+        "__SINGULARITY_IMAGE__": genprod_image,
+        "__GENPRODUCTIONS_GRIDPACK__": genprod_repo,
+        "__BRANCH_GRIDPACK__": genprod_branch,
     }
 
     for k, v in subs.items():
         bash_tpl = bash_tpl.replace(k, v)
 
-    write_text(outdir / "run_gridpack_batch.sh", bash_tpl)
+    write_text(mgworkdir / "run_gridpack_batch.sh", bash_tpl)
 
     # Render condor submission description file
     jds_tpl = open_template(
@@ -315,5 +382,5 @@ def create_gridpack_submit(analysis_name, settings, metadata, outdir):
     for k, v in jds_subs.items():
         jds_tpl = jds_tpl.replace(k, v)
 
-    write_text(outdir / "run_gridpack_batch.jds", jds_tpl)
+    write_text(mgworkdir / "run_gridpack_batch.jds", jds_tpl)
 

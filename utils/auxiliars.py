@@ -13,19 +13,22 @@ from utils.logger import get_logger
 logger = get_logger( __name__ )
 
 
-from settings import TopCombSettings
-settings = TopCombSettings().model_dump()
-main_path = settings.get("topcomb_mainpath")
+from environment import TopCombEnv
+settings = TopCombEnv().model_dump()
+main_path = settings.get("mainpath")
 
 def load_config( config_path ) -> dict:
     """ Loads a configuration file written in yml format """
     with open(config_path, "r") as f:
         return yaml.safe_load(f)
 
-def prepare_workdir(workdir, mode, reset):
+def prepare_workdir( environment ):
     """
     Setup the main folder: requires clean workdir
     """
+    workdir = environment.get("workdir")
+    reset = environment.get("reset")
+    
     if os.path.exists(workdir):
         if reset:
             logger.info(f"Resetting existing workdir: {workdir}")

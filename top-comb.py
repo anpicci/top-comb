@@ -1,45 +1,40 @@
-# === Standard Library Imports ===
 import os
 import sys
-
-
-# === Project-Specific Imports ===
 from utils.parser import main_parser 
 from utils.logger import get_logger
+from environment import TopCombEnv
+from modes import MODE_REGISTRY
 from utils import load_config, prepare_workdir 
 logger = get_logger(__name__)
 
-# === Environment ===
-from settings import TopCombSettings
-settings = TopCombSettings().model_dump()
-from modes import MODE_REGISTRY
-
-
 def run_per_analysis(analyses, func, inputs):
     for analysis_name, analyses_meta in analyses.items():
-        func(analysis_name, analyses_meta, **inputs)
+        inputs["analysis_name"] = analysis_name
+        inputs["analysis_meta"] = analyses_meta
+        func( **inputs )
 
-def run_pipeline(config, mode_info, workdir, args):
+def run_pipeline(mode_info, environment):
     """
     Execute all functions belonging to the mode.
     Each element in mode_info["funcs"] is a callable returning (func, inputs).
     """
+
     funcs = mode_info.get("funcs", [])
     per_analysis = mode_info.get("per-analysis", False)
 
     for builder in funcs:
         # builder builds the function + inputs for THIS step
-        func, inputs = builder(workdir, args)
+        func, inputs = builder( environment )
 
         if per_analysis:
+            analyses = environment.get("main_config")["analyses"]
             run_per_analysis(
-                analyses=config["analyses"],
-                func=func,
-                inputs=inputs,
+                analyses = analyses,
+                func = func,
+                inputs = inputs,
             )
         else:
-            func(**inputs)
-
+            func( **inputs )
 
 def main():
     parser, _ = main_parser()
@@ -49,29 +44,45 @@ def main():
         logger.error("No mode provided. Use --mode.")
         sys.exit(1)
 
-    mode = args.mode
-    if mode not in MODE_REGISTRY:
-        logger.error(f"Unknown mode: {mode}")
-        sys.exit(1)
+    # ----------------------------------------------
+    # Pack all the inputs in a single dictionary. Then
+    # pass that environment to the different modes.
+    # There are some parameters that can be modified by users
+    env_settings = TopCombEnv.new( {} )
+    if args.outpath != None:
+        env_settings = TopCombEnv.new( 
+            outpath = args.outpath,
+        )
+    environment = {
+        **env_settings,
+        **vars(args),
+    }
 
-    main_config = load_config(args.config)
-    workdir = os.path.join(settings["topcomb_workdir"], args.tag)
+    main_config = load_config( 
+        environment.get("main_config") 
+    )
+    
+    workdir = os.path.join(
+        environment.get("workdir"), 
+        environment.get("tag") 
+    )
+    
+    environment["main_config"] = main_config
+    environment["workdir"] = workdir
+    # ----------------------------------------------
 
-    # Only setup needs to prepare the directory
+    # ----------------------------------------------
+    # Now prepare running things
+    mode = environment.get("mode")
     if mode == "setup":
         prepare_workdir(
-            workdir = workdir,
-            mode = "setup",
-            reset=getattr(args, "reset", False),
+            environment = environment,
         )
-
-    # Now run the mode pipeline
     run_pipeline(
-        config=main_config,
-        mode_info=MODE_REGISTRY[mode],
-        workdir=workdir,
-        args=args,
+        mode_info = MODE_REGISTRY[ mode ],
+        environment = environment
     )
+    # ----------------------------------------------
 
 
 if __name__ == "__main__":

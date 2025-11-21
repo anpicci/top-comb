@@ -24,10 +24,9 @@ from .readers import build_histogram_readers, load_histograms_for_readers
 
 logger = get_logger(__name__)
 
-from settings import TopCombSettings
-settings = TopCombSettings().model_dump()
-outpath = settings["topcomb_outpath"]
-
+from environment import TopCombEnv
+settings = TopCombEnv().model_dump()
+outpath = settings.get("outpath")
 
 BASE_SPAMS = [
     {"text": "__LUMI__ (13.0 TeV)", "x0": .73, "y0": .963, "x1": .755, "y1": .99, "textsize": 22},
