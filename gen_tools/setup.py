@@ -31,7 +31,7 @@ def setup_gen_config(
         analysis_meta, 
         workdir, 
         outpath,
-        campaign,
+        tmgtools_path,
         genprod_image,
         genprod_repo,
         genprod_branch
@@ -102,11 +102,10 @@ def setup_gen_config(
 
         # Prepare submission and gridpack helper scripts
         prepare_submission_nanogen_file(
-            analysis_name = analysis_name, 
             metadata = proc_metadata, 
             mgworkdir = mgworkdir, 
-            outpath = outpath, 
-            campaign = campaign
+            tmgtools_path = tmgtools_path,
+            outpath = f"{outpath}/{analysis_name}"
         )
         
         create_gridpack_submit(
@@ -232,8 +231,11 @@ def prepare_reweightcards(metadata, mgworkdir, operators):
         "launch --rwgt_name=dummy\n\n"
     )
 
+    if len(operators) == 0:
+        return
+    
     rwgt_points = get_rwgt_points(operators, 1)
-    if len(operators) >= 2:
+    if len(operators) > 2:
         rwgt_points += get_rwgt_points(operators, 2)
 
     # Add SM point by cloning last point and zeroing couplings
@@ -283,8 +285,11 @@ def prepare_fragment(analysis_name, metadata, mgworkdir, outpath):
     procname = metadata["name"]
     tpl = open_template( metadata["fragment"]["name"] )
 
-    gridpacks_base = Path(outpath) / analysis_name / procname
-    gridpack_path = gridpacks_base / "gridpack" / f"{procname}.tar.xz"
+    gridpacks_base = f"{outpath}/{analysis_name}/{procname}"
+
+    # Remove any redirectors from the fragment path
+    gridpacks_base = gridpacks_base.replace("root://eosuser.cern.ch//", "") 
+    gridpack_path = f"{gridpacks_base}/gridpack/{procname}.tar.xz"
 
     params = ["# Process specific settings"] + metadata["fragment"]["process_parameters"]
 
@@ -298,11 +303,10 @@ def prepare_fragment(analysis_name, metadata, mgworkdir, outpath):
 
 
 def prepare_submission_nanogen_file(
-        analysis_name, 
         metadata, 
         mgworkdir, 
-        outpath, 
-        campaign
+        outpath,
+        tmgtools_path,
     ):
     """
     Create a small JSON config used to submit nanogen validation jobs.
@@ -310,28 +314,23 @@ def prepare_submission_nanogen_file(
 
     procname = metadata["name"]
     data = {
-        "producer" : {
-            "mode": "nanogen",
-            "tag": f"{mgworkdir}/submit_nanogen"
-        },
-        "settings": {
-            "outpath": f"{outpath}/{analysis_name}/{procname}/nanogen",
-            "campaign": campaign 
-        },
         "samples": [
             {
+            "outpath" : outpath,
             "name" : procname,
             "fragment": f"file:{mgworkdir}/fragment.py",
-            "nevents":  1e6,
+            "nevents":  1e5,
             "memory": 32000,
-            "njobs": 5000,
+            "njobs": 200,
             "xsec": 1,
             "isGS": 0
             }
         ]
     }
 
-    write_text(mgworkdir / "nanogen_config.json", json.dumps(data, indent=4))
+    outpath = Path(f"{tmgtools_path}/processes/{metadata['name']}")
+    create_dir( outpath )
+    write_text( tmgtools_path / outpath / "job.json", json.dumps(data, indent=4) )
 
 
 def create_gridpack_submit(
@@ -357,7 +356,6 @@ def create_gridpack_submit(
         "__PROCNAME__": procname,
         "__ANALYSIS_NAME__": analysis_name,
         "__CARDSDIR__": "mgcards",
-        "__OUTPATH__": outpath,
         "__SINGULARITY_IMAGE__": genprod_image,
         "__GENPRODUCTIONS_GRIDPACK__": genprod_repo,
         "__BRANCH_GRIDPACK__": genprod_branch,
@@ -375,6 +373,7 @@ def create_gridpack_submit(
 
     jds_subs = {
         "__SCRIPTNAME__": "run_gridpack_batch.sh",
+        "__OUTPATH__": f"{outpath}/{analysis_name}/{procname}/gridpack",
         "__PROCNAME__": f"{procname}_runGridpack",
         "__NCORES__": "8",
     }

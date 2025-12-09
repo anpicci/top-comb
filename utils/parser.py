@@ -20,7 +20,11 @@ def add_subcommands(subparsers):
     setup_parser.add_argument("--reset", default=False, help="Remove old directory and remake it", action="store_true")
     
     run_gridpack_parser = subparsers.add_parser("run_gridpack", help="Submit gridpacks to condor.")
+    run_gridpack_parser.add_argument( '--submit',  dest = "submit",  default = False, action = "store_true", help = "Submit or not the job." )
+    run_gridpack_parser.add_argument( '--process',  dest = "process",  default = "TT-dummy", help = "Process to be submitted from the work directory" )
     run_nanogen_parser = subparsers.add_parser("run_nanogen", help="Submit generation of NanoGEN outputs to condor.")
+    run_nanogen_parser.add_argument( '--submit',  dest = "submit",  default = False, action = "store_true", help = "Submit or not the job." )
+    run_nanogen_parser.add_argument( '--process',  dest = "process",  default = "TT-dummy", help = "Process to be submitted from the work directory" )
 
     # Add options for reinterpretation
     reinterpret_parser = subparsers.add_parser("reinterpret", help="Run the reinterpretation of differential measurements.")

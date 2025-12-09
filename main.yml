@@ -1,8 +1,13 @@
 # Main configuration file to drive the setup and the combination
 analyses:
-  # TTGamma analysis 
+  dummy:
+    operators: [] #, ctW, ctp, cpQM, cpQ3, cptb, cbW ]
+    generation: 
+      configs/dummy/generation.yml
+    reinterpretation: 
+      configs/dummy/reinterpretation.yml
   ttgamma:
-    operators: [] #[ ctW, ctZ, ctG, ctp, cpQM, cpQ3, cptb, cbW]
+    operators: [ ctG, ctZ ] #, ctW, ctp, cpQM, cpQ3, cptb, cbW ]
     generation: 
       configs/ttgamma/generation.yml
     reinterpretation: 

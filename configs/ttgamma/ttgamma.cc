@@ -3,13 +3,12 @@ This plugin encodes the functionalities to reproduce the fiducial selection used
 
 Author: Carlos Vico (carlos.vico.villalba@cern.ch)
     with the help of Beatriz Ribeiro Lopes
-Last updated: 27-08-2025
+Last updated: 06-12-2025
 */
 #include <ROOT/RVec.hxx>
 #include "functions.h"
 #include "eft_auxiliars.h"
 
-/* PARTON LEVEL FUNCTIONS */
 ROOT::RVec<bool> isFiducialPhoton_PartonLevel(
     const ROOT::RVec<int>& pdgId,
     const ROOT::RVec<int>& status,
@@ -18,13 +17,18 @@ ROOT::RVec<bool> isFiducialPhoton_PartonLevel(
     const ROOT::RVec<float>& phi,
     const ROOT::RVec<int>& idx_mother
     ) {
-
-    /*
-     * This function is used to implement the fiducial definition
-     * for PHOTONS at the PARTON LEVEL. The routine has been
-     * implemented in a way that mimics what is done in TOP-23-002.
+    /**
+     * Identifies fiducial photons at the parton level.
+     * -------------------------------------------------------------------------------- 
+     * Applies the fiducial selection criteria defined in TOP-23-002:
+     * - Requires stable PYTHIA status (status == 1)
+     * - Applies kinematic acceptance cuts: pT > 20 GeV, |eta| < 2.5
+     * - Enforces isolation from leptons (dR > 0.4)
+     * - Enforces isolation from other stable particles excluding neutrinos (dR > 0.4)
+     * - Vetoes photons originating from hadrons (excluding protons)
+     * -------------------------------------------------------------------------------- 
      */
-    
+
     log( 0, " -------------------- " );
     log( 0, "Identifying fiducial level photons..." );
     // Select generator level photons with stable PYTHIA status
@@ -125,10 +129,13 @@ ROOT::RVec<bool> isFiducialLepton_PartonLevel(
     const ROOT::RVec<float>& eta
     ) {
 
-    /*
-     * This function is used to implement the fiducial definition
-     * for LEPTONS at the PARTON LEVEL. The routine has been
-     * implemented in a way that mimics what is done in TOP-23-002.
+    /**
+    * Identifies fiducial leptons at the parton level.
+    * 
+    * Applies the fiducial selection criteria defined in TOP-23-002:
+    * - Requires electrons (pdgId = 11) or muons (pdgId = 13)
+    * - Requires stable PYTHIA status (status == 1)
+    * - Applies kinematic acceptance cuts: pT > 5 GeV, |eta| < 2.5
      */
     
     auto is_fiducial = (
@@ -143,15 +150,22 @@ ROOT::RVec<bool> isFiducialLepton_PartonLevel(
     return is_fiducial;
 }
 
+
 ROOT::RVec<bool> isTop(
     const ROOT::RVec<int>& statusFlags,
     const ROOT::RVec<int>& pdgId,
     const ROOT::RVec<int>& mother_idx
     ) {
-    /*
-     * This function is used to implement the fiducial definition
-     * for TOP QUARKS at the PARTON LEVEL. The routine has been
-     * implemented in a way that mimics what is done in TOP-23-002.
+    /**
+     * Identifies top quarks at the parton level.
+     * 
+     * Selects top quarks that pass fiducial criteria defined in TOP-23-002:
+     * - Requires pdgId = 6 (top quark)
+     * - Requires last copy status flag (statusFlags bit 13)
+     * - Requires presence of a parent particle (mother_idx > 0)
+     * 
+     * Note: The last copy status ensures we select the final-state top quark
+     * before it decays, avoiding duplicates from the parton shower.
      */
     auto is_fiducial = ( 
         ( ( statusFlags & (1 << 13) ) != 0 ) &  // Get the last copy 
@@ -161,17 +175,23 @@ ROOT::RVec<bool> isTop(
     return is_fiducial;
 }
 
+
 ROOT::RVec<bool> isGenExtraJet(
     const ROOT::RVec<int>& statusFlags,
     const ROOT::RVec<int>& pdgId,
     const ROOT::RVec<int>& idx_mother
     ) {
 
-    /*
-     * This function is used to implement the fiducial definition
-     * for B JETS FROM THE TOP at the PARTON LEVEL. The routine has been
-     * implemented in a way that mimics what is done in TOP-23-002.
-     */
+    /**
+    * Identifies b-jets from top decays at the parton level.
+    * 
+    * Selects b-quarks that come from top quark decays:
+    * - Requires pdgId = 5 (b-quark)
+    * - Requires isFromHardProcess status flag (statusFlags bit 12)
+    * - Requires mother particle to be a top quark (pdgId = 6)
+    * 
+    * These b-jets are used to characterize extra jets from the top decay chain.
+    */
 
     auto mother_pdgId = get_parents_properties( 
         idx_mother, 
@@ -181,12 +201,14 @@ ROOT::RVec<bool> isGenExtraJet(
     );
 
     auto is_fiducial = ( 
-        ( (statusFlags & (1 << 12) ) != 0 ) & 
+        ( (statusFlags & (1 << 12 ) ) != 0 ) & 
         ( abs( pdgId ) == 5 ) & 
         ( abs( mother_pdgId ) == 6 ) 
     );
     return is_fiducial;
 }
+
+
 
 int get_genphoton_category(
     const ROOT::RVec<int>& pdgId,
@@ -196,40 +218,22 @@ int get_genphoton_category(
     const ROOT::RVec<bool>& is_fiducial_photon_parton_level
     ) {
 
-    /*
-     * This function is used to characterize PHOTONS defined
-     * at the PARTON LEVEL. It basically tags the origin based on:
-     *  - First copy of the photon
-     *  - A photon is considered from production only if it comes from ISR 
-     *    or from an offshell top.
+    /**
+     * Categorizes generator-level photons by their production mechanism.
+     * 
+     * This function characterizes fiducial parton-level photons based on their origin:
+     * - **Decay photons**: Originate from decay chains (lepton decays, W/b decays, top decays)
+     * - **ISR photons**: Initial state radiation photons not from top production
+     * - **Offshell top photons**: Photons from offshell top quarks or their radiations
+     * 
+     * The categorization is based on the leading (highest pT) photon.
+     * Returns a bitmask where:
+     *   - Bit 0: Photon from any decay process
+     *   - Bit 1: Photon from ISR production
+     *   - Bit 2: Photon from offshell top production
      */
 
-
-    // ---------------------------------------------------------------------------
-    // 1. Consider the first copies of the fiducial photons. The original code
-    // used in TTG-23-002 did not make use of the GenPart_statusFlags branch
-    // of the nanoAOD, so we manually replicate the behaviour here. 
-    // ---------------------------------------------------------------------------
-    // 
-    // # Few things have been changed for better readibility, just variable naming.
-    // def get_first_copy(genpart):
-    //    first_copy = genpart
-    //
-    //    # Loop until the frame is filled with the first copy of each particle
-    //    # in the dataframe, for a given event.
-    //
-    //    while not ak.all( ak.all( first_copy.parent.pdgId != first_copy.pdgId, axis=1 ) ):
-    //        first_copy = ak.where(
-    //          first_copy.parent.pdgId == first_copy.pdgId,
-    //          first_copy.parent,
-    //          first_copy
-    //        )
-    //    return first_copy
-    //
-    // ---------------------------------------------------------------------------
-
     log( 0, "Categorizing sample based on generator level photons..." );
-   
     log( 1, "Getting first copies" );
     ROOT::RVec<bool> is_valid_first_copy = get_first_copy(
         pdgId, // List of all genParticle pdgIds
@@ -323,34 +327,10 @@ int get_genphoton_category(
     return category;
 }
 
-// Specific ttG variables
-float genllDeltaPhi( 
-    const ROOT::RVec<float>& fiducial_genlep_phi
-) {
-    if ( (int)fiducial_genlep_phi.size() < 2 ) { return -99; }
-
-    float genll_deltaphi = deltaPhi( fiducial_genlep_phi[0], fiducial_genlep_phi[1] );
-    
-    return genll_deltaphi;
-}
-
-float genDR_photon_closestTop(
-    const ROOT::RVec<float>& photon_phi, 
-    const ROOT::RVec<float>& photon_eta, 
-    const ROOT::RVec<float>& top_phi, 
-    const ROOT::RVec<float>& top_eta 
-) {
-    // Compute the deltaR between the leading photon and the top closest to it.
-    float deltaR_photon_TOP1 = deltaR2( top_eta[0], top_phi[0], photon_eta[0], photon_phi[0] );
-    float deltaR_photon_TOP2 = deltaR2( top_eta[1], top_phi[1], photon_eta[0], photon_phi[0] );
-    
-    float minDeltaR2 = std::min( deltaR_photon_TOP1, deltaR_photon_TOP2 );
-    float minDeltaR = std::sqrt( minDeltaR2 );
-    return minDeltaR;  
-}
-
 
 /* PARTICLE LEVEL FUNCTIONS */
+
+
 ROOT::RVec<bool> isFiducialPhoton_ParticleLevel(
     const ROOT::RVec<float>& gen_isolated_photon_pt,
     const ROOT::RVec<float>& gen_isolated_photon_eta,
@@ -358,7 +338,15 @@ ROOT::RVec<bool> isFiducialPhoton_ParticleLevel(
     const ROOT::RVec<float>& gen_dressed_lepton_eta,
     const ROOT::RVec<float>& gen_dressed_lepton_phi
     ) {
-    // Routine to implement fiducial definition of isolated photons
+    
+        /**
+    * Identifies fiducial photons at the particle level.
+    * 
+    * Applies the particle-level fiducial selection defined in TOP-23-002:
+    * - Selects isolated photons provided by generator
+    * - Applies kinematic cuts: pT > 20 GeV, |eta| < 2.5
+    * - Enforces isolation from dressed leptons (dR > 0.1)
+    */
     
     // Basic photon requirements
     auto mask_pt = ( gen_isolated_photon_pt > 20.0 );
@@ -381,12 +369,20 @@ ROOT::RVec<bool> isFiducialPhoton_ParticleLevel(
     return is_fiducial;
 }
 
+
 ROOT::RVec<bool> isFiducialLepton_ParticleLevel(
     const ROOT::RVec<float>& gen_dressed_lepton_pt,
     const ROOT::RVec<float>& gen_dressed_lepton_eta
     ) {
-    // Routine to implement fiducial definition of isolated photons
-    // Basic lepton requirements
+
+    /**
+    * Identifies fiducial leptons at the particle level.
+    * 
+    * Applies the particle-level fiducial selection defined in TOP-23-002:
+    * - Selects dressed leptons (QED-corrected) provided by generator
+    * - Applies kinematic cuts: pT > 15 GeV, |eta| < 2.5
+    */
+
     auto mask_pt = ( gen_dressed_lepton_pt > 15.0 );
     auto mask_eta = ( abs(gen_dressed_lepton_eta) < 2.5 );
 
@@ -397,6 +393,7 @@ ROOT::RVec<bool> isFiducialLepton_ParticleLevel(
     return is_fiducial;
 }
 
+
 ROOT::RVec<bool> isFiducialJet_ParticleLevel(
     const ROOT::RVec<float>& gen_jet_pt,
     const ROOT::RVec<float>& gen_jet_eta,
@@ -406,8 +403,20 @@ ROOT::RVec<bool> isFiducialJet_ParticleLevel(
     const ROOT::RVec<float>& gen_isolated_photon_eta,
     const ROOT::RVec<float>& gen_isolated_photon_phi
     ) {
-    // Routine to implement fiducial definition of isolated photons
-    // Basic photon requirements
+
+    /**
+    * Identifies fiducial jets at the particle level.
+    * 
+    * Applies the particle-level fiducial selection defined in TOP-23-002:
+    * - Applies kinematic cuts: pT > 30 GeV, |eta| < 2.4
+    * - Enforces isolation from dressed leptons (dR > 0.4)
+    * - Enforces isolation from isolated photons (dR > 0.4)
+    * 
+    * The particle-level jets are built from stable final-state particles 
+    * by the generator and represent experimentally observable jets.
+    * 
+    */
+
     auto mask_pt = ( gen_jet_pt > 30.0 );
     auto mask_eta = ( abs(gen_jet_eta) < 2.4 );
 
@@ -434,15 +443,24 @@ ROOT::RVec<bool> isFiducialJet_ParticleLevel(
     return is_fiducial;
 }
 
+
 ROOT::RVec<bool> isFiducialBJet_ParticleLevel(
     const ROOT::RVec<int>& fiducial_genjet_hadronFlavour
     ) {
-    // Routine to implement fiducial definition of isolated photons
+    
+        /**
+    * Identifies b-tagged jets at the particle level.
+    * 
+    * Selects jets that have been identified as containing b-hadrons 
+    * by the generator's hadron flavor classification.
+    * 
+    * This function should typically be applied after isFiducialJet_ParticleLevel()
+    * to get b-jets that pass the full fiducial selection.
+     */
+    
     auto is_fiducial = (
         fiducial_genjet_hadronFlavour == 5 
     );
 
     return is_fiducial;
 }
-
-

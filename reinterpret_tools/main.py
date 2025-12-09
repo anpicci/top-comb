@@ -14,8 +14,6 @@ Functions assume ROOT is available and configured (batch mode, styles).
 """
 import os
 import ROOT
-from copy import deepcopy
-
 from utils import get_logger, \
     load_config, create_dir
 
@@ -33,6 +31,7 @@ def reinterpret(
         analysis_name, 
         analysis_meta, 
         just_replot,
+        outpath,
         workdir, 
         ncores,
         debug,
@@ -56,23 +55,25 @@ def reinterpret(
     else:
         logger.warning(f"Setting analysis {analysis_name}")
         reinterpret_one_analysis(
-            analysis_name = analysis_name, 
+            analysis_name = analysis_name,
+            outpath = outpath, 
             metadata = reinterpret_meta,
             ncores = ncores,
             debug = debug,
             doUnc = doUnc
         )
 
-    replot(
-        analysis_name = analysis_name, 
-        metadata = reinterpret_meta
-    )
+    #replot(
+    #    analysis_name = analysis_name, 
+    #    metadata = reinterpret_meta
+    #)
 
     logger.info("Analysis setup completed.")
 
 
 def reinterpret_one_analysis(
         analysis_name, 
+        outpath,
         metadata,
         ncores,
         debug,

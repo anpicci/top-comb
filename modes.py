@@ -21,7 +21,7 @@ def _setup_gen( environment ):
         "analysis_meta" : environment.get("main_config"),
         "workdir" : environment.get("workdir"),
         "outpath" : environment.get("outpath"),
-        "campaign" : environment.get("tmgtools_campaign"),
+        "tmgtools_path" : environment.get("tmgtools"),
         "genprod_repo" : environment.get("genproductions_repo"),
         "genprod_image" : environment.get("genproductions_image"),
         "genprod_branch" : environment.get("genproductions_branch"),
@@ -33,7 +33,9 @@ def _gridpack( environment ):
     """
     from gen_tools import run_gridpack
     return run_gridpack, {
-        "workdir": environment.get("workdir")
+        "workdir": environment.get("workdir"),
+        "process": environment.get("process"),
+        "submit" : environment.get("submit")
     }
 
 def _nanogen( environment ):
@@ -43,7 +45,10 @@ def _nanogen( environment ):
     from gen_tools import run_nanogen
     return run_nanogen, {
         "workdir": environment.get("workdir"),
-        "tmgtools_path" : environment.get("tmgtools")
+        "tmgtools_path" : environment.get("tmgtools"),
+        "campaign" : environment.get("tmgtools_campaign"),
+        "submit" : environment.get("submit"),
+        "process": environment.get("process")
     }
 
 def _reinterpret( environment ):
@@ -53,6 +58,7 @@ def _reinterpret( environment ):
     from reinterpret_tools import reinterpret
     return reinterpret, {
         "just_replot": environment.get("just_replot"),
+        "outpath" : environment.get("outpath"),
         "workdir" : environment.get("workdir"),
         "ncores" : environment.get("ncores"),
         "debug" : environment.get("debug"),
@@ -91,8 +97,6 @@ def _setup_combine( environment ):
         
     return run, { "cmd": cmd }
  
-
-
 MODE_REGISTRY = {
     # Each entry provides:
     #  - "funcs": list of builders that return (func, inputs)

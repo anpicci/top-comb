@@ -21,35 +21,8 @@ plotting:
         SetLineWidth: 1
       label: 'tt\gamma (decay)'
 
-    - name: TTG_fromDecay_EFT__weight0 
-      procs: [ TTG_fromDecay_EFT__weight0 ]
-      histo-decorations:
-        SetFillColor: white
-        SetLineColor: brown 
-        SetLineWidth: 1
-      label: 'tt\gamma (decay) \mathrm{EFT SM}'
-
 # Define here your MC samples
 mcsamples:
-
-  - name: TTG_fromDecay_EFT
-    files: [
-      /eos/user/c/cvicovil/www/top-comb/top-comb/nanogen/TT-1Jets-TTto2L2NuGamma/batch_17_09_2025_1119//genfiles/genfiles_0.root,
-      /eos/user/c/cvicovil/www/top-comb/top-comb/nanogen/TT-1Jets-TTto2L2NuGamma/batch_17_09_2025_1119//genfiles/genfiles_1.root,
-      /eos/user/c/cvicovil/www/top-comb/top-comb/nanogen/TT-1Jets-TTto2L2NuGamma/batch_17_09_2025_1119//genfiles/genfiles_2.root,
-      /eos/user/c/cvicovil/www/top-comb/top-comb/nanogen/TT-1Jets-TTto2L2NuGamma/batch_17_09_2025_1119//genfiles/genfiles_3.root,
-      /eos/user/c/cvicovil/www/top-comb/top-comb/nanogen/TT-1Jets-TTto2L2NuGamma/batch_17_09_2025_1119//genfiles/genfiles_4.root,
-      /eos/user/c/cvicovil/www/top-comb/top-comb/nanogen/TT-1Jets-TTto2L2NuGamma/batch_17_09_2025_1119//genfiles/genfiles_5.root,
-      /eos/user/c/cvicovil/www/top-comb/top-comb/nanogen/TT-1Jets-TTto2L2NuGamma/batch_17_09_2025_1119//genfiles/genfiles_6.root,
-      /eos/user/c/cvicovil/www/top-comb/top-comb/nanogen/TT-1Jets-TTto2L2NuGamma/batch_17_09_2025_1119//genfiles/genfiles_7.root,
-      /eos/user/c/cvicovil/www/top-comb/top-comb/nanogen/TT-1Jets-TTto2L2NuGamma/batch_17_09_2025_1119//genfiles/genfiles_8.root,
-      /eos/user/c/cvicovil/www/top-comb/top-comb/nanogen/TT-1Jets-TTto2L2NuGamma/batch_17_09_2025_1119//genfiles/genfiles_9.root
-    ]
-    ReweightingWeights: [0]
-    xsec: 2.22037 
-    genSum: genEventSumw
-    hooks : from_decay
-
 
   - name: TTG_fromDecay
     files: [

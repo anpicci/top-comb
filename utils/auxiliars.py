@@ -16,6 +16,8 @@ logger = get_logger( __name__ )
 from environment import TopCombEnv
 settings = TopCombEnv().model_dump()
 main_path = settings.get("mainpath")
+if main_path is None:
+    raise ValueError("mainpath not found in environment settings")
 
 def load_config( config_path ) -> dict:
     """ Loads a configuration file written in yml format """
@@ -58,6 +60,8 @@ def create_workdir_info_file(workdir: str):
 
 def open_template( template_file ):
     """Read and return the content of a template file """
+    if main_path is None:
+        raise ValueError("mainpath not found in environment settings")
     with open(
             os.path.join(main_path, template_file)
         ) as f:

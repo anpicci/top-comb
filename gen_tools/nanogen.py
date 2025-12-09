@@ -13,14 +13,16 @@ def run_nanogen(
         analysis_name, 
         analysis_meta, 
         workdir, 
-        tmgtools_path
+        tmgtools_path,
+        campaign,
+        submit,
+        process
     ):
     
     """
     Run NanoGen validation for each configured process using tmg-tools.
     """
 
-    logger.info(f"Running NanoGen for analysis {analysis_name}")
     gen_metadata = load_config( 
         analysis_meta["generation"] 
     )
@@ -28,32 +30,28 @@ def run_nanogen(
     samples = gen_metadata["samples"]
     for sample_metadata in samples:
         procname = sample_metadata["name"]
-        
-        outdir = os.path.join(
-            workdir, 
-            procname
-        )
 
+        if procname != process: # Only submit  the requested process
+            continue
+    
+        logger.info(f"Running NanoGen for analysis {analysis_name}")
+        
         script = os.path.join(
             tmgtools_path, 
             "main.py"
-        )
-
-        jsonfile = os.path.join(
-            outdir, 
-            "nanogen_config.json"
         )
 
         subprocess.run(
             [ 
                 "python3", 
                 script, 
-                "--parse_from_json", 
-                jsonfile, 
+                "--campaign",
+                campaign,
+                "--process",
+                procname,
                 "--mode", 
                 "nanogen", 
-                "--submit"
-            ]
+            ] + (["--submit"] if submit else [])
         )
 
     logger.info("NanoGen execution completed.")

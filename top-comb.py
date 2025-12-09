@@ -48,23 +48,25 @@ def main():
     # Pack all the inputs in a single dictionary. Then
     # pass that environment to the different modes.
     # There are some parameters that can be modified by users
-    env_settings = TopCombEnv.new( {} )
+    top_env = TopCombEnv.new( **{} )
     if args.outpath != None:
-        env_settings = TopCombEnv.new( 
+        top_env = TopCombEnv.new( 
             outpath = args.outpath,
         )
+
+    env_settings = top_env.model_dump()
     environment = {
-        **env_settings,
         **vars(args),
+        **env_settings,
     }
 
     main_config = load_config( 
-        environment.get("main_config") 
+        environment.get("config") 
     )
     
     workdir = os.path.join(
-        environment.get("workdir"), 
-        environment.get("tag") 
+        environment.get("workdir", ""), 
+        environment.get("tag", "") 
     )
     
     environment["main_config"] = main_config
@@ -74,6 +76,9 @@ def main():
     # ----------------------------------------------
     # Now prepare running things
     mode = environment.get("mode")
+    if not mode:
+        logger.error("No mode found in environment.")
+        sys.exit(1)
     if mode == "setup":
         prepare_workdir(
             environment = environment,
