@@ -1,7 +1,7 @@
 # Main configuration file to drive the setup and the combination
 analyses:
   dummy:
-    operators: [] #, ctW, ctp, cpQM, cpQ3, cptb, cbW ]
+    operators: [ ctW, ctZ, ctG ] #, ctW, ctp, cpQM, cpQ3, cptb, cbW ]
     generation: 
       configs/dummy/generation.yml
     reinterpretation: 

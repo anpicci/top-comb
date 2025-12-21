@@ -1,0 +1,131 @@
+"""
+gridpack
+---------------------------------------------------------------------
+Utilities to submit gridpack creation jobs for event generation workflows.
+"""
+from .utils import write_text
+from pathlib import Path
+from typing import Dict, Any
+import os
+import subprocess
+from .generation_config import GenerationConfig
+
+from utils import (
+    open_template, 
+    get_logger
+)
+
+logger = get_logger(__name__)
+
+def _prepare_gridpack(
+        proc_metadata: Dict[str, Any],
+        config: GenerationConfig
+    ):
+
+    """
+    Prepare everything to run gridpacks on HTCondor.
+    """
+    procname = proc_metadata["name"]
+    mgworkdir = config.workdir / procname
+
+    _create_gridpack_scripts(
+        config.analysis_name,
+        proc_metadata,
+        f"{config.outpath}/{config.analysis_name}",
+        mgworkdir,
+        config.genprod_image,
+        config.genprod_repo,
+        config.genprod_branch
+    )
+    
+    cwd = os.getcwd()
+
+    # run the gridpack: package mgcards and submit the condor job
+    os.chdir( mgworkdir )
+    subprocess.run(
+      [
+          "tar", 
+          "-zcvf", 
+          "cards.tgz", 
+          "mgcards"
+      ], 
+      check=True
+    )
+    logger.info(f"Gridpack job for process {procname} is ready for submission in {mgworkdir}")
+    os.chdir( cwd )
+
+def _create_gridpack_scripts(
+        analysis_name: str,
+        metadata: Dict[str, Any],
+        outpath: str,
+        mgworkdir: Path,
+        genprod_image: str,
+        genprod_repo: str,
+        genprod_branch: str
+    ) -> None:
+
+    """
+    Create helper scripts to run the gridpack creation and submission.
+    """
+    procname = metadata["name"]
+    mgworkdir = Path(mgworkdir)
+
+    # Create bash wrapper script
+    bash_content = _render_gridpack_bash_script(
+        procname,
+        analysis_name,
+        genprod_image,
+        genprod_repo,
+        genprod_branch
+    )
+    write_text(mgworkdir / "run_gridpack_batch.sh", bash_content)
+
+    # Create condor submission file
+    jds_content = _render_condor_submission_file(procname, outpath)
+    write_text(mgworkdir / "run_gridpack_batch.jds", jds_content)
+
+
+def _render_gridpack_bash_script(
+        procname: str,
+        analysis_name: str,
+        genprod_image: str,
+        genprod_repo: str,
+        genprod_branch: str
+    ) -> str:
+
+    """
+    Create bash script for gridpack generation.
+    """
+
+    template = open_template("templates/run_gridpack_batch.sh")
+    substitutions = {
+        "__PROCNAME__": procname,
+        "__ANALYSIS_NAME__": analysis_name,
+        "__CARDSDIR__": "mgcards",
+        "__SINGULARITY_IMAGE__": genprod_image,
+        "__GENPRODUCTIONS_GRIDPACK__": genprod_repo,
+        "__BRANCH_GRIDPACK__": genprod_branch,
+    }
+
+    for placeholder, value in substitutions.items():
+        template = template.replace(placeholder, value)
+    
+    return template
+
+def _render_condor_submission_file(procname: str, outpath: str) -> str:
+    """
+    Render condor submission description file.
+    """
+    template = open_template("templates/template_submit.jds")
+    
+    substitutions = {
+        "__SCRIPTNAME__": "run_gridpack_batch.sh",
+        "__OUTPATH__": f"{outpath}/{procname}/gridpack",
+        "__PROCNAME__": f"{procname}_runGridpack",
+        "__NCORES__": "8",
+    }
+
+    for placeholder, value in substitutions.items():
+        template = template.replace(placeholder, value)
+    
+    return template

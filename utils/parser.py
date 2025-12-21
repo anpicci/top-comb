@@ -18,20 +18,15 @@ def add_subcommands(subparsers):
     """Register subcommands for setup modes."""
     setup_parser = subparsers.add_parser("setup", help="Prepare code for generating gridpacks and nanogen inputs.")
     setup_parser.add_argument("--reset", default=False, help="Remove old directory and remake it", action="store_true")
+    setup_parser.add_argument("--analysis",  dest = "analysis",  default = "ttgamma", help = "Analysis configurations to be setup" )
     
-    run_gridpack_parser = subparsers.add_parser("run_gridpack", help="Submit gridpacks to condor.")
-    run_gridpack_parser.add_argument( '--submit',  dest = "submit",  default = False, action = "store_true", help = "Submit or not the job." )
-    run_gridpack_parser.add_argument( '--process',  dest = "process",  default = "TT-dummy", help = "Process to be submitted from the work directory" )
-    run_nanogen_parser = subparsers.add_parser("run_nanogen", help="Submit generation of NanoGEN outputs to condor.")
-    run_nanogen_parser.add_argument( '--submit',  dest = "submit",  default = False, action = "store_true", help = "Submit or not the job." )
-    run_nanogen_parser.add_argument( '--process',  dest = "process",  default = "TT-dummy", help = "Process to be submitted from the work directory" )
-
     # Add options for reinterpretation
     reinterpret_parser = subparsers.add_parser("reinterpret", help="Run the reinterpretation of differential measurements.")
     reinterpret_parser.add_argument( '--ncores', dest = "ncores",  default = 12, type = int, help = "Number of cores to run with." )
     reinterpret_parser.add_argument( '--doUnc',  dest = "doUnc",  default = True, action = "store_true", help = "Turn on systematic variations." )
     reinterpret_parser.add_argument( '--just-replot',  dest = "replot",  action = "store_true", default = False, help = "Just replot, don't run the analysis" )
     reinterpret_parser.add_argument( '--debug',  dest = "debug",  action = "store_true", default = False, help = "Activate debug compiler flags for custom modules" )
+    reinterpret_parser.add_argument( '--analysis',  dest = "analysis",  default = "dummy", help = "Analysis to be reinterpreted" )
     
     # Add options for combine
     run_combinesetup_parser = subparsers.add_parser("setup_combine", help="Install the combine release.")

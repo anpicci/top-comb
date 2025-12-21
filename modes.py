@@ -11,59 +11,19 @@ and inputs_dict contains keyword arguments that will be passed to it.
 import os
 import subprocess
 
-def _setup_gen( environment ):
+def _setup_gen():
     """
     Builder for setting up GEN related aspects 
     """    
     from gen_tools import setup_gen_config
-    return setup_gen_config, {
-        "analysis_name" : environment.get("analysis_name"),
-        "analysis_meta" : environment.get("main_config"),
-        "workdir" : environment.get("workdir"),
-        "outpath" : environment.get("outpath"),
-        "tmgtools_path" : environment.get("tmgtools"),
-        "genprod_repo" : environment.get("genproductions_repo"),
-        "genprod_image" : environment.get("genproductions_image"),
-        "genprod_branch" : environment.get("genproductions_branch"),
-    }
+    return setup_gen_config 
 
-def _gridpack( environment ):
-    """
-    Builder for gridpack mode 
-    """
-    from gen_tools import run_gridpack
-    return run_gridpack, {
-        "workdir": environment.get("workdir"),
-        "process": environment.get("process"),
-        "submit" : environment.get("submit")
-    }
-
-def _nanogen( environment ):
-    """
-    Builder for run_nanogen mode.
-    """
-    from gen_tools import run_nanogen
-    return run_nanogen, {
-        "workdir": environment.get("workdir"),
-        "tmgtools_path" : environment.get("tmgtools"),
-        "campaign" : environment.get("tmgtools_campaign"),
-        "submit" : environment.get("submit"),
-        "process": environment.get("process")
-    }
-
-def _reinterpret( environment ):
+def _reinterpret():
     """
     Builder for 'reinterpret' mode.
     """
     from reinterpret_tools import reinterpret
-    return reinterpret, {
-        "just_replot": environment.get("just_replot"),
-        "outpath" : environment.get("outpath"),
-        "workdir" : environment.get("workdir"),
-        "ncores" : environment.get("ncores"),
-        "debug" : environment.get("debug"),
-        "doUnc" : environment.get("doUnc")
-    }
+    return reinterpret
 
 def _setup_combine( environment ):
     """
@@ -103,22 +63,11 @@ MODE_REGISTRY = {
     #  - "per-analysis": whether the driver should call the func once per analysis
     "setup": {
         "funcs": [ _setup_gen ],
-        "per-analysis": True,
-    },
-    "run_gridpack": {
-        "funcs": [ _gridpack ],
-        "per-analysis": True,
-    },
-    "run_nanogen": {
-        "funcs": [ _nanogen ],
-        "per-analysis": True,
     },
     "reinterpret": {
         "funcs": [ _reinterpret ],
-        "per-analysis": True,
     },
     "setup_combine": {
         "funcs": [ _setup_combine ],
-        "per-analysis": False,
     },
 }
