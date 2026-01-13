@@ -4,13 +4,13 @@ validate_measurements:
   rules:
     # Triggered on merge requests
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-      change: 
+      changes: 
         - workdirs/$COMBINATION_TAG
       when: on_success 
 
     # Also triggered on direct pushes
     - if: $CI_PIPELINE_SOURCE == "push"
-      change: 
+      changes: 
         - workdirs/$COMBINATION_TAG
       when: on_success
 
