@@ -11,7 +11,7 @@ validate_measurements:
     # Also triggered on direct pushes
     - if: $CI_PIPELINE_SOURCE == "push"
       changes: 
-        - workdirs/$COMBINATION_TAG
+        - workdirs/$COMBINATION_TAG/**
       when: on_success
 
     # Do not trigger otherwise

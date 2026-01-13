@@ -2,14 +2,14 @@
 reinterpretation:
 
   samples:
-    hooks: configs/ttgamma/hooks.py
-    datasets: configs/ttgamma/datasets.py
+    hooks: measurements/ttgamma/hooks.py
+    datasets: measurements/ttgamma/datasets.py
 
   # ---- Load auxiliar .cpp code used to build custom variables
   plugins:
     - plugins/eft_auxiliars.h
     - plugins/eft_auxiliars.cc
-    - configs/ttgamma/ttgamma.cc
+    - measurements/ttgamma/ttgamma.cc
 
   # ---- These determine event level selections and corrections
   flow:
@@ -17,15 +17,15 @@ reinterpretation:
 
     # This is what you want to produce
     targets:
-      - { type: plots, plotfile: configs/ttgamma/plots.py, plotmodule: plots, save_snapshot : True }
+      - { type: plots, plotfile: measurements/ttgamma/plots.py, plotmodule: plots, save_snapshot : True }
 
     # This is the base sequence to be used for object and variable definition
     sequence:
-      - { name: parton_leptons,   modules: configs/ttgamma/definitions.py, function: define_leptons_partonLevel, args: ~ }
-      - { name: particle_photons, modules: configs/ttgamma/definitions.py, function: define_isolated_photons_particleLevel, args: ~ }
-      - { name: particle_leptons, modules: configs/ttgamma/definitions.py, function: define_dressed_leptons_particleLevel, args: ~ }
-      - { name: particle_jets,    modules: configs/ttgamma/definitions.py, function: define_jets_particleLevel, args: ~ }
-      - { name: particle_bjets,   modules: configs/ttgamma/definitions.py, function: define_bjets_particleLevel, args: ~ }
+      - { name: parton_leptons,   modules: measurements/ttgamma/definitions.py, function: define_leptons_partonLevel, args: ~ }
+      - { name: particle_photons, modules: measurements/ttgamma/definitions.py, function: define_isolated_photons_particleLevel, args: ~ }
+      - { name: particle_leptons, modules: measurements/ttgamma/definitions.py, function: define_dressed_leptons_particleLevel, args: ~ }
+      - { name: particle_jets,    modules: measurements/ttgamma/definitions.py, function: define_jets_particleLevel, args: ~ }
+      - { name: particle_bjets,   modules: measurements/ttgamma/definitions.py, function: define_bjets_particleLevel, args: ~ }
 
     # These are used to apply a selection on top of the object definition
     selection:

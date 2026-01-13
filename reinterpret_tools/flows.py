@@ -11,8 +11,8 @@ Responsibilities:
 - load_selections(selection_cfg): load selection definitions referenced by
   subflows and sequences.
 - build_subflow(flowmeta, subflowmeta, base_sequence, selections, outpath,
-  analysis_name): construct a flow and its plot/target descriptors for a
-  particular sub-analysis (subflow).
+  measurement_name): construct a flow and its plot/target descriptors for a
+  particular sub-measurement (subflow).
 
 Each public function documents the shape of the expected input metadata and
 returns objects compatible with the booking procedure in reinterpret_driver.
@@ -65,7 +65,7 @@ def load_selections(meta):
     return cuts
 
 
-def build_subflow(flowmeta, subflowmeta, base_sequence, selections, outpath, analysis_name):
+def build_subflow(flowmeta, subflowmeta, base_sequence, selections, outpath, measurement_name):
     """Construct a Flow and its targets."""
     flowname = flowmeta["name"]
     subname = subflowmeta["name"]
@@ -106,7 +106,7 @@ def build_subflow(flowmeta, subflowmeta, base_sequence, selections, outpath, ana
                 columnSel.append(name)
 
             snap_path = (
-                f"{outpath}/{analysis_name}/{flowname}/{subname}"
+                f"{outpath}/{measurement_name}/{flowname}/{subname}"
                 "/snapshots/{name}.root"
             )
 

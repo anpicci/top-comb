@@ -2,9 +2,9 @@
 Driver utilities for running the reinterpretation workflow.
 
 This module provides high-level orchestration:
-- reinterpret: prepare workdir, update submodules, run a single analysis
+- reinterpret: prepare workdir, update submodules, run a single measurement
   setup (including plotting).
-- reinterpret_one_analysis: run the CMGRDF processing pipeline:
+- reinterpret_one_measurement: run the CMGRDF processing pipeline:
   - load datasets and hooks
   - compile plugins
   - build and book flows
@@ -27,7 +27,6 @@ from CMGRDF.plots import PlotSetPrinter
 from .dataset_utilities import read_datasets 
 from .loaders import update_cmgrdf_submodule, load_module_from_path
 from .flows import build_sequence, load_selections, build_subflow
-from .plotting_tools import replot
 
 logger = get_logger(__name__)
 
@@ -45,22 +44,23 @@ def reinterpret(
     ncores = environment.get("ncores")
     debug = environment.get("debug")
     doUnc = environment.get("doUnc")
-    main_config = environment.get("main_config")["analyses"]
-    analysis_name = environment.get("analysis")
-    analysis_config = main_config.get( analysis_name )
+    main_config = environment.get("main_config")["MEASUREMENTS"]
+    measurement_name = environment.get("measurement")
+    measurement_config = main_config.get( measurement_name )
     
     create_dir( workdir )
     update_cmgrdf_submodule()
     
+    measurements_path = environment.get("measurements_path")
     reinterpret_meta = load_config(
-        analysis_config["reinterpretation"]
+        f"{measurements_path}/{measurement_name}/reinterpretation.yml"
     )
-    analysis_workdir = os.path.join(workdir, analysis_name)
-    create_dir(analysis_workdir)
+    measurement_workdir = os.path.join(workdir, measurement_name)
+    create_dir(measurement_workdir)
 
-    logger.warning(f"Setting analysis {analysis_name}")
-    reinterpret_one_analysis(
-        analysis_name = analysis_name,
+    logger.warning(f"Setting measurement {measurement_name}")
+    reinterpret_one_measurement(
+        measurement_name = measurement_name,
         outpath = outpath, 
         metadata = reinterpret_meta,
         ncores = ncores,
@@ -68,10 +68,10 @@ def reinterpret(
         doUnc = doUnc
     )
 
-    logger.info("Analysis setup completed.")
+    logger.info("measurement setup completed.")
 
-def reinterpret_one_analysis(
-        analysis_name, 
+def reinterpret_one_measurement(
+        measurement_name, 
         outpath,
         metadata,
         ncores,
@@ -79,12 +79,12 @@ def reinterpret_one_analysis(
         doUnc,
     ):
     """
-    Execute the CMGRDF-based interpretation for a single analysis.
+    Execute the CMGRDF-based interpretation for a single measurement.
 
     This function performs the core work:
     1) Load dataset definitions and hooks and translate them into CMGRDF
        process definitions.
-    2) Compile any analysis-specific macros/plugins.
+    2) Compile any measurement-specific macros/plugins.
     3) Build booking sequences, selections and per-subflow plot targets.
     4) Book flows into a CMGRDF Processor and run snapshots/plots.
     5) Print resulting plots to disk via PlotSetPrinter.
@@ -138,7 +138,7 @@ def reinterpret_one_analysis(
             base_sequence = baseline_sequence,
             selections = selections,
             outpath = outpath,
-            analysis_name = analysis_name,
+            measurement_name = measurement_name,
         )
 
         maker.book(
@@ -160,7 +160,7 @@ def reinterpret_one_analysis(
         showErrors=False
     ).printSet(
         results,
-        f"{outpath}/{analysis_name}" + "/{flow}",
+        f"{outpath}/{measurement_name}" + "/{flow}",
         maxRatioRange=(0.5, 1.5),
         showRatio=True,
     )

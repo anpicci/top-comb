@@ -32,11 +32,11 @@ def add_submit_gen_parser(subparsers):
 def add_reinterpret_parser(subparsers):
     """Add options for reinterpretation."""
     reinterpret_parser = subparsers.add_parser("reinterpret", help="Run the reinterpretation of differential measurements.")
+    reinterpret_parser.add_argument("-m", "--measurement", default="dummy", help="Measurement configurations to be setup")
     reinterpret_parser.add_argument('--ncores', default=12, type=int, help="Number of cores to run with.")
     reinterpret_parser.add_argument('--do-unc', dest="do_unc", action="store_true", default=False, help="Turn on systematic variations.")
     reinterpret_parser.add_argument('--just-replot', dest="replot", action="store_true", default=False, help="Just replot, don't run the analysis")
     reinterpret_parser.add_argument('--debug', action="store_true", default=False, help="Activate debug compiler flags for custom modules")
-    reinterpret_parser.add_argument('--analysis', default="dummy", help="Analysis to be reinterpreted")
 
 
 def add_combine_parser(subparsers):
