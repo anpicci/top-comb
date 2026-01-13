@@ -1,6 +1,6 @@
 variables:
-  - COMBINATION_TAG: combination_Jan13_2026
-  
+  COMBINATION_TAG: combination_Jan13_2026
+
 stages:
   - validate
 
