@@ -20,7 +20,6 @@ def run_pipeline(mode_info, environment):
 def add_setup_parser(subparsers):
     """Register subcommands for setup modes."""
     setup_parser = subparsers.add_parser("setup", help="Prepare code for generating gridpacks and nanogen inputs.")
-    setup_parser.add_argument("--reset", action="store_true", default=False, help="Remove old directory and remake it")
     setup_parser.add_argument("-m", "--measurement", default="dummy", help="Measurement configurations to be setup")
 
 def add_submit_gen_parser(subparsers):
