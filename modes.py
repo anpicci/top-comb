@@ -1,9 +1,6 @@
 """
 Mode builders and registry.
 
-Each builder (e.g. _setup_gen) is a small factory that returns a tuple:
-    (callable_function, inputs_dict)
-
 The callable_function is the actual implementation to run for the mode,
 and inputs_dict contains keyword arguments that will be passed to it.
 """
@@ -60,7 +57,6 @@ def _setup_combine( environment ):
 MODE_REGISTRY = {
     # Each entry provides:
     #  - "funcs": list of builders that return (func, inputs)
-    #  - "per-analysis": whether the driver should call the func once per analysis
     "setup": {
         "funcs": [ _setup_gen ],
     },

@@ -3,7 +3,7 @@ reinterpretation:
 
   samples:
     hooks: configs/ttgamma/hooks.py
-    datasets: configs/ttgamma/datasets.yml
+    datasets: configs/ttgamma/datasets.py
 
   # ---- Load auxiliar .cpp code used to build custom variables
   plugins:

@@ -14,13 +14,17 @@ Functions assume ROOT is available and configured (batch mode, styles).
 """
 import os
 import ROOT
-from utils import get_logger, \
-    load_config, create_dir
+from utils import (
+    load_config, 
+    create_dir,
+    get_logger
+)
+from environment import TopCombEnv
 
 from CMGRDF import Processor
 from CMGRDF.plots import PlotSetPrinter
 
-from .cmgrdf_datasets import get_cmgrdf_processes 
+from .dataset_utilities import read_datasets 
 from .loaders import update_cmgrdf_submodule, load_module_from_path
 from .flows import build_sequence, load_selections, build_subflow
 from .plotting_tools import replot
@@ -28,45 +32,41 @@ from .plotting_tools import replot
 logger = get_logger(__name__)
 
 def reinterpret(
-        analysis_name, 
-        analysis_meta, 
-        just_replot,
-        outpath,
-        workdir, 
-        ncores,
-        debug,
-        doUnc
-    ):
+        environment: TopCombEnv 
+    ) -> None:
 
     """
     Top-level entry to prepare and run a reinterpretation.
     """
-    create_dir(workdir)
+
+    # Load the main configurations
+    workdir = environment.get("workdir")
+    outpath = environment.get("outpath")
+    ncores = environment.get("ncores")
+    debug = environment.get("debug")
+    doUnc = environment.get("doUnc")
+    main_config = environment.get("main_config")["analyses"]
+    analysis_name = environment.get("analysis")
+    analysis_config = main_config.get( analysis_name )
+    
+    create_dir( workdir )
     update_cmgrdf_submodule()
     
     reinterpret_meta = load_config(
-        analysis_meta["reinterpretation"]
+        analysis_config["reinterpretation"]
     )
     analysis_workdir = os.path.join(workdir, analysis_name)
     create_dir(analysis_workdir)
 
-    if just_replot:
-        logger.info(f"Replotting only for analysis {analysis_name}")
-    else:
-        logger.warning(f"Setting analysis {analysis_name}")
-        reinterpret_one_analysis(
-            analysis_name = analysis_name,
-            outpath = outpath, 
-            metadata = reinterpret_meta,
-            ncores = ncores,
-            debug = debug,
-            doUnc = doUnc
-        )
-
-    #replot(
-    #    analysis_name = analysis_name, 
-    #    metadata = reinterpret_meta
-    #)
+    logger.warning(f"Setting analysis {analysis_name}")
+    reinterpret_one_analysis(
+        analysis_name = analysis_name,
+        outpath = outpath, 
+        metadata = reinterpret_meta,
+        ncores = ncores,
+        debug = debug,
+        doUnc = doUnc
+    )
 
     logger.info("Analysis setup completed.")
 
@@ -97,12 +97,12 @@ def reinterpret_one_analysis(
     # -----------------------------
     # 1. Load samples
     # -----------------------------
-    datasets_cfg = reinterpretation_meta["samples"]["datasets"]
     hooks_path = reinterpretation_meta["samples"]["hooks"]
+    datasets_path = reinterpretation_meta["samples"]["datasets"]
 
-    datasets = load_config(datasets_cfg)
+    datasets_module = load_module_from_path("datasets", datasets_path)
     hooks_module = load_module_from_path("hooks", hooks_path)
-    samples = get_cmgrdf_processes(datasets, hooks_module)
+    samples = read_datasets(datasets_module, hooks_module)
 
     # -----------------------------
     # 2. Plugins
@@ -134,19 +134,19 @@ def reinterpret_one_analysis(
 
     for subflowmeta in flowmeta["subflows"]:
         flow, flow_targets = build_subflow(
-            flowmeta=flowmeta,
-            subflowmeta=subflowmeta,
-            base_sequence=baseline_sequence,
-            selections=selections,
-            outpath=outpath,
-            analysis_name=analysis_name,
+            flowmeta = flowmeta,
+            subflowmeta = subflowmeta,
+            base_sequence = baseline_sequence,
+            selections = selections,
+            outpath = outpath,
+            analysis_name = analysis_name,
         )
 
         maker.book(
-            processes=samples,
-            lumi=138.0,
-            flows=flow,
-            targets=flow_targets,
+            processes = samples,
+            lumi = 138.0,
+            flows = flow,
+            targets = flow_targets,
             withUncertainties = doUnc,
         )
 

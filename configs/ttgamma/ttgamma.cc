@@ -136,7 +136,7 @@ ROOT::RVec<bool> isFiducialLepton_PartonLevel(
     * - Requires electrons (pdgId = 11) or muons (pdgId = 13)
     * - Requires stable PYTHIA status (status == 1)
     * - Applies kinematic acceptance cuts: pT > 5 GeV, |eta| < 2.5
-     */
+    */
     
     auto is_fiducial = (
         ( pt > 5.0 ) & 
@@ -339,7 +339,7 @@ ROOT::RVec<bool> isFiducialPhoton_ParticleLevel(
     const ROOT::RVec<float>& gen_dressed_lepton_phi
     ) {
     
-        /**
+    /**
     * Identifies fiducial photons at the particle level.
     * 
     * Applies the particle-level fiducial selection defined in TOP-23-002:
@@ -448,7 +448,7 @@ ROOT::RVec<bool> isFiducialBJet_ParticleLevel(
     const ROOT::RVec<int>& fiducial_genjet_hadronFlavour
     ) {
     
-        /**
+    /**
     * Identifies b-tagged jets at the particle level.
     * 
     * Selects jets that have been identified as containing b-hadrons 
@@ -456,7 +456,7 @@ ROOT::RVec<bool> isFiducialBJet_ParticleLevel(
     * 
     * This function should typically be applied after isFiducialJet_ParticleLevel()
     * to get b-jets that pass the full fiducial selection.
-     */
+    */
     
     auto is_fiducial = (
         fiducial_genjet_hadronFlavour == 5 

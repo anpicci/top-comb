@@ -1,4 +1,5 @@
 genproductions_scripts/*
+merge_temp/*
 tmgtools_submit
 workdirs
 combine

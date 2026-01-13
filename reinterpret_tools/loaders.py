@@ -37,6 +37,7 @@ def update_cmgrdf_submodule():
 
 def load_module_from_path(name, path):
     """Load module from filesystem path."""
+    print( path )
     spec = importlib.util.spec_from_file_location(name, path)
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)

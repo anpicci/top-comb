@@ -1,5 +1,5 @@
 samples:
-  - name: TT-1Jets-TTto2L2NuGamma
+  - name: TTto2L2NuGamma
 
     # ------ Configurations regarding the Matrix Element
     load_extramodels: dim6top_LO_UFO.tar.gz 
@@ -11,7 +11,7 @@ samples:
         'define l- = e- mu- ta-',
         'define vl = ve vm vt',
         'define vl~ = ve~ vm~ vt~',
-        'generate p p > t t~ FCNC=0 DIM6=1 > l+ vl l- vl~ b  b~ a @0' 
+        'generate p p > t t~ FCNC=0 DIM6=1 > l+ vl b l- vl~ b~ a FCNC=0 DIM6=0 @0', 
       ]
 
     template_run_card: 
@@ -33,12 +33,12 @@ samples:
 
     # ------ Configurations regarding the Parton shower
     fragment:
-      name: templates/template_partonshower_madgraphMLM.dat
+      name: templates/template_partonshower_madgraph.dat
       process_parameters: [
         "'TimeShower:mMaxGamma = 4.0'"
       ]
 
-  - name: TTG-1Jets-TTto2L2Nu_xcut20-qcut42
+  - name: TTG-1Jets-TTto2L2Nu
 
     # ------ Configurations regarding the Matrix Element
     load_extramodels: dim6top_LO_UFO.tar.gz 
@@ -55,7 +55,7 @@ samples:
       ]
     
     template_run_card: 
-      name: templates/template_run_card_LO_MLM.dat 
+      name: templates/template_run_card_LO.dat 
     
     template_customizecards: 
       name: templates/template_customizecards.dat
