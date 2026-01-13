@@ -13,6 +13,7 @@ class TopCombEnv:
 
     # Other paths
     workdir: str = f"{mainpath}/workdirs/" 
+    measurements_path: str = f"{mainpath}/measurements/"
 
     # Configurations related to Generation 
     genproductions: str = f"{mainpath}/genproductions_scripts"
@@ -20,9 +21,8 @@ class TopCombEnv:
     genproductions_image: str = "/cvmfs/unpacked.cern.ch/registry.hub.docker.com/cmssw/el7:x86_64"
     genproductions_branch: str = "topcomb_eft_mg265"
 
-    # TMG tools configurations
-    tmgtools: str = f"{mainpath}/tmg-tools/top-gendqm"
-    tmgtools_campaign: str = "RunIISummer20UL18"
+    # MC production tools configurations
+    mcprod: str = f"{mainpath}/mc-prod"
 
     # Configurations related to Reinterpretation
     cmgrdf: str = f"{mainpath}/cmgrdf-prototype"
