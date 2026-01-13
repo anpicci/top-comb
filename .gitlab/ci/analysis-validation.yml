@@ -1,0 +1,21 @@
+validate_analysis:
+  stage: validate
+  image: python:3.11
+  rules:
+    # Triggered on merge requests
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      changes:
+        - main.yml 
+      when: on_success 
+
+    # Also triggered on direct pushes
+    - if: $CI_PIPELINE_SOURCE == "push"
+      changes:
+        - main.yml 
+      when: on_success
+
+    # Do not trigger otherwise
+    - when: never
+
+  script:
+    - for process in $( ls configs ); do echo python3 top-comb.py setup --analysis $process; done
