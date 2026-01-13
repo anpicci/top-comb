@@ -4,4 +4,4 @@
 	branch = for_release
 [submodule "tmg-tools"]
 	path = tmg-tools
-	url = ssh://git@gitlab.cern.ch:7999/cms-top-tmg/tmg-tools.git
+	url = ssh://git@gitlab.cern.ch:7999/cms-top-tmg/tmg-mc-validation.git 
