@@ -29,18 +29,6 @@ def prepare_workdir( environment ):
     Setup the main folder: requires clean workdir
     """
     workdir = environment.get("workdir")
-    reset = environment.get("reset")
-    
-    if os.path.exists(workdir):
-        if reset:
-            logger.info(f"Resetting existing workdir: {workdir}")
-            shutil.rmtree(workdir)
-        else:
-            logger.error(
-                f"Workdir already exists: {workdir}\n"
-                f"Use --reset to regenerate setup."
-            )
-            sys.exit(1)
     create_dir(workdir)
     create_workdir_info_file(workdir)
     logger.debug(f"Workdir prepared fresh for setup_gen: {workdir}")
