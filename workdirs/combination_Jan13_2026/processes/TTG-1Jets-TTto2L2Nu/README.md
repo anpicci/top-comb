@@ -1,4 +1,4 @@
-# Configuration card created on Tuesday 13. January 2026
+# Configuration card created on Saturday 10. January 2026
 Below is a mapping showing the reweighting points found in NanoAOD.
 The full list of couplings: ['ctp', 'cpQM', 'cpQ3', 'cptb', 'ctW', 'ctZ', 'ctG', 'cbW']
 

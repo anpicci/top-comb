@@ -21,14 +21,14 @@ set param_card yukawa 6 172.5
 
 
 # EFT operators
-set param_card ctp -0.49228943448399365
-set param_card cpQM 0.5393636342544718
-set param_card cpQ3 0.718149509174176
-set param_card cptb 0.05475432217867093
-set param_card ctW 0.7254919700801538
-set param_card ctZ -0.6407645414967675
-set param_card ctG -0.49507307990164584
-set param_card cbW -0.2840116345629581
+set param_card ctp -0.26072058684923105
+set param_card cpQM 0.7687968743864165
+set param_card cpQ3 0.6049150330835594
+set param_card cptb 0.8585243188156045
+set param_card ctW 0.7830263022367868
+set param_card ctZ 0.06530984489171876
+set param_card ctG 0.5121982971694993
+set param_card cbW 0.9757490864305912
 
 
 # User settings
