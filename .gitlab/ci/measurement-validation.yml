@@ -13,4 +13,10 @@ validate_measurements:
     - when: never
 
   script:
-    - for measurement in $( ls measurements ); do echo python3 top-comb.py setup -m $measurement; done
+    - for measurement in $( ls measurements ); do python3 top-comb.py --tag validation setup -m $measurement; done
+  
+  artifacts:
+    paths:
+      - workdirs/validation/
+    when: always
+    expire_in: 1 week
