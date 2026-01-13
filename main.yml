@@ -1,14 +1,27 @@
+# Keep an updated list of measurements that are included
+# in the combination
+MEASUREMENTS_LIST:
+  - dummy
+  - ttgamma
+
 # Main configuration file to drive the setup and the combination
-analyses:
+MEASUREMENTS:
+
+  # Used to debug the framework
   dummy:
-    operators: [ ctW, ctZ, ctG ]
-    generation: 
-      configs/dummy/generation.yml
-    reinterpretation: 
-      configs/dummy/reinterpretation.yml
+    operators: 
+      - ctW
+      - ctZ
+      - ctG
+
+  # TTG differential measurements 
   ttgamma:
-    operators: [ ctG, ctZ, ctW, ctp, cpQM, cpQ3, cptb, cbW ]
-    generation: 
-      configs/ttgamma/generation.yml
-    reinterpretation: 
-      configs/ttgamma/reinterpretation.yml
+    operators: 
+      - ctG
+      - ctZ
+      - ctW
+      - ctp
+      - cpQM
+      - cpQ3
+      - cptb
+      - cbW 
