@@ -3,7 +3,6 @@ merge_temp/*
 tmgtools_submit
 workdirs
 combine
-submit*
 *dict*
 *cache*
 *vim*
