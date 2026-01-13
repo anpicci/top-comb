@@ -61,7 +61,7 @@ def _setup_madgraph(
     procname = proc_metadata["name"]
 
     # Create directories
-    mgworkdir = config.workdir / procname
+    mgworkdir = config.workdir / "processes" / procname
     mgcards_dir = mgworkdir / "mgcards"
     create_dir(dirname=mgcards_dir)
 

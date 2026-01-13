@@ -20,12 +20,12 @@ def _prepare_fragment(
     """
 
     procname = proc_metadata["name"]
-    mgworkdir = config.workdir / procname
+    mgworkdir = config.workdir / "processes" / procname
     tpl = open_template(
         proc_metadata["fragment"]["name"]
     )
 
-    gridpack_path = _get_gridpack_path(config.outpath, config.analysis_name, procname)
+    gridpack_path = _get_gridpack_path(config.outpath, config.measurement_name, procname)
     param_text = _format_process_parameters(
         proc_metadata["fragment"]["process_parameters"],
         tpl
@@ -57,13 +57,13 @@ def _format_process_parameters(parameters: List[str], template: str) -> str:
 
 def _get_gridpack_path(
         outpath: str,
-        analysis_name: str,
+        measurement_name: str,
         procname: str
     ) -> str:
     """
     Construct gridpack path with redirector removed.
     """
-    gridpacks_base = f"{outpath}/{analysis_name}/{procname}"
+    gridpacks_base = f"{outpath}/{measurement_name}/{procname}"
     # Remove any redirectors from the fragment path
     gridpacks_base = gridpacks_base.replace("root://eosuser.cern.ch//", "")
     return f"{gridpacks_base}/gridpack/gridpack.tar.xz"

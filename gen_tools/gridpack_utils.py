@@ -26,12 +26,12 @@ def _prepare_gridpack(
     Prepare everything to run gridpacks on HTCondor.
     """
     procname = proc_metadata["name"]
-    mgworkdir = config.workdir / procname
+    mgworkdir = config.workdir / "processes" / procname
 
     _create_gridpack_scripts(
-        config.analysis_name,
+        config.measurement_name,
         proc_metadata,
-        f"{config.outpath}/{config.analysis_name}",
+        f"{config.outpath}/processes/{config.measurement_name}",
         mgworkdir,
         config.genprod_image,
         config.genprod_repo,
@@ -55,7 +55,7 @@ def _prepare_gridpack(
     os.chdir( cwd )
 
 def _create_gridpack_scripts(
-        analysis_name: str,
+        measurement_name: str,
         metadata: Dict[str, Any],
         outpath: str,
         mgworkdir: Path,
@@ -73,7 +73,7 @@ def _create_gridpack_scripts(
     # Create bash wrapper script
     bash_content = _render_gridpack_bash_script(
         procname,
-        analysis_name,
+        measurement_name,
         genprod_image,
         genprod_repo,
         genprod_branch
@@ -87,7 +87,7 @@ def _create_gridpack_scripts(
 
 def _render_gridpack_bash_script(
         procname: str,
-        analysis_name: str,
+        measurement_name: str,
         genprod_image: str,
         genprod_repo: str,
         genprod_branch: str
@@ -100,7 +100,7 @@ def _render_gridpack_bash_script(
     template = open_template("templates/run_gridpack_batch.sh")
     substitutions = {
         "__PROCNAME__": procname,
-        "__ANALYSIS_NAME__": analysis_name,
+        "__measurement_NAME__": measurement_name,
         "__CARDSDIR__": "mgcards",
         "__SINGULARITY_IMAGE__": genprod_image,
         "__GENPRODUCTIONS_GRIDPACK__": genprod_repo,

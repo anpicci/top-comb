@@ -5,8 +5,6 @@ import re
 from .generation_config import GenerationConfig
 
 from utils import (
-    open_template, 
-    get_logger,
     create_dir
 )
 
@@ -20,23 +18,19 @@ def _prepare_nanogen(
     Create a JSON config used to submit nanogen validation jobs with TMG-tools.
     """
     procname = proc_metadata["name"]
-    mgworkdir = config.workdir / procname
+    mgworkdir = config.workdir / "processes" / procname
     
     config_data = {
-        "samples": [
+        "gen": [
             {
-                "outpath": config.outpath,
                 "name": procname,
-                "fragment": f"file:{mgworkdir}/fragment.py",
-                "nevents": 1e6,
-                "memory": 32000,
-                "njobs": 5000,
+                "config": f"file:{mgworkdir}/fragment.py",
                 "xsec": 1,
                 "isGS": 0
             }
         ]
     }
 
-    config_dir = Path(f"{config.tmgtools_path}/processes/{procname}")
+    config_dir = Path(f"{config.mcprod_path}/processes/{procname}")
     create_dir(config_dir)
     write_text(config_dir / "job.json", json.dumps(config_data, indent=4))

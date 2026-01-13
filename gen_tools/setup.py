@@ -34,21 +34,22 @@ def setup_gen_config(
     """
     
     # Load the main configurations and select the ones for an
-    # specific analysis
-    main_config = environment.get("main_config")["analyses"]
-    analysis_name = environment.get("analysis")
-    analysis_config = main_config.get( analysis_name )
+    # specific measurement
+    main_config = environment.get("main_config")["MEASUREMENTS"]
+    measurement_name = environment.get("measurement")
+    measurement_config = main_config.get( measurement_name )
     
     # Load generation metadata
-    gen_metadata = load_config( analysis_config["generation"] )
-    operators = get_operators( analysis_config.get("operators") )
+    measurements_path = environment.get("measurements_path")
+    gen_metadata = load_config( f"{measurements_path}/{measurement_name}/generation.yml" )
+    operators = get_operators( measurement_config.get("operators") )
 
     # Use the helper class to propagate the information a bit more efficiently
     config = GenerationConfig(
-        analysis_name = analysis_name,
+        measurement_name = measurement_name,
         workdir = Path( environment.get("workdir") ),
         outpath = environment.get("outpath"),
-        tmgtools_path = environment.get("tmgtools"),
+        mcprod_path = environment.get("mcprod"),
         genprod_image = environment.get("genproductions_image"),
         genprod_repo = environment.get("genproductions_repo"),
         genprod_branch = environment.get("genproductions_branch")
