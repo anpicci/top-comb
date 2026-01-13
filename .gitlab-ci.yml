@@ -2,7 +2,5 @@ stages:
   - validate
 
 include:
-  - local: .gitlab/ci/analysis-validation.yml
-
- 
-
+  - local: .gitlab/ci/templates.yml
+  - local: .gitlab/ci/measurement-validation.yml

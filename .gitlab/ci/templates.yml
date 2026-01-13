@@ -1,0 +1,3 @@
+.validate_template:
+  stage: test
+  image: python:3.11
