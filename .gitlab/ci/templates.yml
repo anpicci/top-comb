@@ -2,4 +2,5 @@
   image: python:3.11
   before_script:
     - pip install --upgrade pip
-    - pip install pyyaml
+    - pip install -r requirements.txt
+
