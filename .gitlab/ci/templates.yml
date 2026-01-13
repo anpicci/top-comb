@@ -1,5 +1,5 @@
-.validate_template:
-  stage: validate 
+.basic:
   image: python:3.11
   before_script:
-    - pip3 install yaml
+    - pip install --upgrade pip
+    - pip install yaml

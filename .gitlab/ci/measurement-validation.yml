@@ -1,5 +1,6 @@
 validate_measurements:
-  extends: .validate_template
+  extends: .basic
+  stage: validate 
   rules:
     # Triggered on merge requests
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
