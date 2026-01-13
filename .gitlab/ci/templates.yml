@@ -1,3 +1,5 @@
 .validate_template:
   stage: validate 
   image: python:3.11
+  before_script:
+    - pip3 install yaml
