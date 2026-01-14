@@ -9,7 +9,7 @@ cwd = os.getcwd()
 class TopCombEnv:
     # CHANGE THIS for your environment or override in CI/CD
     mainpath: str = cwd
-    outpath: str = "/eos/cms/store/group/phys_top/cvicovil/top-comb/"
+    outpath: str = "root://eosuser.cern.ch//eos/cms/store/group/phys_top/cvicovil/top-comb/"
 
     # Other paths
     workdir: str = f"{mainpath}/workdirs/" 
