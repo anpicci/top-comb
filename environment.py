@@ -1,7 +1,7 @@
 # settings.py
 import os
 from datetime import datetime
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 cwd = os.getcwd()
 
@@ -9,7 +9,8 @@ cwd = os.getcwd()
 class TopCombEnv:
     # CHANGE THIS for your environment or override in CI/CD
     mainpath: str = cwd
-    outpath: str = "root://eosuser.cern.ch//eos/cms/store/group/phys_top/cvicovil/top-comb/"
+    eos_redirector: str = "root://eosuser.cern.ch/"
+    outpath: str = "/eos/cms/store/group/phys_top/cvicovil/top-comb/"
 
     # Other paths
     workdir: str = f"{mainpath}/workdirs/" 
@@ -26,6 +27,10 @@ class TopCombEnv:
 
     # Configurations related to Reinterpretation
     cmgrdf: str = f"{mainpath}/cmgrdf-prototype"
+    lumis: dict = field(default_factory=lambda: {
+        "Run2" : 16.81 + 19.50 +  41.48 + 59.83
+        }
+    )
 
     # Configurations related to combine
     combine_path: str = f"{mainpath}/combine/"
