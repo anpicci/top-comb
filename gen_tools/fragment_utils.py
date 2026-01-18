@@ -65,6 +65,6 @@ def _get_gridpack_path(
     """
     gridpacks_base = f"{outpath}/{measurement_name}/{procname}"
     # Remove any redirectors from the fragment path
-    gridpacks_base = gridpacks_base.replace("root://eosuser.cern.ch//", "")
+    gridpacks_base = gridpacks_base.replace("root://eosuser.cern.ch/", "")
     return f"{gridpacks_base}/gridpack/gridpack.tar.xz"
 

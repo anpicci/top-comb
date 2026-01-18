@@ -31,7 +31,7 @@ def _prepare_gridpack(
     _create_gridpack_scripts(
         config.measurement_name,
         proc_metadata,
-        f"{config.outpath}/processes/{config.measurement_name}",
+        f"{config.outpath}/gridpacks/",
         mgworkdir,
         config.genprod_image,
         config.genprod_repo,
@@ -120,7 +120,7 @@ def _render_condor_submission_file(procname: str, outpath: str) -> str:
     
     substitutions = {
         "__SCRIPTNAME__": "run_gridpack_batch.sh",
-        "__OUTPATH__": f"{outpath}/{procname}/gridpack",
+        "__OUTPATH__": f"{outpath}/{procname}",
         "__PROCNAME__": f"{procname}_runGridpack",
         "__NCORES__": "8",
     }
