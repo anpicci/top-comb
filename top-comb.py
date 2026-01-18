@@ -25,9 +25,10 @@ def add_setup_parser(subparsers):
 def add_submit_gen_parser(subparsers):
     """Register subcommands for setup modes."""
     submit_gen_parser = subparsers.add_parser("submit", help="Prepare code for generating gridpacks and nanogen inputs.")
-    submit_gen_parser.add_argument("-i", "--input", default="input", required = True, help="Folder with the output from the setup step")
     submit_gen_parser.add_argument("-w", "--what", default="gridpack", help="Choose between: gridpack/nanogen")
     submit_gen_parser.add_argument("-s", "--submit", default=False, action = "store_true", help="Actually submit or dry run.")
+    submit_gen_parser.add_argument("-j", "--njobs", default = 5000, help="How many jobs to submit.")
+    submit_gen_parser.add_argument("-n", "--nevents-per-job", dest = "nevents_per_job", default = 200, help="How many nanogen events are run per jobs.")
     
 def add_reinterpret_parser(subparsers):
     """Add options for reinterpretation."""
