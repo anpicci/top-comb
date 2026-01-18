@@ -3,182 +3,245 @@ cmgrdf_datasets
 ---------------
 Utilities to read datasets and return CMGRDF process objects.
 """
-from CMGRDF import MCGroup, MCSample, Process,  Source
-from utils import load_config, get_logger
 import glob
-import sys
-from CMGRDF.modifiers import Append
-from CMGRDF import AddWeight
 import subprocess
+from typing import Dict, List, Optional, Any
 
-logger = get_logger( __name__ )
+from CMGRDF import (
+    Data,
+    MCGroup, 
+    MCSample, 
+    Process,  
+    Source,
+    DataSample,
+    Append,
+    AddWeight
+)
+from utils.auxiliars import load_config
+from utils.logger import get_logger
+
+logger = get_logger(__name__)
 
 
-def read_datasets( datasets_module, hooks_module ):
+def read_datasets(era: str, datasets_module: Any, hooks_module: Any) -> List[Process]:
     """
     Build and return a list of CMGRDF Process objects from dataset metadata.
+    
+    Args:
+        era: Data-taking era identifier
+        datasets_module: Module containing dataset definitions
+        hooks_module: Module containing hook functions
+        
+    Returns:
+        List of MC Process objects
     """
-    logger.info( "Preparing datasets." )
+    logger.info("Preparing datasets.")
+    all_datasets = getattr(datasets_module, "datasets", {})
 
-    groupings = build_groupings(datasets_module, hooks_module)
-    mc_processes = build_processes(groupings)
-    return mc_processes
+    mc_datasets = get_mc_datasets(era, all_datasets["mc"], hooks_module)
 
-def get_lumi_dict( configs ):
-    """ Return the total luminosity for datasets that are used in the analysis """
-    lumi_dict = {}
-    for campaign, campaign_file in configs["campaigns"].items():
-        campaign_meta = load_config( campaign_file ) 
-        lumi_dict[ str(campaign_meta["era"]) ] = float( campaign_meta["lumi"] )
-    return lumi_dict
+    processes = build_processes(
+        all_datasets, 
+        {**mc_datasets}
+    )
 
+    return processes
 
 # --- Helper functions --------------------
-def _fetch_from_das( 
-        dataset_pattern: str  
-    ):
-   
-    files = subprocess.run(
-        [
-            "dasgoclient",
-            "-query",
-            f"file dataset={dataset_pattern}"
-        ],
-        capture_output = True,
+def _fetch_from_das(dataset_pattern: str) -> List[str]:
+    """
+    Fetch file list from DAS for a given dataset pattern.
+    
+    Args:
+        dataset_pattern: DAS dataset name pattern
+        
+    Returns:
+        List of file paths with redirector prefix
+    """
+    result = subprocess.run(
+        ["dasgoclient", "-query", f"file dataset={dataset_pattern}"],
+        capture_output=True,
+        text=True,
+        check=True
     )
-    file_list = files.stdout.decode("utf-8").strip().split("\n")
-
-    # Now for each file we have to add the redirector prefix
+    
+    files = result.stdout.strip().split("\n")
+    # Filter out empty strings and add redirector prefix
     redirector = "root://cms-xrd-global.cern.ch/"
-    file_list = [ redirector + f for f in file_list ][:10]  # avoid empty string case
-    return file_list
+    return [redirector + f for f in files if f]
+
     
-def _fetch_from_eos(
-        dataset_pattern: str
-    ):
-    files = glob.glob( dataset_pattern )
-    return files[:10]
+def _fetch_from_eos(dataset_pattern: str) -> List[str]:
+    """
+    Fetch file list from EOS for a given dataset pattern.
     
-def resolve_hooks(hooks_module, hooks_list):
-    """Return a list of hook callables resolved from hooks_module and hooks_list."""
+    Args:
+        dataset_pattern: EOS directory path pattern
+        
+    Returns:
+        List of ROOT file paths
+    """
+    return glob.glob(dataset_pattern)
+
+    
+def resolve_hooks(hooks_module: Optional[Any], hooks_list: Optional[List[str]]) -> Optional[List]:
+    """
+    Return a list of hook callables resolved from hooks_module and hooks_list.
+    
+    Args:
+        hooks_module: Module containing hook functions
+        hooks_list: List of hook names to resolve
+        
+    Returns:
+        List of hook callables or None
+    """
     if not hooks_module or not hooks_list:
-        return []
-    return getattr(hooks_module, hooks_list)
+        return None
+    return getattr(hooks_module, hooks_list, None)
 
-def build_mcsample(sample_meta, files, hooks_module, genSum = "genEventSumw", rwgt_hooks = []):
-    """Create an MCSample for one input file using sample metadata."""
-    sample_name = sample_meta.get("name")
-    norm = sample_meta.get("xsec")
-    hooks_list = sample_meta.get("hooks")
 
-    hooks = resolve_hooks(hooks_module, hooks_list) + rwgt_hooks
-    source_obj = Source(
-        name = f"source_{sample_name}", 
-        files = files, 
-        era = None
-    )
-
-    return MCSample(
-        name = sample_name,
-        source = source_obj,
-        xsec = norm,
-        eras = None,
-        hooks = hooks,
-        genSumWeightName = genSum
-    )
-
-def build_groupings(datasets_module, hooks_module):
+def _create_source(era: str, sample_name: str, files: List[str]) -> Dict[str, Source]:
     """
-    Parse dataset metadata and return a mapping group_name -> list of MCSample objects.
+    Create a Source object dictionary for a sample.
+    
+    Args:
+        era: Data-taking era
+        sample_name: Name of the sample
+        files: List of file paths
+        
+    Returns:
+        Dictionary mapping era to Source object
     """
+    return {
+        era: Source(
+            name=f"source_{sample_name}", 
+            files=files, 
+            era=era
+        )
+    }
 
-    groupings = {}
 
-    datasets = getattr(datasets_module, "datasets", {})
+def _resolve_files(files: str) -> List[str]:
+    """
+    Resolve file paths based on prefix (das:/ or eos:/).
+    
+    Args:
+        files: File path string with prefix
+        
+    Returns:
+        List of resolved file paths
+    """
+    if isinstance(files, str):
+        if files.startswith("das:/"):
+            return _fetch_from_das(files[4:])
+        elif files.startswith("eos:/"):
+            return _fetch_from_eos(files[4:])
+    return []
+
+def get_mclist(dataset: Dict[str, Any], hooks_module, era, reweighting_hooks = [], genSum = "genEventSumw") -> List[MCSample]:
+    """
+    Create a list of MCSample objects for a dataset without reweighting.
+    """
+    mclist = []
+    processes = dataset.get("processes", [])
+    logger.debug(f" - Processes: {', '.join(proc.get('name') for proc in processes)}.")
+    for proc in processes:
+
+        sample_files = _resolve_files(proc.get("files"))
+        sample_name = proc.get("name")
+        norm = proc.get("xsec")
+        hooks = resolve_hooks(hooks_module, proc.get("hooks"))
+        source_obj = _create_source(era, sample_name, sample_files)
+
+        mcsample = MCSample(
+            name=sample_name,
+            source=source_obj,
+            xsec=norm,
+            eras=[ era ],
+            hooks = hooks+ reweighting_hooks,
+            genSumWeightName=genSum,
+        )
+
+        mclist.append(mcsample)
+
+    return mclist
 
 
-    for dataset in datasets:
-        dataset_name = dataset.get("name")
-        sample_files = dataset.get("files", [])
-        if isinstance(sample_files, str) and sample_files.startswith("das:/"):
-            sample_files = _fetch_from_das( sample_files[4:] )
-        elif isinstance(sample_files, str) and sample_files.startswith("eos:/"):
-            sample_files = _fetch_from_eos( sample_files[4:] ) 
 
-        reweights = dataset.get("ReweightingWeights", [])
+def get_mc_datasets(era: str, mc_datasets: Dict[str, Any], hooks_module: Any) -> Dict[str, List]:
+    """
+    Process and return MC datasets grouped by name.
+    
+    Args:
+        era: Data-taking era
+        mc_datasets: Dictionary of MC dataset configurations
+        hooks_module: Module containing hook functions
+        
+    Returns:
+        Dictionary mapping dataset names to lists of MCSample objects
+    """
+    groups = {}
 
-        # If no reweights, process normally
-        if not reweights:
-            groupings.setdefault(dataset_name, [])
-            
-            mcsample = build_mcsample(
-                dataset,
-                sample_files,
-                hooks_module
-            )
-            groupings[ dataset_name ].append(
-                mcsample
-            )
+    for dataset_name, dataset in mc_datasets.items():
+        reweights = dataset.get("ReweightPoints", [])
 
-            print(f"Added dataset {dataset_name} with {len(sample_files)} files.")
-
-        else:
+        if len(reweights) == 0:
+            logger.info(f"Grouping {dataset_name}.")
+            groups.setdefault(dataset_name, [])
+            groups[dataset_name] = get_mclist( dataset, hooks_module, era )
+        else:            
             # Process all reweighted versions without recursion
             for rw in reweights:
                 rw_name = f"{dataset_name}__weight{rw}"
-                groupings.setdefault(rw_name, [])
+                logger.info(f"Grouping {rw_name}.")
+                groups.setdefault(rw_name, [])
 
                 # Here you can set the reweighting hook if needed
 
                 reweighting_hook = Append( 
                     AddWeight("point", f"LHEReweightingWeight[{rw}]") 
                 )
-                genSum = f"genEventSumw*LHEReweightingSumw[{rw}]"
 
                 rwgt_hooks = [ reweighting_hook ]
-
-                # Construct a minimal "derived sample" without deepcopy
-                derived = dict(dataset)
-                derived["name"] = rw_name
-
-                mcsample = build_mcsample(
-                    derived,
-                    sample_files,
-                    hooks_module,
-                    genSum,
-                    rwgt_hooks,
-                )
-                groupings[rw_name].append(
-                    mcsample
+                groups[rw_name] = get_mclist( 
+                    dataset, 
+                    hooks_module, 
+                    era, 
+                    reweighting_hooks = rwgt_hooks,
+                    genSum = f"genEventSumw*LHEReweightingSumw[{rw}]"
                 )
 
-    return groupings
+    return groups
 
 
-def build_processes(groupings):
+def build_processes(samples, groupings: Dict[str, List]) -> List[Process]:
     """
     Convert groupings to a list of CMGRDF Process objects (one per group).
+    
+    Args:
+        groupings: Dictionary mapping group names to lists of samples
+        
+    Returns:
+        List of Process objects
     """
     processes = []
-    color = 1
 
     for groupname, group_list in groupings.items():
-        logger.info( f"Grouping files into  {groupname}" )
+        logger.info(f"Grouping files into {groupname}")
 
         if not group_list:
-            logger.warning( f"Group {groupname} has no samples contributing to it!!! Will skip." )
-        else:
-            process = Process(
-                name = groupname,
-                samples = MCGroup( groupname, group_list ),
-                fillColor = color,
-            )
-            processes.append(process)
+            logger.warning(f"Group {groupname} has no samples contributing to it! Will skip.")
+            continue
 
-        color += 1
-        if color in [10, 18, 19]:  # skip unreadable/white colors
-            color += 1
-
+        sample_meta = samples["mc"].get(groupname.split("__weight")[0])
+        process = Process(
+            name=groupname,
+            samples=MCGroup(groupname, group_list),
+            fillColor = sample_meta.get("histo-decorations").get("SetFillColor")
+        )
+            
+        processes.append(process)
+        
     return processes
 
 
