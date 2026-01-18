@@ -6,7 +6,7 @@ from CMGRDF.flow import Cut
 
 evaluate_function = lambda func, args: f"{func}({','.join(args)})"
 
-def define_leptons_partonLevel( args ):
+def define_leptons_partonLevel():
     sequence = [
         Define(
             "is_fiducial_lepton_parton_level",
@@ -42,7 +42,7 @@ def define_leptons_partonLevel( args ):
     ]
     return sequence
 
-def define_tops_partonLevel( args ):
+def define_tops_partonLevel():
     sequence = [
         Define(
             "is_top",
@@ -78,7 +78,7 @@ def define_tops_partonLevel( args ):
     ]
     return sequence
 
-def define_extrajet_partonLevel( args ):
+def define_extrajet_partonLevel():
     sequence = [
         Define(
             "is_genextrajet",
@@ -113,7 +113,7 @@ def define_extrajet_partonLevel( args ):
 
     return sequence
 
-def define_isolated_photons_particleLevel( args ):
+def define_isolated_photons_particleLevel():
 
     sequence = [
         Define(
@@ -142,10 +142,11 @@ def define_isolated_photons_particleLevel( args ):
             ),
             optMembers=[],
         ),
+        DefineP4("FiducialPhoton_particleLevel"),
     ]
     return sequence
 
-def define_dressed_leptons_particleLevel( args ):
+def define_dressed_leptons_particleLevel():
     sequence = [
         Define(
             "is_fiducial_lepton_particle_level",
@@ -176,7 +177,7 @@ def define_dressed_leptons_particleLevel( args ):
     ]
     return sequence
 
-def define_jets_particleLevel( args ):
+def define_jets_particleLevel():
     sequence = [
         Define(
             "is_fiducial_jet_particle_level",
@@ -213,7 +214,7 @@ def define_jets_particleLevel( args ):
     ]
     return sequence
 
-def define_bjets_particleLevel( args ):
+def define_bjets_particleLevel():
 
     sequence = [
         Define(
@@ -246,7 +247,7 @@ def define_bjets_particleLevel( args ):
     return sequence
 
 
-def define_other_variables( args ):
+def define_other_variables():
     sequence = [
         Define(
             "genll_deltaphi",

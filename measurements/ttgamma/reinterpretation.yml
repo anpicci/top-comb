@@ -1,53 +1,45 @@
 # Define the aspects regarding the analysis
-reinterpretation:
+samples:
+  hooks: measurements/ttgamma/hooks.py
+  datasets: 
+    Run2: measurements/ttgamma/datasets.py
 
-  samples:
-    hooks: measurements/ttgamma/hooks.py
-    datasets: measurements/ttgamma/datasets.py
-
-  # ---- Load auxiliar .cpp code used to build custom variables
-  plugins:
+# ---- Load auxiliar .cpp code used to build custom variables
+plugins:
     - plugins/eft_auxiliars.h
     - plugins/eft_auxiliars.cc
     - measurements/ttgamma/ttgamma.cc
 
-  # ---- These determine event level selections and corrections
-  flow:
-    name: FiducialSelectionValidation
+# ---- These are RDF flows that are loaded for all loads 
+baseline:
+  name: FiducialSelectionValidation
+  targets:
+    - type: plots
+      plotfile: measurements/ttgamma/plots.py
+      plotmodule: plots
+      save_snapshot : False 
 
-    # This is what you want to produce
-    targets:
-      - { type: plots, plotfile: measurements/ttgamma/plots.py, plotmodule: plots, save_snapshot : True }
+  # This is the base sequence to be used for object and variable definition
+  sequence:
+    parton_leps: measurements/ttgamma/definitions.py:define_leptons_partonLevel 
+    particle_photons: measurements/ttgamma/definitions.py:define_isolated_photons_particleLevel
+    particle_leps: measurements/ttgamma/definitions.py:define_dressed_leptons_particleLevel
+    particle_jets: measurements/ttgamma/definitions.py:define_jets_particleLevel
+    particle_bjets: measurements/ttgamma/definitions.py:define_bjets_particleLevel
 
-    # This is the base sequence to be used for object and variable definition
-    sequence:
-      - { name: parton_leptons,   modules: measurements/ttgamma/definitions.py, function: define_leptons_partonLevel, args: ~ }
-      - { name: particle_photons, modules: measurements/ttgamma/definitions.py, function: define_isolated_photons_particleLevel, args: ~ }
-      - { name: particle_leptons, modules: measurements/ttgamma/definitions.py, function: define_dressed_leptons_particleLevel, args: ~ }
-      - { name: particle_jets,    modules: measurements/ttgamma/definitions.py, function: define_jets_particleLevel, args: ~ }
-      - { name: particle_bjets,   modules: measurements/ttgamma/definitions.py, function: define_bjets_particleLevel, args: ~ }
-
-    # These are used to apply a selection on top of the object definition
+# These are built on top of the baseline, and follow the same structure
+subflows:
+  - name: inclusive
     selection:
-      baseline:
-        - { name: atleast2genlep, expr: "nFiducialLepton_particleLevel >= 2" }
-        - { name: atleast2genjet, expr: "nFiducialJet_particleLevel >= 2" }
-        - { name: atleast1genbjet, expr: "nFiducialBJet_particleLevel >= 1" }
-        - { name: mll, expr: "(FiducialLepton_particleLevel_p4[0] + FiducialLepton_particleLevel_p4[1]).M() > 30" }
-      channels:
-        inclusive:
-          - { "name": inclusive, expr: "nFiducialPhoton_particleLevel >= 0" }
-        nophoton:
-          - { "name": nophoton, expr: "nFiducialPhoton_particleLevel == 0" }
-        exactly1photon:
-          - { "name": exact1pho, expr: "nFiducialPhoton_particleLevel == 1" }
-        exactly2photon:
-          - { "name": exact2pho, expr: "nFiducialPhoton_particleLevel == 2" }
-        morethan2photon:
-          - { "name": more2pho, expr: "nFiducialPhoton_particleLevel > 2" }
+      inclusive: measurements/ttgamma/selections.py:baseline
+  - name: nophoton
+    selection:
+      nophoton: measurements/ttgamma/selections.py:nophoton
+  - name: exact1photon
+    selection:
+      exact1photon: measurements/ttgamma/selections.py:exact1photon
+  - name: exactly2photons
+    selection:
+      exactly2photons: measurements/ttgamma/selections.py:exact2photon
 
-    subflows:
-      - { name: inclusive, channel: inclusive, label: '', sublabel: '' }
-      - { name: nophoton, channel: nophoton, label: '0\gamma', sublabel: '' }
-      - { name: exactly1photon, channel: exactly1photon, label: '1\gamma', sublabel: '' }
-      - { name: exactly2photon, channel: exactly2photon, label: '2\gamma', sublabel: '' }
+   
