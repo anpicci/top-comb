@@ -7,7 +7,7 @@ class LegendParameters:
     corner: str = "TR"
     text_size: float = 0.046
     ncolumns: int = 2
-    x1: float = 0.32
+    x1: float = 0.38
     y1: float = 0.72
     x2: float = 0.89
     y2: float = 0.905

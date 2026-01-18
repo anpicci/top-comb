@@ -8,6 +8,7 @@ from datetime import datetime
 import subprocess
 import shutil
 
+import importlib.util
 # Create the logger instance
 from utils.logger import get_logger
 logger = get_logger( __name__ )
@@ -77,6 +78,12 @@ def get_operators( selected_operators ):
                 operators.append( op )
     return operators
          
+def load_module_from_path(name, path):
+    """Load module from filesystem path."""
+    spec = importlib.util.spec_from_file_location(name, path)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
 
 def get_rwgt_points(all_operators, comb_scheme = 1):
     """ Function to get reweighting points """
