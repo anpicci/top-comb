@@ -11,7 +11,9 @@ samples:
         'define l- = e- mu- ta-',
         'define vl = ve vm vt',
         'define vl~ = ve~ vm~ vt~',
-        'generate p p > t t~ FCNC=0 DIM6=1 > l+ vl b l- vl~ b~ a FCNC=0 DIM6=0 @0', 
+        # 'generate p p > t t~ FCNC=0 DIM6=1 > l+ vl b l- vl~ b~ a FCNC=0 DIM6=0 @0', 
+        'generate p p > t t~ FCNC=0 DIM6=1, (t > l+ vl b a FCNC=0 DIM6=0), (t~ > l- vl~ b~ FCNC=0 DIM6=0) @0', 
+        'add process p p > t t~ FCNC=0 DIM6=1, (t > l+ vl b FCNC=0 DIM6=0), (t~ > l- vl~ b~ a FCNC=0 DIM6=0) @1', 
       ]
 
     template_run_card: 
@@ -51,7 +53,7 @@ samples:
         'define vl = ve vm vt',
         'define vl~ = ve~ vm~ vt~',
         'generate p p > t t~ a FCNC=0 DIM6=1, (t > l+ vl b FCNC=0 DIM6=0), (t~ > l- vl~ b~ FCNC=0 DIM6=0) @0', 
-        'add process p p > t t~ a j FCNC=0 DIM6=1, (t > l+ vl b FCNC=0 DIM6=0), (t~ > l- vl~ b~ FCNC=0 DIM6=0) @0', 
+        'add process p p > t t~ a j FCNC=0 DIM6=1, (t > l+ vl b FCNC=0 DIM6=0), (t~ > l- vl~ b~ FCNC=0 DIM6=0) @1', 
       ]
     
     template_run_card: 

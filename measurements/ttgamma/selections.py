@@ -19,6 +19,14 @@ def nophoton():
 
     return cuts
 
+def atleast1photon():
+    cuts = baseline()
+    cuts += [ 
+        Cut("atleast1photon","nFiducialPhoton_particleLevel >= 1"),
+    ]
+
+    return cuts
+
 def exact1photon():
     cuts = baseline()
     cuts += [ 

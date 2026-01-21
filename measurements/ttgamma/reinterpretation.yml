@@ -17,7 +17,7 @@ baseline:
     - type: plots
       plotfile: measurements/ttgamma/plots.py
       plotmodule: plots
-      save_snapshot : False 
+      save_snapshot : True 
 
   # This is the base sequence to be used for object and variable definition
   sequence:
@@ -35,6 +35,9 @@ subflows:
   - name: nophoton
     selection:
       nophoton: measurements/ttgamma/selections.py:nophoton
+  - name: atleast1photon
+    selection:
+      atleast1photon: measurements/ttgamma/selections.py:atleast1photon
   - name: exact1photon
     selection:
       exact1photon: measurements/ttgamma/selections.py:exact1photon

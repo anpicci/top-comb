@@ -3,27 +3,8 @@ import plotting.cms_palette as cmscolors
 
 datasets = {
     "mc" : {
-        "TTG_fromDecay" :{
-            "ReweightPoints" : [],
-            "legend" : "t#bar{t}#gamma (from decay)",
-            "histo-decorations" : {
-                "SetFillColor" : cmscolors.orange,
-            },
-            "processes" : [
-                {
-                    "name" : "TTG_fromDecay",
-                    "files" : "das:/TTGamma_Dilept_TuneCP5_13TeV-madgraph-pythia8/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v1/NANOAODSIM",
-                    "xsec" : 2.22037,
-                    "hooks" : "from_decay",
-                }
-            ]
-        },
-        "TTG_fromProduction" : {
-            "ReweightPoints" : [],
-            "legend" : "t#bar{t}#gamma (from prod)",
-            "histo-decorations" : {
-                "SetFillColor" : cmscolors.light_blue,
-            },
+        "TTGSM_Prod" :{
+            "legend" : "t#bar{t}#gamma (from production)",
             "processes" : [
                 {
                     "name" : "TTG_fromProduction",
@@ -33,31 +14,24 @@ datasets = {
                 }
             ]
         },
-        "TTGEFT_fromDecay" : {
-            "ReweightPoints" : [128],
-            "legend" : "t#bar{t}#gamma (from decay)",
-            "histo-decorations" : {
-                "SetFillColor" : cmscolors.dark_orange,
-            },
+        "TTGSM_Decay" :{
+            # "ReweightPoints" : [ 128 ], # Give a non empty list to enable reweighting to a specific point
             "processes" : [
                 {
-                    "name" : "TTGEFT_fromDecay",
-                    "files" : "eos:/eos/cms/store/group/phys_top/cvicovil/top-comb/ttgamma/TTto2L2NuGamma/GEN/*.root",
+                    "name" : "TTG_fromDecay",
+                    "files" : "das:/TTGamma_Dilept_TuneCP5_13TeV-madgraph-pythia8/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v1/NANOAODSIM",
                     "xsec" : 2.22037,
                     "hooks" : "from_decay",
-                }
+                },
             ]
         },
-        "TTGEFT_fromProd" : {
-            "ReweightPoints" : [128],
-            "legend" : "t#bar{t}#gamma (from production)",
-            "histo-decorations" : {
-                "SetFillColor" : cmscolors.blue,
-            },
+        "TTGEFT" : {
+            "ReweightMap" : "workdirs/combination_20Jan_2026/ttgamma/reweight_mapping.json",
+            # "ReweightPoints" : [ 128 ], # Give a non empty list to enable reweighting to a specific point
             "processes" : [
                 {
                     "name" : "TTGEFT_fromProd",
-                    "files" : "eos:/eos/cms/store/group/phys_top/cvicovil/top-comb/ttgamma/TTG-1Jets-TTto2L2Nu/GEN/*.root",
+                    "files" : "eos:/eos/cms/store/group/phys_top/cvicovil/top-comb/combination_Jan18_2026/NANOGEN/TTG-1Jets-TTto2L2Nu/*.root",
                     "xsec" : 0.428,
                     "hooks" : "from_prod",
                 }
