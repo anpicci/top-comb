@@ -20,7 +20,6 @@ def run_pipeline(mode_info, environment):
 def add_setup_parser(subparsers):
     """Register subcommands for setup modes."""
     setup_parser = subparsers.add_parser("setup", help="Prepare code for generating gridpacks and nanogen inputs.")
-    setup_parser.add_argument("-m", "--measurement", default="dummy", help="Measurement configurations to be setup")
 
 def add_submit_gen_parser(subparsers):
     """Register subcommands for setup modes."""
@@ -39,6 +38,9 @@ def add_reinterpret_parser(subparsers):
     reinterpret_parser.add_argument('--just-replot', dest="replot", action="store_true", default=False, help="Just replot, don't run the analysis")
     reinterpret_parser.add_argument('--debug', action="store_true", default=False, help="Activate debug compiler flags for custom modules")
 
+def add_cook_inputs_parser(subparsers):
+    """Add options for reinterpretation."""
+    cook_parser = subparsers.add_parser("cook", help="Prepare the input json files to the combination code.")
 
 def add_combine_parser(subparsers):
     """Add options for combine."""
@@ -49,11 +51,13 @@ def main():
     parser.add_argument("--outpath", default=None, type=str, help="Where to store results.")
     parser.add_argument("--config", default="main.yml", type=str, help="Path to config file")
     parser.add_argument("--tag", default="myrun", type=str, help="Workdir tag folder to use")
+    parser.add_argument("--measurement", default="ttgamma", help="Measurement configurations to be setup")
     
     subparsers = parser.add_subparsers(dest="mode")
     add_setup_parser(subparsers)
     add_submit_gen_parser(subparsers)
     add_reinterpret_parser(subparsers)
+    add_cook_inputs_parser(subparsers)
     add_combine_parser(subparsers)
 
     args = parser.parse_args()
