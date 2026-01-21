@@ -12,13 +12,15 @@ class JSONtoROOTConverter:
     Converts JSON histogram data to ROOT TH1D histograms.
     """
     
-    def __init__(self, json_path: str):
+    def __init__(self, json_path: str, filter_histograms: List[str] = []):
         """
         Initialize the converter with a JSON file.
         """
         self.json_path = json_path
-        self.filename = json_path.split("/")[-1].replace(".json", "")
+        channel, plot = json_path.split("/")[-2:]
+        self.filename = f"{channel}__{plot}".replace(".json", "") 
         self.data = self._load_json()
+        self.filter_histograms = filter_histograms
         self.histograms = {}
         
     def _load_json(self) -> Dict:
@@ -28,19 +30,22 @@ class JSONtoROOTConverter:
     
     def _create_histogram(self, histo_name: str, histo_data: Dict) -> ROOT.TH1D:
         """
-        Create a ROOT TH1D histogram from JSON data.
+        Create a ROOT TH1D histogram from JSON data with variable binning.
         """
         # Extract bin edges
         bins = histo_data['axes']['x']['bins']
         nbins = len(bins) - 1
+        
+        # Convert bin edges to array for ROOT
+        import array
+        bin_array = array.array('d', bins)
         
         # Create histogram with variable binning
         hist = ROOT.TH1D(
             histo_name,
             histo_name,
             nbins,
-            bins[0],
-            bins[-1]
+            bin_array
         )
         
         # Set axis titles
@@ -49,10 +54,7 @@ class JSONtoROOTConverter:
         hist.GetXaxis().SetTitle(x_title)
         hist.GetYaxis().SetTitle(y_title)
         
-        # Apply style options if present
-        style = histo_data['style']
-        hist.SetLineColor(style['fillcolor'])
-        hist.SetLineWidth(2)
+        hist.SetLineWidth(0)
         
         # Fill histogram with central values and errors
         central = histo_data['central']
@@ -75,7 +77,9 @@ class JSONtoROOTConverter:
         
         self.histograms = {}
         for histo_name, histo_data in self.data['histos'].items():
-            self.histograms[histo_name] = self._create_histogram( f"{self.filename}__{histo_name}", histo_data)
+            if histo_name in self.filter_histograms or not self.filter_histograms != []:
+                self.histograms[histo_name] = self._create_histogram( f"{self.filename}__{histo_name}", histo_data)
+
         
         return self.histograms
     
@@ -120,7 +124,7 @@ class JSONtoROOTConverter:
         return list(self.data.get('histos', {}).keys())
 
 
-def read_json_histograms(json_path: str) -> Dict[str, ROOT.TH1D]:
+def read_json_histograms(json_path: str, filter_histograms: List[str] = []) -> Dict[str, ROOT.TH1D]:
     """
     Convenience function to read and convert all histograms from a JSON file.
     
@@ -130,5 +134,5 @@ def read_json_histograms(json_path: str) -> Dict[str, ROOT.TH1D]:
     Returns:
         Dictionary mapping histogram names to ROOT.TH1D objects
     """
-    converter = JSONtoROOTConverter(json_path)
+    converter = JSONtoROOTConverter(json_path, filter_histograms=filter_histograms)
     return converter.convert_all()

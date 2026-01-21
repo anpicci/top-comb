@@ -7,6 +7,7 @@ import os
 from datetime import datetime
 import subprocess
 import shutil
+import json
 
 import importlib.util
 # Create the logger instance
@@ -22,8 +23,16 @@ if main_path is None:
 
 def load_config( config_path ) -> dict:
     """ Loads a configuration file written in yml format """
+
+    data = {}
     with open(config_path, "r") as f:
-        return yaml.safe_load(f)
+        if any( ext in config_path for ext in [".yml", ".yaml"] ):
+            data = yaml.safe_load(f)
+        elif ".json" in config_path:
+            data = json.load(f)
+        else:
+            raise ValueError(f"Unsupported configuration file format: {config_path}")
+    return data
 
 def prepare_workdir( environment ):
     """
