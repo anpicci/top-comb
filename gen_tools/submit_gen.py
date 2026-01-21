@@ -34,8 +34,8 @@ def submit_nanogen( proc_folder, environment ):
         f"--process", process, 
         f"--outpath", outpath,
         "--mode", "nanogen",
-        f"--nevents-per-job", environment.get('nevents_per_job'),
-        f"--njobs", environment.get('njobs'),
+        f"--nevents-per-job", str(environment.get('nevents_per_job')),
+        f"--njobs", str(environment.get('njobs')),
         "--backend", "condor", 
         "--submit", 
     ]

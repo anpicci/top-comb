@@ -8,7 +8,6 @@ from pathlib import Path
 from typing import Dict, Any
 import os
 import subprocess
-from .generation_config import GenerationConfig
 
 from utils import (
     open_template, 
@@ -17,31 +16,49 @@ from utils import (
 
 logger = get_logger(__name__)
 
+def _get_gridpack_path(
+        outpath: str,
+        measurement_name: str,
+        procname: str
+    ) -> str:
+    """
+    Construct gridpack path with redirector removed.
+    """
+    gridpacks_base = f"{outpath}/{procname}"
+    # Remove any redirectors from the fragment path
+    gridpacks_base = gridpacks_base.replace("root://eosuser.cern.ch/", "")
+    return f"{gridpacks_base}/gridpack.tar.xz"
+
+
 def _prepare_gridpack(
+        measurement_name: str,
         proc_metadata: Dict[str, Any],
-        config: GenerationConfig
+        outpath: Path,
+        procdir: Path,
+        genprod_image:str,
+        genprod_repo:str,
+        genprod_branch:str,
     ):
 
     """
     Prepare everything to run gridpacks on HTCondor.
     """
     procname = proc_metadata["name"]
-    mgworkdir = config.workdir / "processes" / procname
 
     _create_gridpack_scripts(
-        config.measurement_name,
+        measurement_name,
         proc_metadata,
-        f"{config.outpath}/gridpacks/",
-        mgworkdir,
-        config.genprod_image,
-        config.genprod_repo,
-        config.genprod_branch
+        outpath,
+        procdir,
+        genprod_image,
+        genprod_repo,
+        genprod_branch
     )
     
     cwd = os.getcwd()
 
     # run the gridpack: package mgcards and submit the condor job
-    os.chdir( mgworkdir )
+    os.chdir( procdir )
     subprocess.run(
       [
           "tar", 
@@ -51,8 +68,14 @@ def _prepare_gridpack(
       ], 
       check=True
     )
-    logger.info(f"Gridpack job for process {procname} is ready for submission in {mgworkdir}")
+    logger.info(f"Gridpack job for process {procname} is ready for submission in {procdir}")
     os.chdir( cwd )
+
+    return _get_gridpack_path(
+        outpath,
+        measurement_name,
+        procname
+    )
 
 def _create_gridpack_scripts(
         measurement_name: str,

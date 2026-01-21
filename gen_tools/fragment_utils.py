@@ -1,8 +1,6 @@
-from .utils import write_text
 from pathlib import Path
 from typing import Dict, Any, List
 import re
-from .generation_config import GenerationConfig
 
 from utils import (
     open_template, 
@@ -12,20 +10,18 @@ from utils import (
 logger = get_logger(__name__)
 
 def _prepare_fragment(
+        gridpack_path: str,
         proc_metadata: Dict[str, Any],
-        config: GenerationConfig
     ) -> None:
     """
     Render the fragment.py used by the event production step.
     """
 
     procname = proc_metadata["name"]
-    mgworkdir = config.workdir / "processes" / procname
     tpl = open_template(
         proc_metadata["fragment"]["name"]
     )
 
-    gridpack_path = _get_gridpack_path(config.outpath, config.measurement_name, procname)
     param_text = _format_process_parameters(
         proc_metadata["fragment"]["process_parameters"],
         tpl
@@ -36,7 +32,8 @@ def _prepare_fragment(
         PROCESS_PARAMETERS=param_text
     )
 
-    write_text(Path(mgworkdir) / "fragment.py", fragment_content)
+    return fragment_content
+
 
 def _format_process_parameters(parameters: List[str], template: str) -> str:
     """
@@ -54,17 +51,4 @@ def _format_process_parameters(parameters: List[str], template: str) -> str:
     indent = placeholder.group("indent") if placeholder else ""
     
     return (",\n" + indent).join(params)
-
-def _get_gridpack_path(
-        outpath: str,
-        measurement_name: str,
-        procname: str
-    ) -> str:
-    """
-    Construct gridpack path with redirector removed.
-    """
-    gridpacks_base = f"{outpath}/{measurement_name}/{procname}"
-    # Remove any redirectors from the fragment path
-    gridpacks_base = gridpacks_base.replace("root://eosuser.cern.ch/", "")
-    return f"{gridpacks_base}/gridpack/gridpack.tar.xz"
 
