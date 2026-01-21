@@ -360,7 +360,7 @@ ROOT::RVec<bool> isFiducialPhoton_ParticleLevel(
         gen_isolated_photon_phi,
         gen_dressed_lepton_eta,
         gen_dressed_lepton_phi,
-        0.1
+        0.4
     );
 
     auto is_fiducial = (
