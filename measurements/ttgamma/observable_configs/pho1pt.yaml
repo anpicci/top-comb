@@ -1,0 +1,51 @@
+
+# Always define these components (SM, Data and EFT). They can be empty if not needed.
+dataset: Run2
+
+components:
+  observable: pho1pt
+  central_values: measurements/ttgamma/hepdata/pho1pt_distr.yaml
+  total_cov: measurements/ttgamma/hepdata/pho1pt_total_corr.yaml
+  stat_cov: measurements/ttgamma/hepdata/pho1pt_stat_corr.yaml 
+  eftshapes: 
+    /eos/cms/store/group/phys_top/cvicovil/top-comb/combination_Jan18_2026/shapes/ttgamma/FiducialSelectionValidation/exact1photon/pho1pt.json
+  mapping:
+    workdirs/combination_20Jan_2026/ttgamma/reweight_mapping.json
+  #   # style:
+  #   #   SetLineColor: cms_palette:black
+  #   #   SetLineWidth: 2
+  # data:
+  #   read_from: hepdata
+  #   hepdata: measurements/ttgamma/hepdata/pho1pt_reindented.json:data
+  #   index: 0 # Index of the observable in the HEPData file
+  #   error_label: total uncertainty # Label of the uncertainty to be used
+  #   format: graph
+  #   # style:
+  #   #   SetMarkerStyle: 20
+  #   #   SetMarkerSize: 1.2
+  #   #   SetLineColor: cms_palette:black
+  # EFT:
+  #   read_from: reweight_map
+  #   jsonfile: /eos/cms/store/group/phys_top/cvicovil/top-comb/combination_Jan18_2026/shapes/ttgamma/FiducialSelectionValidation/exact1photon/pho1pt.json
+  #   reweight_map: measurements/ttgamma/ttgamma_reweight_map.yml
+  #         # style:
+  #         #   SetLineColor: cms_palette:light_blue
+  #         #   SetLineWidth: 2
+  # plotting:
+  #   axes:
+  #       xTitle: "p_{T}(#gamma_{1}) [GeV]"
+  #       logy: true
+  #       yRange: [0.01, 100]
+  #       RatioRange: [0.0, 2.0]
+  #       yTitle: "Events"
+  #   annotations:
+  #     lumi: 138
+  #     com: "13 TeV"
+  #     region_labels:
+  #       exact1photon: '1 \gamma'
+  #     custom_annotations: ~
+
+
+
+
+

@@ -1,0 +1,97 @@
+dependent_variables:
+- header:
+    name: $d\sigma/d(p_{T}(\gamma))$ observed
+    units: fb/GeV
+  values:
+  - errors:
+    - asymerror:
+        minus: -0.42497
+        plus: 0.4168
+      label: total uncertainty
+    - asymerror:
+        minus: -0.1829
+        plus: 0.18478
+      label: Statistical uncertainty
+    value: 4.1339
+  - errors:
+    - asymerror:
+        minus: -0.14564
+        plus: 0.1468
+      label: total uncertainty
+    - asymerror:
+        minus: -0.11224
+        plus: 0.11432
+      label: Statistical uncertainty
+    value: 1.7657
+  - errors:
+    - asymerror:
+        minus: -0.079522
+        plus: 0.081208
+      label: total uncertainty
+    - asymerror:
+        minus: -0.062369
+        plus: 0.064018
+      label: Statistical uncertainty
+    value: 0.87214
+  - errors:
+    - asymerror:
+        minus: -0.023743
+        plus: 0.024175
+      label: total uncertainty
+    - asymerror:
+        minus: -0.018245
+        plus: 0.018795
+      label: Statistical uncertainty
+    value: 0.24098
+  - errors:
+    - asymerror:
+        minus: -0.013077
+        plus: 0.014025
+      label: total uncertainty
+    - asymerror:
+        minus: -0.01071
+        plus: 0.011093
+      label: Statistical uncertainty
+    value: 0.14774
+- header:
+    name: $d\sigma/d(p_{T}(\gamma))$ theory prediction
+    units: fb/GeV
+  values:
+  - value: 4.8365
+  - value: 2.0726
+  - value: 0.98375
+  - value: 0.31314
+  - value: 0.13332
+- header:
+    name: $d\sigma/d(p_{T}(\gamma))$ nominal MC prediction
+    units: fb/GeV
+  values:
+  - value: 3.9042
+  - value: 1.6987
+  - value: 0.81929
+  - value: 0.2772
+  - value: 0.13577
+- header:
+    name: $d\sigma/d(p_{T}(\gamma))$ alternative MC prediction
+    units: fb/GeV
+  values:
+  - value: 5.6457
+  - value: 2.3899
+  - value: 1.0903
+  - value: 0.32742
+  - value: 0.14105
+independent_variables:
+- header:
+    name: $p_T(\gamma)$
+    units: GeV
+  values:
+  - high: 35.0
+    low: 20.0
+  - high: 50.0
+    low: 35.0
+  - high: 70.0
+    low: 50.0
+  - high: 130.0
+    low: 70.0
+  - high: 195.0
+    low: 130.0
