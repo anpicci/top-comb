@@ -7,15 +7,10 @@ MEASUREMENTS_LIST:
 # Main configuration file to drive the setup and the combination
 MEASUREMENTS:
 
-  # Used to debug the framework
-  dummy:
-    operators: 
-      - ctW
-      - ctZ
-      - ctG
-
   # TTG differential measurements 
   ttgamma:
+    observable: 
+      pho1pt
     operators: 
       - ctG
       - ctZ
