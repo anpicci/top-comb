@@ -21,8 +21,6 @@ from eftcomb.python.tools import (
     Measurement
 )
 
-from EFT2Obs.scripts.eftscaling import EFTScaling
-
 logger = get_logger(__name__)
 
 class ttgamma_component(components.component):
