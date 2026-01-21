@@ -6,16 +6,15 @@ Utilities to read datasets and return CMGRDF process objects.
 import glob
 import subprocess
 from typing import Dict, List, Optional, Any
+import sys
 
 from CMGRDF import (
-    Data,
-    MCGroup, 
     MCSample, 
     Process,  
     Source,
-    DataSample,
     Append,
-    AddWeight
+    AddWeight,
+    AddWeightUncertainty,
 )
 from utils.auxiliars import load_config
 from utils.logger import get_logger
@@ -153,12 +152,22 @@ def get_mclist(dataset: Dict[str, Any], hooks_module, era, reweighting_hooks = [
         hooks = resolve_hooks(hooks_module, proc.get("hooks"))
         source_obj = _create_source(era, sample_name, sample_files)
 
+        # Uncertainties
+        pdfunchook = Append(
+            [ 
+                    AddWeightUncertainty(
+                        f"pdf_{sample_name}_{i}", f"max(0.95f,min(1.05f,LHEPdfWeight[{i}]))", f"1./max(0.95f,min(1.05f,LHEPdfWeight[{i}]))"
+                    ) 
+                for i in range(100)
+            ]
+        )
+
         mcsample = MCSample(
             name=sample_name,
             source=source_obj,
             xsec=norm,
             eras=[ era ],
-            hooks = hooks+ reweighting_hooks,
+            hooks = hooks + reweighting_hooks,
             genSumWeightName=genSum,
         )
 
@@ -183,24 +192,28 @@ def get_mc_datasets(era: str, mc_datasets: Dict[str, Any], hooks_module: Any) ->
     groups = {}
 
     for dataset_name, dataset in mc_datasets.items():
-        reweights = dataset.get("ReweightPoints", [])
+        reweight_map = dataset.get("ReweightMap", None)
 
-        if len(reweights) == 0:
+        if  not reweight_map:
             logger.info(f"Grouping {dataset_name}.")
             groups.setdefault(dataset_name, [])
             groups[dataset_name] = get_mclist( dataset, hooks_module, era )
         else:            
-            # Process all reweighted versions without recursion
-            for rw in reweights:
-                rw_name = f"{dataset_name}__weight{rw}"
+            # Load the reweight mapping
+            rw_map = load_config(reweight_map)
+            selecttedPoints = dataset.get("ReweightPoints", len( rw_map ) )
+
+            for rwkey, rwmeta in rw_map.items():
+                index = rwmeta["index"]
+
+                rw_name = f"{dataset_name}__{rwkey}"
                 logger.info(f"Grouping {rw_name}.")
                 groups.setdefault(rw_name, [])
 
                 # Here you can set the reweighting hook if needed
-
                 reweighting_hook = Append( 
-                    AddWeight("point", f"LHEReweightingWeight[{rw}]") 
-                )
+                    AddWeight("point", f"LHEReweightingWeight[{index}]") 
+                ) 
 
                 rwgt_hooks = [ reweighting_hook ]
                 groups[rw_name] = get_mclist( 
@@ -208,7 +221,7 @@ def get_mc_datasets(era: str, mc_datasets: Dict[str, Any], hooks_module: Any) ->
                     hooks_module, 
                     era, 
                     reweighting_hooks = rwgt_hooks,
-                    genSum = f"genEventSumw*LHEReweightingSumw[{rw}]"
+                    genSum = f"genEventSumw"
                 )
 
     return groups
@@ -233,11 +246,9 @@ def build_processes(samples, groupings: Dict[str, List]) -> List[Process]:
             logger.warning(f"Group {groupname} has no samples contributing to it! Will skip.")
             continue
 
-        sample_meta = samples["mc"].get(groupname.split("__weight")[0])
         process = Process(
             name=groupname,
-            samples=MCGroup(groupname, group_list),
-            fillColor = sample_meta.get("histo-decorations").get("SetFillColor")
+            samples=group_list,
         )
             
         processes.append(process)

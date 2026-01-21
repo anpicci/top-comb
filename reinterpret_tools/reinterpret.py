@@ -1,16 +1,6 @@
 """
 Driver utilities for running the reinterpretation workflow.
-
-This module provides high-level orchestration:
-- reinterpret: prepare workdir, update submodules, run a single measurement
-  setup (including plotting).
-- reinterpret_one_measurement: run the CMGRDF processing pipeline:
-  - load datasets and hooks
-  - compile plugins
-  - build and book flows
-  - execute snapshots and plots, then produce PlotSetPrinter output
-
-Functions assume ROOT is available and configured (batch mode, styles).
+Functions assume ROOT is available and configured.
 """
 import os, sys
 import ROOT
@@ -67,13 +57,6 @@ def load_selections(meta):
 def process_flow_config(config, doUnc=False, eras=None):
     """
     Process flow configuration to build sequence and selections.
-    
-    Args:
-        config: Flow configuration dictionary
-        base_sequence: Base sequence to extend (if None, starts empty)
-        base_selections: Base selections to extend (if None, starts empty)
-        doUnc: Whether to include systematic uncertainties
-        eras: List of eras to process
     """
     sequence = []
     selections = []
@@ -96,14 +79,6 @@ def process_flow_config(config, doUnc=False, eras=None):
 def build_targets(config, sequence, flowname, outpath, measurement_name):
     """
     Build plot and snapshot targets from configuration.
-
-    Args:
-        config: Configuration dictionary containing targets
-        sequence: Current sequence (will be modified if snapshots are saved)
-        flowname: Name of the flow
-        outpath: Output path for results
-        measurement_name: Name of the measurement
-    
     """
     plot_targets = []
     snap_targets = []
@@ -133,15 +108,12 @@ def build_targets(config, sequence, flowname, outpath, measurement_name):
                 sequence.append(Define(name, expr))
                 columnSel.append(name)
             
-            snap_path = (
-                f"{outpath}/{measurement_name}/{flowname}/"
-                "/snapshots/{{name}}.root"
-            )
+            snapshot_path = f"{outpath}/{measurement_name}/{flowname}/" + "{era}/snapshots/{name}.root"
             
             from CMGRDF import Snapshot
             snap_targets.append(
                 Snapshot(
-                    snap_path,
+                    snapshot_path,
                     columnSel=["weight"] + columnSel,
                     compression=None,
                 )
@@ -180,16 +152,13 @@ def build_flow(
     )
     
     # Create flow
-    for step in sequence + selections:
-        logger.debug(f"Flow step: {step}")
-        
     flow = Flow(f"{flowname}/", sequence + selections)
     
     return flow, targets
 
 
 def reinterpret_one_measurement(
-         measurement_name, 
+        measurement_name, 
         outpath,
         metadata,
         lumis,
@@ -199,14 +168,13 @@ def reinterpret_one_measurement(
     ):
     """
     Execute the CMGRDF-based interpretation for a single measurement.
-
     This function performs the core work:
     1) Load dataset definitions and hooks and translate them into CMGRDF
        process definitions.
     2) Compile any measurement-specific macros/plugins.
     3) Build booking sequences, selections and per-subflow plot targets.
     4) Book flows into a CMGRDF Processor and run snapshots/plots.
-    5) Print resulting plots to disk via PlotSetPrinter.
+    5) Output resulting targets (plots, snapshots, cards, etc...).
     """
 
     ROOT.EnableImplicitMT( ncores )
