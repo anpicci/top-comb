@@ -1,7 +1,7 @@
 import json
 import numpy as np 
 
-stuff=json.loads(open( "../extrapoConfigs/full_pois.json").read())
+stuff=json.loads(open( "extrapoConfigs/full_pois.json").read())
 pois=[p for p in stuff]
 import csv
 
