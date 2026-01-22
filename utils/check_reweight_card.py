@@ -3,9 +3,12 @@ import sys, os, re
 import itertools
 import argparse
 
-sys.path.append( os.environ["TOPCOMB_MAINPATH"] )
+from environment import TopCombEnv
+settings = TopCombEnv().model_dump()
+sys.path.append( settings.get("topcomb_mainpath", ".") )
+
 # Create the logger instance
-from utils.logger import get_logger
+from utils import get_logger
 logger = get_logger( __name__ )
 
 def parse_blocks(lines):

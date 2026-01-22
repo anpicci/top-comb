@@ -1,4 +1,11 @@
 genproductions_scripts/*
+tmgtools_submit
+workdirs
+combine
 submit*
+*dict*
 *cache*
 *vim*
+*.pcm
+*.so
+*.d
