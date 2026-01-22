@@ -1,0 +1,48 @@
+# Define the aspects regarding the analysis
+samples:
+  hooks: measurements/ttgamma/hooks.py
+  datasets: 
+    Run2: measurements/ttgamma/datasets.py
+
+# ---- Load auxiliar .cpp code used to build custom variables
+plugins:
+    - plugins/eft_auxiliars.h
+    - plugins/eft_auxiliars.cc
+    - measurements/ttgamma/ttgamma.cc
+
+# ---- These are RDF flows that are loaded for all loads 
+baseline:
+  name: FiducialSelectionValidation
+  targets:
+    - type: plots
+      plotfile: measurements/ttgamma/plots.py
+      plotmodule: plots
+      save_snapshot : True 
+
+  # This is the base sequence to be used for object and variable definition
+  sequence:
+    parton_leps: measurements/ttgamma/definitions.py:define_leptons_partonLevel 
+    particle_photons: measurements/ttgamma/definitions.py:define_isolated_photons_particleLevel
+    particle_leps: measurements/ttgamma/definitions.py:define_dressed_leptons_particleLevel
+    particle_jets: measurements/ttgamma/definitions.py:define_jets_particleLevel
+    particle_bjets: measurements/ttgamma/definitions.py:define_bjets_particleLevel
+
+# These are built on top of the baseline, and follow the same structure
+subflows:
+  - name: inclusive
+    selection:
+      inclusive: measurements/ttgamma/selections.py:baseline
+  - name: nophoton
+    selection:
+      nophoton: measurements/ttgamma/selections.py:nophoton
+  - name: atleast1photon
+    selection:
+      atleast1photon: measurements/ttgamma/selections.py:atleast1photon
+  - name: exact1photon
+    selection:
+      exact1photon: measurements/ttgamma/selections.py:exact1photon
+  - name: exactly2photons
+    selection:
+      exactly2photons: measurements/ttgamma/selections.py:exact2photon
+
+   

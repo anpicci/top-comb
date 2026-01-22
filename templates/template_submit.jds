@@ -1,7 +1,7 @@
 executable = __SCRIPTNAME__
 getenv = True
 when_to_transfer_output = on_exit
-+JobFlavour = 'tomorrow'
++JobFlavour = "tomorrow"
 +JobBatchName = "__PROCNAME__"
 transfer_input_files = cards.tgz
 output_destination = __OUTPATH__ 

@@ -1,7 +1,7 @@
 import ROOT
 from copy import deepcopy
 import numpy as np
-from plotting import PlotterBase
+from plotting.base_plotter import PlotterBase
 from plotting.axes import AxisBuilder, AxisParameters
 from plotting.legend import LegendBuilder
 from plotting.canvas import CanvasBuilder, CanvasParameters
@@ -42,8 +42,13 @@ class Plotter1D(PlotterBase):
             label_size = 0, 
             title_size = 0 
         )
+
+        yaxis_inputs = {
+            "title": plot_customizations.get("yTitle", "Y-axis"),
+            "range": plot_customizations.get("yRange", "__auto__")
+        }
         upperAxisParamsY = AxisParameters( 
-            plot_customizations.yTitle 
+            **yaxis_inputs
         )
         upper_axis = AxisBuilder( 
             ref_objs = ref_objs, 
@@ -53,11 +58,11 @@ class Plotter1D(PlotterBase):
         legend = LegendBuilder().build()
         p1 = pads["main"]
         p1.cd()
-        if plot_customizations.logy:
+        if plot_customizations.get("logy", False):
             p1.SetLogy()
         upper_axis.Draw("hist")
         
-        self.print_spam( plot_customizations.annotations + spams )
+        self.print_spam( plot_customizations.get("annotations") + spams )
         for obj in zip(ref_objs + funcs, labels):
             if isinstance(obj[0], ROOT.TH1):
                 obj[0].Draw("hist same")
@@ -74,13 +79,13 @@ class Plotter1D(PlotterBase):
         # ------------- Draw the lower axis ------------- #
         # Lower axis
         lowerAxisParamsX = AxisParameters( 
-            title = plot_customizations.xTitle, 
+            title = plot_customizations.get("xTitle", "X-axis"), 
             label_size = 22, 
             title_offset = 1.05 
         )
         lowerAxisParamsY = AxisParameters( 
             title = "Data/Pred.", 
-            range = plot_customizations.RatioRange, 
+            range = plot_customizations.get("RatioRange", (0.8, 1.2)), 
             centertitle = True, 
             ndivisions = 503
         )

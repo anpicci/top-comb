@@ -1,0 +1,16 @@
+executable = run_gridpack_batch.sh
+getenv = True
+when_to_transfer_output = on_exit
++JobFlavour = "tomorrow"
++JobBatchName = "TTto2L2NuGamma_runGridpack"
+transfer_input_files = cards.tgz
+output_destination = root://eosuser.cern.ch///eos/cms/store/group/phys_top/cvicovil/top-comb//ttgamma/TTto2L2NuGamma/gridpack 
+output = TTto2L2NuGamma_runGridpack.$(ProcId).stdout
+error = TTto2L2NuGamma_runGridpack.$(ProcId).stderr
+log = TTto2L2NuGamma_runGridpack.$(ProcId).stdlog
+MY.XRDCP_CREATE_DIR     = True
+request_memory = 32000
+RequestCpus = 8
+arguments = $(arg)
+queue
+

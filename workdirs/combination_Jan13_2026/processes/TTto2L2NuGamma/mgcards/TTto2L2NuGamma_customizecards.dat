@@ -1,0 +1,39 @@
+# These inputs are based on fixing the PDG vlaues of mZ, mW, and G_fermi
+# The MC programs use a constant width scheme, whereas PDG values are sqrt(s) dependent.
+# We correct for this following Sect. 3.1 in https://arxiv.org/pdf/1606.02330.pdf
+set param_card SMINPUTS 1 132.30648214177197
+set param_card SMINPUTS 2 1.1663787e-05
+
+# Z boson
+set param_card mass 23 91.153509740726733
+set param_card DECAY 23 2.4932018986110700
+
+# W boson
+set param_card mass 24 80.351812293789408
+set param_card DECAY 24 2.0904310808144846
+
+# top quark
+set param_card mass 6 172.5
+set param_card DECAY 6 1.311
+set param_card yukawa 6 172.5
+
+
+
+
+# EFT operators
+set param_card ctp -0.26072058684923105
+set param_card cpQM 0.7687968743864165
+set param_card cpQ3 0.6049150330835594
+set param_card cptb 0.8585243188156045
+set param_card ctW 0.7830263022367868
+set param_card ctZ 0.06530984489171876
+set param_card ctG 0.5121982971694993
+set param_card cbW 0.9757490864305912
+
+
+# User settings
+set param_card DECAY 6 1.491500e+00
+set run_card maxjetflavor 5
+set run_card pta 10
+set run_card draj 0.1
+set run_card dral 0.1

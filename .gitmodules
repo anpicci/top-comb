@@ -2,6 +2,6 @@
 	path = cmgrdf-prototype
 	url = https://gitlab.cern.ch/cms-new-cmgtools/cmgrdf-prototype.git
 	branch = for_release
-[submodule "tmg-tools"]
-	path = tmg-tools
-	url = ssh://git@gitlab.cern.ch:7999/cms-top-tmg/tmg-tools.git
+[submodule "mc-prod"]
+	path = mc-prod
+	url = ssh://git@gitlab.cern.ch:7999/cms-top-tmg/tmg-mc-validation.git

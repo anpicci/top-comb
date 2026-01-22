@@ -1,7 +1,6 @@
 import ROOT
 import os
 from utils import get_logger
-from plotting.custom_plot_parameters import CustomPlotParameters
 logger = get_logger(__name__)
 
 class PlotterBase:
@@ -15,9 +14,7 @@ class PlotterBase:
         # Main plot
         canvas = cls()._draw( 
             name = name, 
-            plot_customizations = CustomPlotParameters.from_dict( 
-                dict_customs
-            ), 
+            plot_customizations = dict_customs, 
             **kwargs 
         )        
         
@@ -60,7 +57,7 @@ class PlotterBase:
 
     def save_canvas(self, canvas, outfolder, output_name):
         #canvas.Update()
-        for ext in [".png", ".eps"]:
+        for ext in [".png", ".eps", ".pdf"]:
             canvas.SaveAs( os.path.join( outfolder, output_name + ext) )
 
         base_outfolder = str(outfolder).split("/")[:-1]

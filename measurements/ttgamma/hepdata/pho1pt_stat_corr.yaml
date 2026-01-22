@@ -1,0 +1,138 @@
+dependent_variables:
+- header:
+    name: Correlation
+  values:
+  - value: 1.0
+  - value: -0.2355
+  - value: 0.01008
+  - value: -0.0037558
+  - value: -6.7218e-05
+  - value: -0.2355
+  - value: 1.0
+  - value: -0.067681
+  - value: 0.012702
+  - value: -0.00090591
+  - value: 0.01008
+  - value: -0.067681
+  - value: 1.0
+  - value: -0.19831
+  - value: 0.012491
+  - value: -0.0037558
+  - value: 0.012702
+  - value: -0.19831
+  - value: 1.0
+  - value: -0.063861
+  - value: -6.7218e-05
+  - value: -0.00090591
+  - value: 0.012491
+  - value: -0.063861
+  - value: 1.0
+independent_variables:
+- header:
+    name: $p_T(\gamma)$
+    units: GeV
+  values:
+  - high: 35.0
+    low: 20.0
+  - high: 35.0
+    low: 20.0
+  - high: 35.0
+    low: 20.0
+  - high: 35.0
+    low: 20.0
+  - high: 35.0
+    low: 20.0
+  - high: 50.0
+    low: 35.0
+  - high: 50.0
+    low: 35.0
+  - high: 50.0
+    low: 35.0
+  - high: 50.0
+    low: 35.0
+  - high: 50.0
+    low: 35.0
+  - high: 70.0
+    low: 50.0
+  - high: 70.0
+    low: 50.0
+  - high: 70.0
+    low: 50.0
+  - high: 70.0
+    low: 50.0
+  - high: 70.0
+    low: 50.0
+  - high: 130.0
+    low: 70.0
+  - high: 130.0
+    low: 70.0
+  - high: 130.0
+    low: 70.0
+  - high: 130.0
+    low: 70.0
+  - high: 130.0
+    low: 70.0
+  - high: 195.0
+    low: 130.0
+  - high: 195.0
+    low: 130.0
+  - high: 195.0
+    low: 130.0
+  - high: 195.0
+    low: 130.0
+  - high: 195.0
+    low: 130.0
+- header:
+    name: $p_T(\gamma)$
+    units: GeV
+  values:
+  - high: 35.0
+    low: 20.0
+  - high: 50.0
+    low: 35.0
+  - high: 70.0
+    low: 50.0
+  - high: 130.0
+    low: 70.0
+  - high: 195.0
+    low: 130.0
+  - high: 35.0
+    low: 20.0
+  - high: 50.0
+    low: 35.0
+  - high: 70.0
+    low: 50.0
+  - high: 130.0
+    low: 70.0
+  - high: 195.0
+    low: 130.0
+  - high: 35.0
+    low: 20.0
+  - high: 50.0
+    low: 35.0
+  - high: 70.0
+    low: 50.0
+  - high: 130.0
+    low: 70.0
+  - high: 195.0
+    low: 130.0
+  - high: 35.0
+    low: 20.0
+  - high: 50.0
+    low: 35.0
+  - high: 70.0
+    low: 50.0
+  - high: 130.0
+    low: 70.0
+  - high: 195.0
+    low: 130.0
+  - high: 35.0
+    low: 20.0
+  - high: 50.0
+    low: 35.0
+  - high: 70.0
+    low: 50.0
+  - high: 130.0
+    low: 70.0
+  - high: 195.0
+    low: 130.0

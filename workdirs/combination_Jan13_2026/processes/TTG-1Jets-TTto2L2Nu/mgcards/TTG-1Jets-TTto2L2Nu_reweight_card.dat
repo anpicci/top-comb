@@ -1,0 +1,1293 @@
+# Reweight card created on Saturday 10. January 2026
+change rwgt_dir rwgt
+launch --rwgt_name=dummy
+
+launch --rwgt_name=ctpminus1p0
+set cbW 0.0000
+set cpQ3 0.0000
+set cpQM 0.0000
+set cptb 0.0000
+set ctG 0.0000
+set ctW 0.0000
+set ctZ 0.0000
+set ctp -1.0000
+
+launch --rwgt_name=ctp1p0
+set cbW 0.0000
+set cpQ3 0.0000
+set cpQM 0.0000
+set cptb 0.0000
+set ctG 0.0000
+set ctW 0.0000
+set ctZ 0.0000
+set ctp 1.0000
+
+launch --rwgt_name=cpQMminus1p0
+set cbW 0.0000
+set cpQ3 0.0000
+set cpQM -1.0000
+set cptb 0.0000
+set ctG 0.0000
+set ctW 0.0000
+set ctZ 0.0000
+set ctp 0.0000
+
+launch --rwgt_name=cpQM1p0
+set cbW 0.0000
+set cpQ3 0.0000
+set cpQM 1.0000
+set cptb 0.0000
+set ctG 0.0000
+set ctW 0.0000
+set ctZ 0.0000
+set ctp 0.0000
+
+launch --rwgt_name=cpQ3minus1p0
+set cbW 0.0000
+set cpQ3 -1.0000
+set cpQM 0.0000
+set cptb 0.0000
+set ctG 0.0000
+set ctW 0.0000
+set ctZ 0.0000
+set ctp 0.0000
+
+launch --rwgt_name=cpQ31p0
+set cbW 0.0000
+set cpQ3 1.0000
+set cpQM 0.0000
+set cptb 0.0000
+set ctG 0.0000
+set ctW 0.0000
+set ctZ 0.0000
+set ctp 0.0000
+
+launch --rwgt_name=cptbminus1p0
+set cbW 0.0000
+set cpQ3 0.0000
+set cpQM 0.0000
+set cptb -1.0000
+set ctG 0.0000
+set ctW 0.0000
+set ctZ 0.0000
+set ctp 0.0000
+
+launch --rwgt_name=cptb1p0
+set cbW 0.0000
+set cpQ3 0.0000
+set cpQM 0.0000
+set cptb 1.0000
+set ctG 0.0000
+set ctW 0.0000
+set ctZ 0.0000
+set ctp 0.0000
+
+launch --rwgt_name=ctWminus1p0
+set cbW 0.0000
+set cpQ3 0.0000
+set cpQM 0.0000
+set cptb 0.0000
+set ctG 0.0000
+set ctW -1.0000
+set ctZ 0.0000
+set ctp 0.0000
+
+launch --rwgt_name=ctW1p0
+set cbW 0.0000
+set cpQ3 0.0000
+set cpQM 0.0000
+set cptb 0.0000
+set ctG 0.0000
+set ctW 1.0000
+set ctZ 0.0000
+set ctp 0.0000
+
+launch --rwgt_name=ctZminus1p0
+set cbW 0.0000
+set cpQ3 0.0000
+set cpQM 0.0000
+set cptb 0.0000
+set ctG 0.0000
+set ctW 0.0000
+set ctZ -1.0000
+set ctp 0.0000
+
+launch --rwgt_name=ctZ1p0
+set cbW 0.0000
+set cpQ3 0.0000
+set cpQM 0.0000
+set cptb 0.0000
+set ctG 0.0000
+set ctW 0.0000
+set ctZ 1.0000
+set ctp 0.0000
+
+launch --rwgt_name=ctGminus1p0
+set cbW 0.0000
+set cpQ3 0.0000
+set cpQM 0.0000
+set cptb 0.0000
+set ctG -1.0000
+set ctW 0.0000
+set ctZ 0.0000
+set ctp 0.0000
+
+launch --rwgt_name=ctG1p0
+set cbW 0.0000
+set cpQ3 0.0000
+set cpQM 0.0000
+set cptb 0.0000
+set ctG 1.0000
+set ctW 0.0000
+set ctZ 0.0000
+set ctp 0.0000
+
+launch --rwgt_name=cbWminus1p0
+set cbW -1.0000
+set cpQ3 0.0000
+set cpQM 0.0000
+set cptb 0.0000
+set ctG 0.0000
+set ctW 0.0000
+set ctZ 0.0000
+set ctp 0.0000
+
+launch --rwgt_name=cbW1p0
+set cbW 1.0000
+set cpQ3 0.0000
+set cpQM 0.0000
+set cptb 0.0000
+set ctG 0.0000
+set ctW 0.0000
+set ctZ 0.0000
+set ctp 0.0000
+
+launch --rwgt_name=cpQMminus1p0_ctpminus1p0
+set cbW 0.0000
+set cpQ3 0.0000
+set cpQM -1.0000
+set cptb 0.0000
+set ctG 0.0000
+set ctW 0.0000
+set ctZ 0.0000
+set ctp -1.0000
+
+launch --rwgt_name=cpQM1p0_ctpminus1p0
+set cbW 0.0000
+set cpQ3 0.0000
+set cpQM 1.0000
+set cptb 0.0000
+set ctG 0.0000
+set ctW 0.0000
+set ctZ 0.0000
+set ctp -1.0000
+
+launch --rwgt_name=cpQ3minus1p0_ctpminus1p0
+set cbW 0.0000
+set cpQ3 -1.0000
+set cpQM 0.0000
+set cptb 0.0000
+set ctG 0.0000
+set ctW 0.0000
+set ctZ 0.0000
+set ctp -1.0000
+
+launch --rwgt_name=cpQ31p0_ctpminus1p0
+set cbW 0.0000
+set cpQ3 1.0000
+set cpQM 0.0000
+set cptb 0.0000
+set ctG 0.0000
+set ctW 0.0000
+set ctZ 0.0000
+set ctp -1.0000
+
+launch --rwgt_name=cptbminus1p0_ctpminus1p0
+set cbW 0.0000
+set cpQ3 0.0000
+set cpQM 0.0000
+set cptb -1.0000
+set ctG 0.0000
+set ctW 0.0000
+set ctZ 0.0000
+set ctp -1.0000
+
+launch --rwgt_name=cptb1p0_ctpminus1p0
+set cbW 0.0000
+set cpQ3 0.0000
+set cpQM 0.0000
+set cptb 1.0000
+set ctG 0.0000
+set ctW 0.0000
+set ctZ 0.0000
+set ctp -1.0000
+
+launch --rwgt_name=ctWminus1p0_ctpminus1p0
+set cbW 0.0000
+set cpQ3 0.0000
+set cpQM 0.0000
+set cptb 0.0000
+set ctG 0.0000
+set ctW -1.0000
+set ctZ 0.0000
+set ctp -1.0000
+
+launch --rwgt_name=ctW1p0_ctpminus1p0
+set cbW 0.0000
+set cpQ3 0.0000
+set cpQM 0.0000
+set cptb 0.0000
+set ctG 0.0000
+set ctW 1.0000
+set ctZ 0.0000
+set ctp -1.0000
+
+launch --rwgt_name=ctZminus1p0_ctpminus1p0
+set cbW 0.0000
+set cpQ3 0.0000
+set cpQM 0.0000
+set cptb 0.0000
+set ctG 0.0000
+set ctW 0.0000
+set ctZ -1.0000
+set ctp -1.0000
+
+launch --rwgt_name=ctZ1p0_ctpminus1p0
+set cbW 0.0000
+set cpQ3 0.0000
+set cpQM 0.0000
+set cptb 0.0000
+set ctG 0.0000
+set ctW 0.0000
+set ctZ 1.0000
+set ctp -1.0000
+
+launch --rwgt_name=ctGminus1p0_ctpminus1p0
+set cbW 0.0000
+set cpQ3 0.0000
+set cpQM 0.0000
+set cptb 0.0000
+set ctG -1.0000
+set ctW 0.0000
+set ctZ 0.0000
+set ctp -1.0000
+
+launch --rwgt_name=ctG1p0_ctpminus1p0
+set cbW 0.0000
+set cpQ3 0.0000
+set cpQM 0.0000
+set cptb 0.0000
+set ctG 1.0000
+set ctW 0.0000
+set ctZ 0.0000
+set ctp -1.0000
+
+launch --rwgt_name=cbWminus1p0_ctpminus1p0
+set cbW -1.0000
+set cpQ3 0.0000
+set cpQM 0.0000
+set cptb 0.0000
+set ctG 0.0000
+set ctW 0.0000
+set ctZ 0.0000
+set ctp -1.0000
+
+launch --rwgt_name=cbW1p0_ctpminus1p0
+set cbW 1.0000
+set cpQ3 0.0000
+set cpQM 0.0000
+set cptb 0.0000
+set ctG 0.0000
+set ctW 0.0000
+set ctZ 0.0000
+set ctp -1.0000
+
+launch --rwgt_name=cpQMminus1p0_ctp1p0
+set cbW 0.0000
+set cpQ3 0.0000
+set cpQM -1.0000
+set cptb 0.0000
+set ctG 0.0000
+set ctW 0.0000
+set ctZ 0.0000
+set ctp 1.0000
+
+launch --rwgt_name=cpQM1p0_ctp1p0
+set cbW 0.0000
+set cpQ3 0.0000
+set cpQM 1.0000
+set cptb 0.0000
+set ctG 0.0000
+set ctW 0.0000
+set ctZ 0.0000
+set ctp 1.0000
+
+launch --rwgt_name=cpQ3minus1p0_ctp1p0
+set cbW 0.0000
+set cpQ3 -1.0000
+set cpQM 0.0000
+set cptb 0.0000
+set ctG 0.0000
+set ctW 0.0000
+set ctZ 0.0000
+set ctp 1.0000
+
+launch --rwgt_name=cpQ31p0_ctp1p0
+set cbW 0.0000
+set cpQ3 1.0000
+set cpQM 0.0000
+set cptb 0.0000
+set ctG 0.0000
+set ctW 0.0000
+set ctZ 0.0000
+set ctp 1.0000
+
+launch --rwgt_name=cptbminus1p0_ctp1p0
+set cbW 0.0000
+set cpQ3 0.0000
+set cpQM 0.0000
+set cptb -1.0000
+set ctG 0.0000
+set ctW 0.0000
+set ctZ 0.0000
+set ctp 1.0000
+
+launch --rwgt_name=cptb1p0_ctp1p0
+set cbW 0.0000
+set cpQ3 0.0000
+set cpQM 0.0000
+set cptb 1.0000
+set ctG 0.0000
+set ctW 0.0000
+set ctZ 0.0000
+set ctp 1.0000
+
+launch --rwgt_name=ctWminus1p0_ctp1p0
+set cbW 0.0000
+set cpQ3 0.0000
+set cpQM 0.0000
+set cptb 0.0000
+set ctG 0.0000
+set ctW -1.0000
+set ctZ 0.0000
+set ctp 1.0000
+
+launch --rwgt_name=ctW1p0_ctp1p0
+set cbW 0.0000
+set cpQ3 0.0000
+set cpQM 0.0000
+set cptb 0.0000
+set ctG 0.0000
+set ctW 1.0000
+set ctZ 0.0000
+set ctp 1.0000
+
+launch --rwgt_name=ctZminus1p0_ctp1p0
+set cbW 0.0000
+set cpQ3 0.0000
+set cpQM 0.0000
+set cptb 0.0000
+set ctG 0.0000
+set ctW 0.0000
+set ctZ -1.0000
+set ctp 1.0000
+
+launch --rwgt_name=ctZ1p0_ctp1p0
+set cbW 0.0000
+set cpQ3 0.0000
+set cpQM 0.0000
+set cptb 0.0000
+set ctG 0.0000
+set ctW 0.0000
+set ctZ 1.0000
+set ctp 1.0000
+
+launch --rwgt_name=ctGminus1p0_ctp1p0
+set cbW 0.0000
+set cpQ3 0.0000
+set cpQM 0.0000
+set cptb 0.0000
+set ctG -1.0000
+set ctW 0.0000
+set ctZ 0.0000
+set ctp 1.0000
+
+launch --rwgt_name=ctG1p0_ctp1p0
+set cbW 0.0000
+set cpQ3 0.0000
+set cpQM 0.0000
+set cptb 0.0000
+set ctG 1.0000
+set ctW 0.0000
+set ctZ 0.0000
+set ctp 1.0000
+
+launch --rwgt_name=cbWminus1p0_ctp1p0
+set cbW -1.0000
+set cpQ3 0.0000
+set cpQM 0.0000
+set cptb 0.0000
+set ctG 0.0000
+set ctW 0.0000
+set ctZ 0.0000
+set ctp 1.0000
+
+launch --rwgt_name=cbW1p0_ctp1p0
+set cbW 1.0000
+set cpQ3 0.0000
+set cpQM 0.0000
+set cptb 0.0000
+set ctG 0.0000
+set ctW 0.0000
+set ctZ 0.0000
+set ctp 1.0000
+
+launch --rwgt_name=cpQ3minus1p0_cpQMminus1p0
+set cbW 0.0000
+set cpQ3 -1.0000
+set cpQM -1.0000
+set cptb 0.0000
+set ctG 0.0000
+set ctW 0.0000
+set ctZ 0.0000
+set ctp 0.0000
+
+launch --rwgt_name=cpQ31p0_cpQMminus1p0
+set cbW 0.0000
+set cpQ3 1.0000
+set cpQM -1.0000
+set cptb 0.0000
+set ctG 0.0000
+set ctW 0.0000
+set ctZ 0.0000
+set ctp 0.0000
+
+launch --rwgt_name=cpQMminus1p0_cptbminus1p0
+set cbW 0.0000
+set cpQ3 0.0000
+set cpQM -1.0000
+set cptb -1.0000
+set ctG 0.0000
+set ctW 0.0000
+set ctZ 0.0000
+set ctp 0.0000
+
+launch --rwgt_name=cpQMminus1p0_cptb1p0
+set cbW 0.0000
+set cpQ3 0.0000
+set cpQM -1.0000
+set cptb 1.0000
+set ctG 0.0000
+set ctW 0.0000
+set ctZ 0.0000
+set ctp 0.0000
+
+launch --rwgt_name=cpQMminus1p0_ctWminus1p0
+set cbW 0.0000
+set cpQ3 0.0000
+set cpQM -1.0000
+set cptb 0.0000
+set ctG 0.0000
+set ctW -1.0000
+set ctZ 0.0000
+set ctp 0.0000
+
+launch --rwgt_name=cpQMminus1p0_ctW1p0
+set cbW 0.0000
+set cpQ3 0.0000
+set cpQM -1.0000
+set cptb 0.0000
+set ctG 0.0000
+set ctW 1.0000
+set ctZ 0.0000
+set ctp 0.0000
+
+launch --rwgt_name=cpQMminus1p0_ctZminus1p0
+set cbW 0.0000
+set cpQ3 0.0000
+set cpQM -1.0000
+set cptb 0.0000
+set ctG 0.0000
+set ctW 0.0000
+set ctZ -1.0000
+set ctp 0.0000
+
+launch --rwgt_name=cpQMminus1p0_ctZ1p0
+set cbW 0.0000
+set cpQ3 0.0000
+set cpQM -1.0000
+set cptb 0.0000
+set ctG 0.0000
+set ctW 0.0000
+set ctZ 1.0000
+set ctp 0.0000
+
+launch --rwgt_name=cpQMminus1p0_ctGminus1p0
+set cbW 0.0000
+set cpQ3 0.0000
+set cpQM -1.0000
+set cptb 0.0000
+set ctG -1.0000
+set ctW 0.0000
+set ctZ 0.0000
+set ctp 0.0000
+
+launch --rwgt_name=cpQMminus1p0_ctG1p0
+set cbW 0.0000
+set cpQ3 0.0000
+set cpQM -1.0000
+set cptb 0.0000
+set ctG 1.0000
+set ctW 0.0000
+set ctZ 0.0000
+set ctp 0.0000
+
+launch --rwgt_name=cbWminus1p0_cpQMminus1p0
+set cbW -1.0000
+set cpQ3 0.0000
+set cpQM -1.0000
+set cptb 0.0000
+set ctG 0.0000
+set ctW 0.0000
+set ctZ 0.0000
+set ctp 0.0000
+
+launch --rwgt_name=cbW1p0_cpQMminus1p0
+set cbW 1.0000
+set cpQ3 0.0000
+set cpQM -1.0000
+set cptb 0.0000
+set ctG 0.0000
+set ctW 0.0000
+set ctZ 0.0000
+set ctp 0.0000
+
+launch --rwgt_name=cpQ3minus1p0_cpQM1p0
+set cbW 0.0000
+set cpQ3 -1.0000
+set cpQM 1.0000
+set cptb 0.0000
+set ctG 0.0000
+set ctW 0.0000
+set ctZ 0.0000
+set ctp 0.0000
+
+launch --rwgt_name=cpQ31p0_cpQM1p0
+set cbW 0.0000
+set cpQ3 1.0000
+set cpQM 1.0000
+set cptb 0.0000
+set ctG 0.0000
+set ctW 0.0000
+set ctZ 0.0000
+set ctp 0.0000
+
+launch --rwgt_name=cpQM1p0_cptbminus1p0
+set cbW 0.0000
+set cpQ3 0.0000
+set cpQM 1.0000
+set cptb -1.0000
+set ctG 0.0000
+set ctW 0.0000
+set ctZ 0.0000
+set ctp 0.0000
+
+launch --rwgt_name=cpQM1p0_cptb1p0
+set cbW 0.0000
+set cpQ3 0.0000
+set cpQM 1.0000
+set cptb 1.0000
+set ctG 0.0000
+set ctW 0.0000
+set ctZ 0.0000
+set ctp 0.0000
+
+launch --rwgt_name=cpQM1p0_ctWminus1p0
+set cbW 0.0000
+set cpQ3 0.0000
+set cpQM 1.0000
+set cptb 0.0000
+set ctG 0.0000
+set ctW -1.0000
+set ctZ 0.0000
+set ctp 0.0000
+
+launch --rwgt_name=cpQM1p0_ctW1p0
+set cbW 0.0000
+set cpQ3 0.0000
+set cpQM 1.0000
+set cptb 0.0000
+set ctG 0.0000
+set ctW 1.0000
+set ctZ 0.0000
+set ctp 0.0000
+
+launch --rwgt_name=cpQM1p0_ctZminus1p0
+set cbW 0.0000
+set cpQ3 0.0000
+set cpQM 1.0000
+set cptb 0.0000
+set ctG 0.0000
+set ctW 0.0000
+set ctZ -1.0000
+set ctp 0.0000
+
+launch --rwgt_name=cpQM1p0_ctZ1p0
+set cbW 0.0000
+set cpQ3 0.0000
+set cpQM 1.0000
+set cptb 0.0000
+set ctG 0.0000
+set ctW 0.0000
+set ctZ 1.0000
+set ctp 0.0000
+
+launch --rwgt_name=cpQM1p0_ctGminus1p0
+set cbW 0.0000
+set cpQ3 0.0000
+set cpQM 1.0000
+set cptb 0.0000
+set ctG -1.0000
+set ctW 0.0000
+set ctZ 0.0000
+set ctp 0.0000
+
+launch --rwgt_name=cpQM1p0_ctG1p0
+set cbW 0.0000
+set cpQ3 0.0000
+set cpQM 1.0000
+set cptb 0.0000
+set ctG 1.0000
+set ctW 0.0000
+set ctZ 0.0000
+set ctp 0.0000
+
+launch --rwgt_name=cbWminus1p0_cpQM1p0
+set cbW -1.0000
+set cpQ3 0.0000
+set cpQM 1.0000
+set cptb 0.0000
+set ctG 0.0000
+set ctW 0.0000
+set ctZ 0.0000
+set ctp 0.0000
+
+launch --rwgt_name=cbW1p0_cpQM1p0
+set cbW 1.0000
+set cpQ3 0.0000
+set cpQM 1.0000
+set cptb 0.0000
+set ctG 0.0000
+set ctW 0.0000
+set ctZ 0.0000
+set ctp 0.0000
+
+launch --rwgt_name=cpQ3minus1p0_cptbminus1p0
+set cbW 0.0000
+set cpQ3 -1.0000
+set cpQM 0.0000
+set cptb -1.0000
+set ctG 0.0000
+set ctW 0.0000
+set ctZ 0.0000
+set ctp 0.0000
+
+launch --rwgt_name=cpQ3minus1p0_cptb1p0
+set cbW 0.0000
+set cpQ3 -1.0000
+set cpQM 0.0000
+set cptb 1.0000
+set ctG 0.0000
+set ctW 0.0000
+set ctZ 0.0000
+set ctp 0.0000
+
+launch --rwgt_name=cpQ3minus1p0_ctWminus1p0
+set cbW 0.0000
+set cpQ3 -1.0000
+set cpQM 0.0000
+set cptb 0.0000
+set ctG 0.0000
+set ctW -1.0000
+set ctZ 0.0000
+set ctp 0.0000
+
+launch --rwgt_name=cpQ3minus1p0_ctW1p0
+set cbW 0.0000
+set cpQ3 -1.0000
+set cpQM 0.0000
+set cptb 0.0000
+set ctG 0.0000
+set ctW 1.0000
+set ctZ 0.0000
+set ctp 0.0000
+
+launch --rwgt_name=cpQ3minus1p0_ctZminus1p0
+set cbW 0.0000
+set cpQ3 -1.0000
+set cpQM 0.0000
+set cptb 0.0000
+set ctG 0.0000
+set ctW 0.0000
+set ctZ -1.0000
+set ctp 0.0000
+
+launch --rwgt_name=cpQ3minus1p0_ctZ1p0
+set cbW 0.0000
+set cpQ3 -1.0000
+set cpQM 0.0000
+set cptb 0.0000
+set ctG 0.0000
+set ctW 0.0000
+set ctZ 1.0000
+set ctp 0.0000
+
+launch --rwgt_name=cpQ3minus1p0_ctGminus1p0
+set cbW 0.0000
+set cpQ3 -1.0000
+set cpQM 0.0000
+set cptb 0.0000
+set ctG -1.0000
+set ctW 0.0000
+set ctZ 0.0000
+set ctp 0.0000
+
+launch --rwgt_name=cpQ3minus1p0_ctG1p0
+set cbW 0.0000
+set cpQ3 -1.0000
+set cpQM 0.0000
+set cptb 0.0000
+set ctG 1.0000
+set ctW 0.0000
+set ctZ 0.0000
+set ctp 0.0000
+
+launch --rwgt_name=cbWminus1p0_cpQ3minus1p0
+set cbW -1.0000
+set cpQ3 -1.0000
+set cpQM 0.0000
+set cptb 0.0000
+set ctG 0.0000
+set ctW 0.0000
+set ctZ 0.0000
+set ctp 0.0000
+
+launch --rwgt_name=cbW1p0_cpQ3minus1p0
+set cbW 1.0000
+set cpQ3 -1.0000
+set cpQM 0.0000
+set cptb 0.0000
+set ctG 0.0000
+set ctW 0.0000
+set ctZ 0.0000
+set ctp 0.0000
+
+launch --rwgt_name=cpQ31p0_cptbminus1p0
+set cbW 0.0000
+set cpQ3 1.0000
+set cpQM 0.0000
+set cptb -1.0000
+set ctG 0.0000
+set ctW 0.0000
+set ctZ 0.0000
+set ctp 0.0000
+
+launch --rwgt_name=cpQ31p0_cptb1p0
+set cbW 0.0000
+set cpQ3 1.0000
+set cpQM 0.0000
+set cptb 1.0000
+set ctG 0.0000
+set ctW 0.0000
+set ctZ 0.0000
+set ctp 0.0000
+
+launch --rwgt_name=cpQ31p0_ctWminus1p0
+set cbW 0.0000
+set cpQ3 1.0000
+set cpQM 0.0000
+set cptb 0.0000
+set ctG 0.0000
+set ctW -1.0000
+set ctZ 0.0000
+set ctp 0.0000
+
+launch --rwgt_name=cpQ31p0_ctW1p0
+set cbW 0.0000
+set cpQ3 1.0000
+set cpQM 0.0000
+set cptb 0.0000
+set ctG 0.0000
+set ctW 1.0000
+set ctZ 0.0000
+set ctp 0.0000
+
+launch --rwgt_name=cpQ31p0_ctZminus1p0
+set cbW 0.0000
+set cpQ3 1.0000
+set cpQM 0.0000
+set cptb 0.0000
+set ctG 0.0000
+set ctW 0.0000
+set ctZ -1.0000
+set ctp 0.0000
+
+launch --rwgt_name=cpQ31p0_ctZ1p0
+set cbW 0.0000
+set cpQ3 1.0000
+set cpQM 0.0000
+set cptb 0.0000
+set ctG 0.0000
+set ctW 0.0000
+set ctZ 1.0000
+set ctp 0.0000
+
+launch --rwgt_name=cpQ31p0_ctGminus1p0
+set cbW 0.0000
+set cpQ3 1.0000
+set cpQM 0.0000
+set cptb 0.0000
+set ctG -1.0000
+set ctW 0.0000
+set ctZ 0.0000
+set ctp 0.0000
+
+launch --rwgt_name=cpQ31p0_ctG1p0
+set cbW 0.0000
+set cpQ3 1.0000
+set cpQM 0.0000
+set cptb 0.0000
+set ctG 1.0000
+set ctW 0.0000
+set ctZ 0.0000
+set ctp 0.0000
+
+launch --rwgt_name=cbWminus1p0_cpQ31p0
+set cbW -1.0000
+set cpQ3 1.0000
+set cpQM 0.0000
+set cptb 0.0000
+set ctG 0.0000
+set ctW 0.0000
+set ctZ 0.0000
+set ctp 0.0000
+
+launch --rwgt_name=cbW1p0_cpQ31p0
+set cbW 1.0000
+set cpQ3 1.0000
+set cpQM 0.0000
+set cptb 0.0000
+set ctG 0.0000
+set ctW 0.0000
+set ctZ 0.0000
+set ctp 0.0000
+
+launch --rwgt_name=cptbminus1p0_ctWminus1p0
+set cbW 0.0000
+set cpQ3 0.0000
+set cpQM 0.0000
+set cptb -1.0000
+set ctG 0.0000
+set ctW -1.0000
+set ctZ 0.0000
+set ctp 0.0000
+
+launch --rwgt_name=cptbminus1p0_ctW1p0
+set cbW 0.0000
+set cpQ3 0.0000
+set cpQM 0.0000
+set cptb -1.0000
+set ctG 0.0000
+set ctW 1.0000
+set ctZ 0.0000
+set ctp 0.0000
+
+launch --rwgt_name=cptbminus1p0_ctZminus1p0
+set cbW 0.0000
+set cpQ3 0.0000
+set cpQM 0.0000
+set cptb -1.0000
+set ctG 0.0000
+set ctW 0.0000
+set ctZ -1.0000
+set ctp 0.0000
+
+launch --rwgt_name=cptbminus1p0_ctZ1p0
+set cbW 0.0000
+set cpQ3 0.0000
+set cpQM 0.0000
+set cptb -1.0000
+set ctG 0.0000
+set ctW 0.0000
+set ctZ 1.0000
+set ctp 0.0000
+
+launch --rwgt_name=cptbminus1p0_ctGminus1p0
+set cbW 0.0000
+set cpQ3 0.0000
+set cpQM 0.0000
+set cptb -1.0000
+set ctG -1.0000
+set ctW 0.0000
+set ctZ 0.0000
+set ctp 0.0000
+
+launch --rwgt_name=cptbminus1p0_ctG1p0
+set cbW 0.0000
+set cpQ3 0.0000
+set cpQM 0.0000
+set cptb -1.0000
+set ctG 1.0000
+set ctW 0.0000
+set ctZ 0.0000
+set ctp 0.0000
+
+launch --rwgt_name=cbWminus1p0_cptbminus1p0
+set cbW -1.0000
+set cpQ3 0.0000
+set cpQM 0.0000
+set cptb -1.0000
+set ctG 0.0000
+set ctW 0.0000
+set ctZ 0.0000
+set ctp 0.0000
+
+launch --rwgt_name=cbW1p0_cptbminus1p0
+set cbW 1.0000
+set cpQ3 0.0000
+set cpQM 0.0000
+set cptb -1.0000
+set ctG 0.0000
+set ctW 0.0000
+set ctZ 0.0000
+set ctp 0.0000
+
+launch --rwgt_name=cptb1p0_ctWminus1p0
+set cbW 0.0000
+set cpQ3 0.0000
+set cpQM 0.0000
+set cptb 1.0000
+set ctG 0.0000
+set ctW -1.0000
+set ctZ 0.0000
+set ctp 0.0000
+
+launch --rwgt_name=cptb1p0_ctW1p0
+set cbW 0.0000
+set cpQ3 0.0000
+set cpQM 0.0000
+set cptb 1.0000
+set ctG 0.0000
+set ctW 1.0000
+set ctZ 0.0000
+set ctp 0.0000
+
+launch --rwgt_name=cptb1p0_ctZminus1p0
+set cbW 0.0000
+set cpQ3 0.0000
+set cpQM 0.0000
+set cptb 1.0000
+set ctG 0.0000
+set ctW 0.0000
+set ctZ -1.0000
+set ctp 0.0000
+
+launch --rwgt_name=cptb1p0_ctZ1p0
+set cbW 0.0000
+set cpQ3 0.0000
+set cpQM 0.0000
+set cptb 1.0000
+set ctG 0.0000
+set ctW 0.0000
+set ctZ 1.0000
+set ctp 0.0000
+
+launch --rwgt_name=cptb1p0_ctGminus1p0
+set cbW 0.0000
+set cpQ3 0.0000
+set cpQM 0.0000
+set cptb 1.0000
+set ctG -1.0000
+set ctW 0.0000
+set ctZ 0.0000
+set ctp 0.0000
+
+launch --rwgt_name=cptb1p0_ctG1p0
+set cbW 0.0000
+set cpQ3 0.0000
+set cpQM 0.0000
+set cptb 1.0000
+set ctG 1.0000
+set ctW 0.0000
+set ctZ 0.0000
+set ctp 0.0000
+
+launch --rwgt_name=cbWminus1p0_cptb1p0
+set cbW -1.0000
+set cpQ3 0.0000
+set cpQM 0.0000
+set cptb 1.0000
+set ctG 0.0000
+set ctW 0.0000
+set ctZ 0.0000
+set ctp 0.0000
+
+launch --rwgt_name=cbW1p0_cptb1p0
+set cbW 1.0000
+set cpQ3 0.0000
+set cpQM 0.0000
+set cptb 1.0000
+set ctG 0.0000
+set ctW 0.0000
+set ctZ 0.0000
+set ctp 0.0000
+
+launch --rwgt_name=ctWminus1p0_ctZminus1p0
+set cbW 0.0000
+set cpQ3 0.0000
+set cpQM 0.0000
+set cptb 0.0000
+set ctG 0.0000
+set ctW -1.0000
+set ctZ -1.0000
+set ctp 0.0000
+
+launch --rwgt_name=ctWminus1p0_ctZ1p0
+set cbW 0.0000
+set cpQ3 0.0000
+set cpQM 0.0000
+set cptb 0.0000
+set ctG 0.0000
+set ctW -1.0000
+set ctZ 1.0000
+set ctp 0.0000
+
+launch --rwgt_name=ctGminus1p0_ctWminus1p0
+set cbW 0.0000
+set cpQ3 0.0000
+set cpQM 0.0000
+set cptb 0.0000
+set ctG -1.0000
+set ctW -1.0000
+set ctZ 0.0000
+set ctp 0.0000
+
+launch --rwgt_name=ctG1p0_ctWminus1p0
+set cbW 0.0000
+set cpQ3 0.0000
+set cpQM 0.0000
+set cptb 0.0000
+set ctG 1.0000
+set ctW -1.0000
+set ctZ 0.0000
+set ctp 0.0000
+
+launch --rwgt_name=cbWminus1p0_ctWminus1p0
+set cbW -1.0000
+set cpQ3 0.0000
+set cpQM 0.0000
+set cptb 0.0000
+set ctG 0.0000
+set ctW -1.0000
+set ctZ 0.0000
+set ctp 0.0000
+
+launch --rwgt_name=cbW1p0_ctWminus1p0
+set cbW 1.0000
+set cpQ3 0.0000
+set cpQM 0.0000
+set cptb 0.0000
+set ctG 0.0000
+set ctW -1.0000
+set ctZ 0.0000
+set ctp 0.0000
+
+launch --rwgt_name=ctW1p0_ctZminus1p0
+set cbW 0.0000
+set cpQ3 0.0000
+set cpQM 0.0000
+set cptb 0.0000
+set ctG 0.0000
+set ctW 1.0000
+set ctZ -1.0000
+set ctp 0.0000
+
+launch --rwgt_name=ctW1p0_ctZ1p0
+set cbW 0.0000
+set cpQ3 0.0000
+set cpQM 0.0000
+set cptb 0.0000
+set ctG 0.0000
+set ctW 1.0000
+set ctZ 1.0000
+set ctp 0.0000
+
+launch --rwgt_name=ctGminus1p0_ctW1p0
+set cbW 0.0000
+set cpQ3 0.0000
+set cpQM 0.0000
+set cptb 0.0000
+set ctG -1.0000
+set ctW 1.0000
+set ctZ 0.0000
+set ctp 0.0000
+
+launch --rwgt_name=ctG1p0_ctW1p0
+set cbW 0.0000
+set cpQ3 0.0000
+set cpQM 0.0000
+set cptb 0.0000
+set ctG 1.0000
+set ctW 1.0000
+set ctZ 0.0000
+set ctp 0.0000
+
+launch --rwgt_name=cbWminus1p0_ctW1p0
+set cbW -1.0000
+set cpQ3 0.0000
+set cpQM 0.0000
+set cptb 0.0000
+set ctG 0.0000
+set ctW 1.0000
+set ctZ 0.0000
+set ctp 0.0000
+
+launch --rwgt_name=cbW1p0_ctW1p0
+set cbW 1.0000
+set cpQ3 0.0000
+set cpQM 0.0000
+set cptb 0.0000
+set ctG 0.0000
+set ctW 1.0000
+set ctZ 0.0000
+set ctp 0.0000
+
+launch --rwgt_name=ctGminus1p0_ctZminus1p0
+set cbW 0.0000
+set cpQ3 0.0000
+set cpQM 0.0000
+set cptb 0.0000
+set ctG -1.0000
+set ctW 0.0000
+set ctZ -1.0000
+set ctp 0.0000
+
+launch --rwgt_name=ctG1p0_ctZminus1p0
+set cbW 0.0000
+set cpQ3 0.0000
+set cpQM 0.0000
+set cptb 0.0000
+set ctG 1.0000
+set ctW 0.0000
+set ctZ -1.0000
+set ctp 0.0000
+
+launch --rwgt_name=cbWminus1p0_ctZminus1p0
+set cbW -1.0000
+set cpQ3 0.0000
+set cpQM 0.0000
+set cptb 0.0000
+set ctG 0.0000
+set ctW 0.0000
+set ctZ -1.0000
+set ctp 0.0000
+
+launch --rwgt_name=cbW1p0_ctZminus1p0
+set cbW 1.0000
+set cpQ3 0.0000
+set cpQM 0.0000
+set cptb 0.0000
+set ctG 0.0000
+set ctW 0.0000
+set ctZ -1.0000
+set ctp 0.0000
+
+launch --rwgt_name=ctGminus1p0_ctZ1p0
+set cbW 0.0000
+set cpQ3 0.0000
+set cpQM 0.0000
+set cptb 0.0000
+set ctG -1.0000
+set ctW 0.0000
+set ctZ 1.0000
+set ctp 0.0000
+
+launch --rwgt_name=ctG1p0_ctZ1p0
+set cbW 0.0000
+set cpQ3 0.0000
+set cpQM 0.0000
+set cptb 0.0000
+set ctG 1.0000
+set ctW 0.0000
+set ctZ 1.0000
+set ctp 0.0000
+
+launch --rwgt_name=cbWminus1p0_ctZ1p0
+set cbW -1.0000
+set cpQ3 0.0000
+set cpQM 0.0000
+set cptb 0.0000
+set ctG 0.0000
+set ctW 0.0000
+set ctZ 1.0000
+set ctp 0.0000
+
+launch --rwgt_name=cbW1p0_ctZ1p0
+set cbW 1.0000
+set cpQ3 0.0000
+set cpQM 0.0000
+set cptb 0.0000
+set ctG 0.0000
+set ctW 0.0000
+set ctZ 1.0000
+set ctp 0.0000
+
+launch --rwgt_name=cbWminus1p0_ctGminus1p0
+set cbW -1.0000
+set cpQ3 0.0000
+set cpQM 0.0000
+set cptb 0.0000
+set ctG -1.0000
+set ctW 0.0000
+set ctZ 0.0000
+set ctp 0.0000
+
+launch --rwgt_name=cbW1p0_ctGminus1p0
+set cbW 1.0000
+set cpQ3 0.0000
+set cpQM 0.0000
+set cptb 0.0000
+set ctG -1.0000
+set ctW 0.0000
+set ctZ 0.0000
+set ctp 0.0000
+
+launch --rwgt_name=cbWminus1p0_ctG1p0
+set cbW -1.0000
+set cpQ3 0.0000
+set cpQM 0.0000
+set cptb 0.0000
+set ctG 1.0000
+set ctW 0.0000
+set ctZ 0.0000
+set ctp 0.0000
+
+launch --rwgt_name=cbW1p0_ctG1p0
+set cbW 1.0000
+set cpQ3 0.0000
+set cpQM 0.0000
+set cptb 0.0000
+set ctG 1.0000
+set ctW 0.0000
+set ctZ 0.0000
+set ctp 0.0000
+
+launch --rwgt_name=SM
+set cbW 0.0000
+set cpQ3 0.0000
+set cpQM 0.0000
+set cptb 0.0000
+set ctG 0.0000
+set ctW 0.0000
+set ctZ 0.0000
+set ctp 0.0000

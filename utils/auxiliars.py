@@ -7,7 +7,9 @@ import os
 from datetime import datetime
 import subprocess
 import shutil
+import json
 
+import importlib.util
 # Create the logger instance
 from utils.logger import get_logger
 logger = get_logger( __name__ )
@@ -21,26 +23,22 @@ if main_path is None:
 
 def load_config( config_path ) -> dict:
     """ Loads a configuration file written in yml format """
+
+    data = {}
     with open(config_path, "r") as f:
-        return yaml.safe_load(f)
+        if any( ext in config_path for ext in [".yml", ".yaml"] ):
+            data = yaml.safe_load(f)
+        elif ".json" in config_path:
+            data = json.load(f)
+        else:
+            raise ValueError(f"Unsupported configuration file format: {config_path}")
+    return data
 
 def prepare_workdir( environment ):
     """
     Setup the main folder: requires clean workdir
     """
     workdir = environment.get("workdir")
-    reset = environment.get("reset")
-    
-    if os.path.exists(workdir):
-        if reset:
-            logger.info(f"Resetting existing workdir: {workdir}")
-            shutil.rmtree(workdir)
-        else:
-            logger.error(
-                f"Workdir already exists: {workdir}\n"
-                f"Use --reset to regenerate setup."
-            )
-            sys.exit(1)
     create_dir(workdir)
     create_workdir_info_file(workdir)
     logger.debug(f"Workdir prepared fresh for setup_gen: {workdir}")
@@ -89,6 +87,12 @@ def get_operators( selected_operators ):
                 operators.append( op )
     return operators
          
+def load_module_from_path(name, path):
+    """Load module from filesystem path."""
+    spec = importlib.util.spec_from_file_location(name, path)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
 
 def get_rwgt_points(all_operators, comb_scheme = 1):
     """ Function to get reweighting points """

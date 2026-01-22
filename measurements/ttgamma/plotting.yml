@@ -1,0 +1,39 @@
+
+logistics:
+  inpath: /eos/cms/store/group/phys_top/cvicovil/top-comb/ttgamma/FiducialSelectionValidation/
+  channels: 
+    - inclusive
+    - exact1photon
+  
+
+axes:
+  tot_weight:
+    xTitle: "Number of events"
+    yTitle: "Events"
+  pho1pt:
+    xTitle: "p_{T}(#gamma_{1}) [GeV]"
+    logy: true
+    yRange: [1, 50000]
+    yTitle: "Events"
+
+annotations:
+  lumi: 138
+  com: "13 TeV"
+  region_labels:
+    inclusive: 'Inclusive'
+    exact1photon: '1 \gamma'
+  custom_annotations: ~
+
+
+legend:
+  TTG_fromDecay : 
+    label : "t#bar{t}#gamma SM (dec.)"
+
+  TTG_fromProduction : 
+    label : "t#bar{t}#gamma SM (prod.)"
+
+  TTGEFT_fromDecay__weight128 : 
+    label : "t#bar{t}#gamma EFT SM (dec.)"
+
+  TTGEFT_fromProd__weight128 : 
+    label : "t#bar{t}#gamma EFT SM (prod.)"

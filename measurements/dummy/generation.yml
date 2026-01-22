@@ -1,0 +1,36 @@
+samples:
+  - name: TT-dummy
+
+    # ------ Configurations regarding the Matrix Element
+    load_extramodels: dim6top_LO_UFO.tar.gz 
+    model: 'dim6top_LO_UFO'
+    process: [
+        'define p = g u c d s u~ c~ d~ s~ b b~',
+        'define j = p',
+        'define l+ = e+ mu+ ta+',
+        'define l- = e- mu- ta-',
+        'define vl = ve vm vt',
+        'define vl~ = ve~ vm~ vt~',
+        'generate p p > t t~ FCNC=0 DIM6=1 @0' 
+      ]
+
+    template_run_card: 
+      name: templates/template_run_card_LO.dat 
+
+    template_customizecards: 
+      name: templates/template_customizecards.dat
+      extraopts: [
+        "set run_card maxjetflavor 5",
+      ] 
+
+    template_restrict_card: 
+      name: templates/template_restrict_ckm_no_b_mass.dat 
+      restrict_name: restrict_ttg
+
+    # ------ Configurations regarding the Parton shower
+    fragment:
+      name: templates/template_partonshower_madgraphMLM.dat
+      process_parameters: [
+        "'TimeShower:mMaxGamma = 4.0'"
+      ]
+

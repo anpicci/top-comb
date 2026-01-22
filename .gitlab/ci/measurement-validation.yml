@@ -1,0 +1,21 @@
+validate_measurements:
+  extends: .basic
+  stage: validate 
+  rules:
+    # Triggered on merge requests
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      changes: 
+        - workdirs/$COMBINATION_TAG
+      when: on_success 
+
+    # Also triggered on direct pushes
+    - if: $CI_PIPELINE_SOURCE == "push"
+      changes: 
+        - workdirs/$COMBINATION_TAG/**
+      when: on_success
+
+    # Do not trigger otherwise
+    - when: never
+
+  script:
+    - echo 'Validating of $COMBINATION_TAG'  
